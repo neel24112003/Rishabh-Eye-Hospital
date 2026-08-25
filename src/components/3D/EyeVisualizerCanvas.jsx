@@ -307,33 +307,33 @@ export default function EyeVisualizerCanvas() {
       <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/15 via-[#B8ED78]/10 to-transparent rounded-full blur-3xl pointer-events-none transform scale-90" />
 
       {/* Top Floating HUD Status Badge */}
-      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-[#070C14]/85 border border-[#35A6B7]/40 backdrop-blur-md">
+      <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-20 flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#070C14]/90 border border-[#35A6B7]/40 backdrop-blur-md">
         {activeMode === 'scan' ? (
           <>
-            <Activity className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#35A6B7] animate-pulse shrink-0" />
-            <span className="text-[10px] sm:text-[11px] font-bold text-white uppercase tracking-wider">3D Cornea Scan</span>
+            <Activity className="w-3 h-3 text-[#35A6B7] animate-pulse shrink-0" />
+            <span className="text-[9.5px] sm:text-[10.5px] font-bold text-white uppercase tracking-wider">3D Cornea Scan</span>
           </>
         ) : (
           <>
-            <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#B8ED78] fill-[#B8ED78] animate-pulse shrink-0" />
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#B8ED78] uppercase tracking-wider">LASIK View Active</span>
+            <Zap className="w-3 h-3 text-[#B8ED78] fill-[#B8ED78] animate-pulse shrink-0" />
+            <span className="text-[9.5px] sm:text-[10.5px] font-bold text-[#B8ED78] uppercase tracking-wider">LASIK View Active</span>
           </>
         )}
       </div>
 
       {/* Top Right Floating HUD Metrics Box (Appears during Scan Mode on both Mobile & Desktop) */}
       {activeMode === 'scan' && (
-        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex flex-col gap-0.5 sm:gap-1 p-2 sm:p-2.5 rounded-xl bg-[#070C14]/90 border border-[#35A6B7]/40 backdrop-blur-md text-[9px] sm:text-[10px] text-slate-300 shadow-xl shadow-[#070C14]">
-          <div className="flex items-center gap-1.5 text-[#B8ED78] font-bold">
-            <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0" />
+        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-20 flex flex-col gap-0.5 p-1.5 sm:p-2 rounded-xl bg-[#070C14]/90 border border-[#35A6B7]/40 backdrop-blur-md text-[8.5px] sm:text-[9.5px] text-slate-300 shadow-xl shadow-[#070C14]">
+          <div className="flex items-center gap-1 text-[#B8ED78] font-bold">
+            <CheckCircle2 className="w-2.5 h-2.5 shrink-0" />
             <span>Cornea: 540 µm</span>
           </div>
-          <div className="flex items-center gap-1.5 text-slate-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#35A6B7] shrink-0" />
+          <div className="flex items-center gap-1 text-slate-200">
+            <span className="w-1 h-1 rounded-full bg-[#35A6B7] shrink-0" />
             <span>IOP: 14 mmHg</span>
           </div>
-          <div className="flex items-center gap-1.5 text-slate-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#51AABC] shrink-0" />
+          <div className="flex items-center gap-1 text-slate-200">
+            <span className="w-1 h-1 rounded-full bg-[#51AABC] shrink-0" />
             <span>Lens: 99.8% Clear</span>
           </div>
         </div>
