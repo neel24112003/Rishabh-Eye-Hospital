@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, ShieldCheck, ChevronDown, Loader2, Compass } from 'lucide-react';
+import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, ShieldCheck, ChevronDown, Loader2, Compass, User } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function ContactMap({ onBookSuccess }) {
@@ -160,45 +160,57 @@ export default function ContactMap({ onBookSuccess }) {
                 </p>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between">
+              <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between" autoComplete="off">
                 
                 {/* Inputs Group */}
                 <div className="space-y-4 mb-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1.5">Patient Full Name *</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Enter patient name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          autoComplete="off"
+                          placeholder="Enter patient name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full px-4 py-3 pr-10 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
+                        />
+                        <User className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
+                      </div>
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1.5">Phone Number *</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="10-digit mobile number"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
-                      />
+                      <div className="relative">
+                        <input
+                          type="tel"
+                          required
+                          autoComplete="off"
+                          placeholder="10-digit mobile number"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="w-full px-4 py-3 pr-10 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
+                        />
+                        <Phone className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
+                      </div>
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">Patient Email Address (Optional for Auto-Reply Confirmation)</label>
-                    <input
-                      type="email"
-                      placeholder="e.g. patient@gmail.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
-                    />
+                    <div className="relative">
+                      <input
+                        type="email"
+                        autoComplete="off"
+                        placeholder="e.g. patient@gmail.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full px-4 py-3 pr-10 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
+                      />
+                      <Mail className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

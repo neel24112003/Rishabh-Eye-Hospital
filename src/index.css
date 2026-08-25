@@ -30,6 +30,25 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
+/* Turn all browser native autofill / contact / profile icons crisp white */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-profile-auto-fill-button {
+  filter: invert(1) brightness(2) !important;
+  background-color: transparent !important;
+}
+
+/* Ensure autofill input text stays crisp white with dark background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #070C14 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  color-scheme: dark !important;
+}
+
 /* Optimized Lightweight Glassmorphism Utilities (GPU Accelerated) */
 .glass-panel {
   background: rgba(14, 23, 38, 0.75);
