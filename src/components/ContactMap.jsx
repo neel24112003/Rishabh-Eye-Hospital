@@ -295,16 +295,18 @@ export default function ContactMap({ onBookSuccess }) {
 
           {/* Interactive Google Map */}
           <div className="lg:col-span-5 flex flex-col gap-4">
-            <div className="glass-panel rounded-3xl p-3 border border-[#35A6B7]/40 shadow-2xl h-full flex flex-col">
-              <div className="p-4 flex items-center justify-between border-b border-slate-800">
-                <div className="flex items-center gap-2 text-white font-bold text-sm">
+            <div className="glass-panel rounded-3xl p-4 sm:p-5 border border-[#35A6B7]/40 shadow-2xl h-full flex flex-col justify-between">
+              
+              {/* Clean Suitable Heading */}
+              <div className="pb-3 flex items-center justify-between border-b border-slate-800">
+                <div className="flex items-center gap-2 text-white font-bold text-sm sm:text-base">
                   <Navigation className="w-4 h-4 text-[#B8ED78]" />
-                  <span>Interactive Map & Directions</span>
+                  <span>Hospital Location & Live Directions</span>
                 </div>
-                <span className="text-[11px] font-mono text-[#35A6B7]">Althan, Surat</span>
               </div>
 
-              <div className="relative flex-1 min-h-[350px] rounded-2xl overflow-hidden mt-3 border border-slate-800">
+              {/* Map Iframe */}
+              <div className="relative flex-1 min-h-[360px] rounded-2xl overflow-hidden my-4 border border-slate-800 shadow-inner">
                 <iframe
                   title="Rishabh Eyecare Hospital Location Map Surat"
                   src={mapEmbedUrl}
@@ -314,21 +316,23 @@ export default function ContactMap({ onBookSuccess }) {
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full min-h-[350px]"
+                  className="w-full h-full min-h-[360px]"
                 />
               </div>
 
-              <div className="p-4 pt-3 flex items-center">
+              {/* Prominent, Taller & Perfectly Aligned Get GPS Directions Button */}
+              <div className="pt-1">
                 <a
                   href="https://maps.google.com/?q=Rishabh+Eyecare+Hospital+The+Lenora+New+City+Light+Rd+Althan+Surat"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#35A6B7] to-[#B8ED78] text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition-opacity shadow-lg"
+                  className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#35A6B7] via-[#51AABC] to-[#B8ED78] text-slate-950 font-extrabold text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-xl shadow-[#B8ED78]/20 hover:shadow-[#B8ED78]/35 border border-white/20"
                 >
-                  <Navigation className="w-4 h-4" />
+                  <Navigation className="w-5 h-5 text-slate-950 shrink-0" />
                   <span>Get GPS Directions</span>
                 </a>
               </div>
+
             </div>
           </div>
 
