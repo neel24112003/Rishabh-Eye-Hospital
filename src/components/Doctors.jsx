@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Award, CheckCircle2, Calendar, Sparkles, Shield, UserCheck, Star, Stethoscope, Eye, User } from 'lucide-react';
+import { Award, CheckCircle2, Sparkles, Shield, UserCheck, Star, Stethoscope, Eye, User } from 'lucide-react';
 
-export default function Doctors({ onOpenAppointment }) {
+export default function Doctors() {
   const doctors = [
     {
       name: "Dr. Hetalkumar R. Yagnik",
@@ -71,7 +71,7 @@ export default function Doctors({ onOpenAppointment }) {
               transition={{ duration: 0.4, delay: index * 0.15 }}
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-start"
             >
-              {/* Doctor Avatar Badge (High-Definition Styled Card) */}
+              {/* Doctor Avatar Badge */}
               <div className="relative w-full sm:w-48 h-56 sm:h-full rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-lg bg-gradient-to-b from-[#0E1726] to-[#070C14] flex flex-col items-center justify-center p-6 text-center">
                 <div className={`w-20 h-20 rounded-2xl bg-gradient-to-tr ${doctor.badgeColor} p-0.5 shadow-xl mb-3 group-hover:scale-105 transition-transform`}>
                   <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center font-display font-black text-2xl text-[#B8ED78]">
@@ -115,7 +115,7 @@ export default function Doctors({ onOpenAppointment }) {
                     {doctor.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5 mb-6">
+                  <div className="flex flex-wrap gap-1.5">
                     {doctor.specialties.map((spec, sIdx) => (
                       <span
                         key={sIdx}
@@ -126,14 +126,6 @@ export default function Doctors({ onOpenAppointment }) {
                     ))}
                   </div>
                 </div>
-
-                <button
-                  onClick={onOpenAppointment}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#35A6B7] to-[#51AABC] hover:from-[#B8ED78] hover:to-[#35A6B7] text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all duration-300"
-                >
-                  <Calendar className="w-4 h-4 text-slate-950" />
-                  <span>Book Slot with {doctor.name.split(' ')[1]}</span>
-                </button>
               </div>
             </motion.div>
           ))}
