@@ -4,7 +4,7 @@ import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, S
 import confetti from 'canvas-confetti';
 
 export default function ContactMap({ onBookSuccess }) {
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     name: '',
     phone: '',
     email: '',
@@ -13,8 +13,9 @@ export default function ContactMap({ onBookSuccess }) {
     preferredDate: '',
     preferredTime: 'Morning (9:00 AM - 1:00 PM)',
     notes: ''
-  });
+  };
 
+  const [formData, setFormData] = useState(initialFormState);
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -44,6 +45,12 @@ export default function ContactMap({ onBookSuccess }) {
       });
 
       if (onBookSuccess) onBookSuccess(formData);
+
+      // Auto-hide success screen after 4 seconds and return to form
+      setTimeout(() => {
+        setBookingSubmitted(false);
+        setFormData(initialFormState);
+      }, 4000);
     }
   };
 
@@ -146,15 +153,9 @@ export default function ContactMap({ onBookSuccess }) {
               >
                 <CheckCircle2 className="w-16 h-16 text-[#B8ED78] mx-auto mb-4 animate-bounce" />
                 <h4 className="font-display text-2xl font-extrabold text-white mb-2">Appointment Request Received!</h4>
-                <p className="text-sm text-slate-200 max-w-md mx-auto mb-6 leading-relaxed">
+                <p className="text-sm text-slate-200 max-w-md mx-auto leading-relaxed">
                   Thank you, <strong className="text-white">{formData.name}</strong>. We have successfully received your appointment request. The Rishabh Eye Hospital OPD team is reviewing your requested slot and will call you on <strong className="text-[#B8ED78]">{formData.phone}</strong> shortly to confirm your consultation!
                 </p>
-                <button
-                  onClick={() => setBookingSubmitted(false)}
-                  className="px-6 py-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-white text-xs font-bold border border-slate-700"
-                >
-                  Book Another Appointment
-                </button>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
