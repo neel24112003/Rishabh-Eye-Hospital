@@ -18,7 +18,7 @@ export default function AboutHospital() {
     },
     {
       title: "17+ Years & 100% Track Record",
-      desc: "Surgeries led by Senior Super-Consultant Dr. Hetalkumar Yagnik with an unblemished success record.",
+      desc: "Surgeries led by Senior Super-Consultant Dr. Hetalkumar Yagnik & Dr. Shefali Yagnik with an unblemished record.",
       icon: Award,
       color: "from-[#51AABC] to-[#B8ED78]"
     },
@@ -82,14 +82,31 @@ export default function AboutHospital() {
               Rishabh Eyecare Hospital and Laser Center is a state-of-the-art hospital featuring ample fully AC waiting space, fully modular international-standard German Operation Theatre, and American world-class Phaco system for cataract surgery. We provide an in-house optical shop for all classes, best-in-class investigative instruments, and laser spectacle removal facility, performed by Senior Super-Consultant Dr. Hetalkumar Yagnik having a vast experience of 17 years with a proven track record of all surgeries executed successfully. We offer all types of ophthalmic checkups and surgeries with spectacle and contact lens dispensing under one roof. Rishabh Eyecare Hospital has started its new setup with ultramodern facilities for our patients.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#35A6B7]/20 border border-[#35A6B7] flex items-center justify-center font-bold text-[#B8ED78]">
-                  HY
+            {/* Doctors Showcase Bar */}
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-slate-800">
+              <div className="flex flex-wrap items-center gap-6">
+                {/* Dr. Hetalkumar */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#35A6B7]/20 border border-[#35A6B7] flex items-center justify-center font-bold text-[#B8ED78]">
+                    HY
+                  </div>
+                  <div>
+                    <div className="font-bold text-white text-sm">Dr. Hetalkumar R. Yagnik</div>
+                    <div className="text-xs text-[#35A6B7] font-medium">Senior Super-Consultant • 17+ Years Exp</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-bold text-white text-sm">Dr. Hetalkumar R. Yagnik</div>
-                  <div className="text-xs text-[#35A6B7] font-medium">Senior Super-Consultant • 17+ Years Experience</div>
+
+                <div className="hidden md:block w-px h-8 bg-slate-800" />
+
+                {/* Dr. Shefali */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#51AABC]/20 border border-[#51AABC] flex items-center justify-center font-bold text-[#35A6B7]">
+                    SY
+                  </div>
+                  <div>
+                    <div className="font-bold text-white text-sm">Dr. Shefali H. Yagnik</div>
+                    <div className="text-xs text-[#51AABC] font-medium">Consultant Ophthalmic Surgeon • 14+ Years Exp</div>
+                  </div>
                 </div>
               </div>
 
