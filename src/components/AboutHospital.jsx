@@ -100,12 +100,12 @@ export default function AboutHospital() {
 
                 {/* Dr. Shefali */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#51AABC]/20 border border-[#51AABC] flex items-center justify-center font-bold text-[#35A6B7]">
+                  <div className="w-10 h-10 rounded-full bg-[#35A6B7]/20 border border-[#35A6B7] flex items-center justify-center font-bold text-[#B8ED78]">
                     SY
                   </div>
                   <div>
                     <div className="font-bold text-white text-sm">Dr. Shefali H. Yagnik</div>
-                    <div className="text-xs text-[#51AABC] font-medium">Consultant Ophthalmic Surgeon • 14+ Years Exp</div>
+                    <div className="text-xs text-[#35A6B7] font-medium">Consultant Ophthalmic Surgeon • 14+ Years Exp</div>
                   </div>
                 </div>
               </div>
