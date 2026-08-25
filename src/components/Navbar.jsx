@@ -50,39 +50,6 @@ export default function Navbar({ onOpenAppointment }) {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-      {/* Top Notification Bar / Hotline Banner */}
-      <div 
-        className={`bg-gradient-to-r from-[#070C14] via-[#0E1726] to-[#070C14] border-b border-[#35A6B7]/20 text-xs px-4 transition-all duration-300 ${
-          scrolled ? 'h-0 py-0 opacity-0 overflow-hidden' : 'py-2 opacity-100'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-3 text-slate-300 text-center sm:text-left">
-          <div className="flex items-center justify-center gap-2 sm:gap-4">
-            <span className="flex items-center gap-1.5 text-[#B8ED78] font-medium text-[11px] sm:text-xs">
-              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>17+ Years of Excellence in Surat</span>
-            </span>
-            <span className="hidden md:inline text-slate-500">•</span>
-            <span className="hidden md:flex items-center gap-1 text-slate-400">
-              <MapPin className="w-3 h-3 text-[#35A6B7] shrink-0" />
-              <span>New City Light Rd, Althan, Surat</span>
-            </span>
-          </div>
-
-          <div className="flex items-center justify-center gap-3 sm:ml-auto">
-            <a 
-              href="tel:07405563636" 
-              className="flex items-center gap-1.5 font-bold text-[#B8ED78] hover:text-white transition-colors text-[11px] sm:text-xs"
-            >
-              <Phone className="w-3.5 h-3.5 animate-pulse text-[#B8ED78] shrink-0" />
-              <span>Helpline: 074055 63636</span>
-            </a>
-            <span className="hidden sm:inline text-slate-600">|</span>
-            <span className="hidden sm:inline text-slate-400 font-mono text-[11px]">Mon - Sat: 9am - 8:30pm</span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Glassmorphism Navbar */}
       <div
         className={`transition-all duration-300 ${
