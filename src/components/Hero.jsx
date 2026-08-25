@@ -114,43 +114,43 @@ export default function Hero({ onOpenAppointment }) {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          <div className="glass-panel p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-4 hover:border-[#B8ED78]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#B8ED78]">
-              <Award className="w-6 h-6" />
+          <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-2.5 sm:gap-4 hover:border-[#B8ED78]/40 transition-colors">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#B8ED78] shrink-0">
+              <Award className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-extrabold font-display text-white">17+</div>
-              <div className="text-xs text-slate-400 font-medium">Years Super-Experience</div>
-            </div>
-          </div>
-
-          <div className="glass-panel p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-4 hover:border-[#B8ED78]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#35A6B7]">
-              <Activity className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-extrabold font-display text-[#B8ED78]">100%</div>
-              <div className="text-xs text-slate-400 font-medium">Successful Track Record</div>
+            <div className="min-w-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-extrabold font-display text-white truncate">17+</div>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">Years Super-Experience</div>
             </div>
           </div>
 
-          <div className="glass-panel p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-4 hover:border-[#B8ED78]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#51AABC]">
-              <Zap className="w-6 h-6" />
+          <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-2.5 sm:gap-4 hover:border-[#B8ED78]/40 transition-colors">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#35A6B7] shrink-0">
+              <Activity className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-extrabold font-display text-white">German</div>
-              <div className="text-xs text-slate-400 font-medium">Modular Operation Theatre</div>
+            <div className="min-w-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-extrabold font-display text-[#B8ED78] truncate">100%</div>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">Successful Track Record</div>
             </div>
           </div>
 
-          <div className="glass-panel p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-4 hover:border-[#B8ED78]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#B8ED78]">
-              <Eye className="w-6 h-6" />
+          <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-2.5 sm:gap-4 hover:border-[#B8ED78]/40 transition-colors">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#51AABC] shrink-0">
+              <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-extrabold font-display text-white">American</div>
-              <div className="text-xs text-slate-400 font-medium">World-Class Phaco System</div>
+            <div className="min-w-0">
+              <div className="text-lg sm:text-2xl md:text-3xl font-extrabold font-display text-white truncate">German</div>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">Modular Operation Theatre</div>
+            </div>
+          </div>
+
+          <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border border-[#35A6B7]/25 flex items-center gap-2.5 sm:gap-4 hover:border-[#B8ED78]/40 transition-colors">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/30 flex items-center justify-center text-[#B8ED78] shrink-0">
+              <Eye className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-lg sm:text-2xl md:text-3xl font-extrabold font-display text-white truncate">American</div>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">World-Class Phaco System</div>
             </div>
           </div>
         </motion.div>

@@ -345,31 +345,34 @@ export default function EyeVisualizerCanvas() {
         className="w-full h-[360px] sm:h-[440px] lg:h-[480px] cursor-grab active:cursor-grabbing z-10"
       />
 
-      {/* Button 1: Left Bottom Corner - 3D Cornea Scan */}
-      <button
-        onClick={() => setActiveMode('scan')}
-        className={`absolute bottom-4 left-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
-          activeMode === 'scan'
-            ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
-            : 'bg-[#0E1726]/85 text-[#35A6B7] border border-[#35A6B7]/40 hover:bg-[#35A6B7]/20'
-        }`}
-      >
-        <Scan className={`w-4 h-4 ${activeMode === 'scan' ? 'text-slate-950' : 'text-[#35A6B7]'}`} />
-        <span>3D Cornea Scan</span>
-      </button>
+      {/* Bottom Controls Bar (Guaranteed 0% overlap on mobile & desktop) */}
+      <div className="absolute bottom-3 inset-x-3 sm:bottom-4 sm:inset-x-4 z-20 flex items-center justify-between gap-2">
+        {/* Button 1: 3D Cornea Scan */}
+        <button
+          onClick={() => setActiveMode('scan')}
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+            activeMode === 'scan'
+              ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
+              : 'bg-[#0E1726]/85 text-[#35A6B7] border border-[#35A6B7]/40 hover:bg-[#35A6B7]/20'
+          }`}
+        >
+          <Scan className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${activeMode === 'scan' ? 'text-slate-950' : 'text-[#35A6B7]'}`} />
+          <span className="truncate">3D Cornea Scan</span>
+        </button>
 
-      {/* Button 2: Right Bottom Corner - Instant LASIK Laser */}
-      <button
-        onClick={() => setActiveMode('lasik')}
-        className={`absolute bottom-4 right-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
-          activeMode === 'lasik'
-            ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
-            : 'bg-[#0E1726]/85 text-[#B8ED78] border border-[#B8ED78]/40 hover:bg-[#B8ED78]/20'
-        }`}
-      >
-        <Zap className={`w-4 h-4 ${activeMode === 'lasik' ? 'fill-slate-950 text-slate-950' : 'fill-[#B8ED78] text-[#B8ED78]'}`} />
-        <span>LASIK Laser View</span>
-      </button>
+        {/* Button 2: Instant LASIK Laser */}
+        <button
+          onClick={() => setActiveMode('lasik')}
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+            activeMode === 'lasik'
+              ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
+              : 'bg-[#0E1726]/85 text-[#B8ED78] border border-[#B8ED78]/40 hover:bg-[#B8ED78]/20'
+          }`}
+        >
+          <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${activeMode === 'lasik' ? 'fill-slate-950 text-slate-950' : 'fill-[#B8ED78] text-[#B8ED78]'}`} />
+          <span className="truncate">LASIK Laser View</span>
+        </button>
+      </div>
     </div>
   );
 }
