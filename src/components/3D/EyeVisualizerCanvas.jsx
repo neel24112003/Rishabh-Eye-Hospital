@@ -351,10 +351,10 @@ export default function EyeVisualizerCanvas() {
         className={`absolute bottom-4 left-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
           activeMode === 'scan'
             ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
-            : 'bg-[#0E1726]/85 text-slate-300 border border-slate-700 hover:text-white hover:border-[#35A6B7]'
+            : 'bg-[#0E1726]/85 text-[#35A6B7] border border-[#35A6B7]/40 hover:bg-[#35A6B7]/20'
         }`}
       >
-        <Scan className="w-4 h-4 text-slate-950" />
+        <Scan className={`w-4 h-4 ${activeMode === 'scan' ? 'text-slate-950' : 'text-[#35A6B7]'}`} />
         <span>3D Cornea Scan</span>
       </button>
 
@@ -367,7 +367,7 @@ export default function EyeVisualizerCanvas() {
             : 'bg-[#0E1726]/85 text-[#B8ED78] border border-[#B8ED78]/40 hover:bg-[#B8ED78]/20'
         }`}
       >
-        <Zap className="w-4 h-4 fill-[#B8ED78] text-slate-950" />
+        <Zap className={`w-4 h-4 ${activeMode === 'lasik' ? 'fill-slate-950 text-slate-950' : 'fill-[#B8ED78] text-[#B8ED78]'}`} />
         <span>LASIK Laser View</span>
       </button>
     </div>
