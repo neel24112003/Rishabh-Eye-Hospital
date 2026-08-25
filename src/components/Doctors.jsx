@@ -80,12 +80,9 @@ export default function Doctors() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
 
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10">
+                <div className="absolute bottom-3 left-3 z-10">
                   <span className="px-2.5 py-1 rounded-full bg-slate-950/80 text-[10px] font-bold text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
                     {doctor.experience}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-full bg-[#35A6B7]/80 text-[10px] font-bold text-white border border-[#35A6B7]/40 backdrop-blur-md">
-                    SURAT
                   </span>
                 </div>
               </div>
