@@ -78,13 +78,6 @@ export default function Doctors() {
                   alt={doctor.name}
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-
-                <div className="absolute bottom-3 left-3 z-10">
-                  <span className="px-2.5 py-1 rounded-full bg-slate-950/80 text-[10px] font-bold text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
-                    {doctor.experience}
-                  </span>
-                </div>
               </div>
 
               {/* Doctor Info */}
