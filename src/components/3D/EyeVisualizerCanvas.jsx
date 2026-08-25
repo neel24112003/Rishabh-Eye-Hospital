@@ -277,32 +277,31 @@ export default function EyeVisualizerCanvas() {
         className="w-full h-[360px] sm:h-[440px] lg:h-[480px] cursor-grab active:cursor-grabbing z-10"
       />
 
-      {/* Sleek Centered Dual Control Buttons (3D Eye View & LASIK Laser View) */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center gap-2 p-1.5 rounded-2xl glass-panel border border-[#35A6B7]/40 shadow-2xl backdrop-blur-md">
-        <button
-          onClick={() => setLasikActive(false)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-            !lasikActive
-              ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-md shadow-[#35A6B7]/30'
-              : 'text-slate-300 hover:text-white'
-          }`}
-        >
-          <Eye className="w-4 h-4" />
-          <span>3D Eye View</span>
-        </button>
+      {/* Button 1: Left Bottom Corner Floating Box */}
+      <button
+        onClick={() => setLasikActive(false)}
+        className={`absolute bottom-4 left-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-300 backdrop-blur-md ${
+          !lasikActive
+            ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
+            : 'bg-[#0E1726]/85 text-slate-300 border border-slate-700 hover:text-white hover:border-[#B8ED78]'
+        }`}
+      >
+        <Eye className="w-4 h-4" />
+        <span>3D Eye View</span>
+      </button>
 
-        <button
-          onClick={() => setLasikActive(!lasikActive)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-            lasikActive
-              ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-md shadow-[#B8ED78]/40'
-              : 'text-[#B8ED78] bg-[#B8ED78]/10 border border-[#B8ED78]/30 hover:bg-[#B8ED78]/20'
-          }`}
-        >
-          <Zap className="w-4 h-4 fill-[#B8ED78]" />
-          <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser View'}</span>
-        </button>
-      </div>
+      {/* Button 2: Right Bottom Corner Floating Box */}
+      <button
+        onClick={() => setLasikActive(!lasikActive)}
+        className={`absolute bottom-4 right-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-300 backdrop-blur-md ${
+          lasikActive
+            ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
+            : 'bg-[#0E1726]/85 text-[#B8ED78] border border-[#B8ED78]/40 hover:bg-[#B8ED78]/20'
+        }`}
+      >
+        <Zap className="w-4 h-4 fill-[#B8ED78]" />
+        <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser View'}</span>
+      </button>
     </div>
   );
 }
