@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Eye, Zap } from 'lucide-react';
+import { Eye, Zap, Activity, Scan, Layers, CheckCircle2 } from 'lucide-react';
 
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
-  const [lasikActive, setLasikActive] = useState(false);
+  const [activeMode, setActiveMode] = useState('scan'); // 'scan' | 'lasik'
+  const activeModeRef = useRef('scan');
+
+  // Keep ref synchronized instantly without re-mounting Three.js canvas!
+  useEffect(() => {
+    activeModeRef.current = activeMode;
+  }, [activeMode]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -13,7 +19,7 @@ export default function EyeVisualizerCanvas() {
     const width = container.clientWidth || 500;
     const height = container.clientHeight || 500;
 
-    // Scene & Camera (camera z=6.7 for perfect slightly smaller centered eye proportion)
+    // Scene & Camera (camera z=6.7 for perfect centered eye proportion)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
     camera.position.z = 6.7;
@@ -128,6 +134,19 @@ export default function EyeVisualizerCanvas() {
     corneaMesh.position.set(0, 0, 0);
     eyeGroup.add(corneaMesh);
 
+    // 5. Cornea Anatomy Scan Ring (Sweeps in Scan Mode)
+    const scanRingGeo = new THREE.RingGeometry(0.2, 1.45, 64);
+    const scanRingMat = new THREE.MeshBasicMaterial({
+      color: 0x35a6b7,
+      transparent: true,
+      opacity: 0,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+    });
+    const scanRingMesh = new THREE.Mesh(scanRingGeo, scanRingMat);
+    scanRingMesh.position.z = 1.65;
+    eyeGroup.add(scanRingMesh);
+
     // Orbiting Particles (Lightweight)
     const particleCount = 140;
     const particleGeo = new THREE.BufferGeometry();
@@ -165,11 +184,11 @@ export default function EyeVisualizerCanvas() {
     const particleSystem = new THREE.Points(particleGeo, particleMat);
     scene.add(particleSystem);
 
-    // LASIK Laser Beam
+    // LASIK Laser Beam Group
     const laserGroup = new THREE.Group();
     scene.add(laserGroup);
 
-    const laserLineGeo = new THREE.CylinderGeometry(0.012, 0.012, 6, 8);
+    const laserLineGeo = new THREE.CylinderGeometry(0.015, 0.015, 6, 8);
     const laserLineMat = new THREE.MeshBasicMaterial({
       color: 0x35a6b7,
       transparent: true,
@@ -241,15 +260,30 @@ export default function EyeVisualizerCanvas() {
 
       particleSystem.rotation.y = elapsedTime * 0.06;
 
-      if (lasikActive) {
-        laserLineMat.opacity = 0.9 + Math.sin(elapsedTime * 12) * 0.1;
-        laserMesh.position.y = Math.sin(elapsedTime * 2.5) * 0.8;
-        targetRingMat.opacity = 0.9;
-        targetRing.scale.setScalar(1 + Math.sin(elapsedTime * 4) * 0.15);
+      // INSTANT ON-THE-SPOT MODE SWITCHING (0ms LAG!)
+      const mode = activeModeRef.current;
+
+      if (mode === 'lasik') {
+        // Laser Beam active
+        laserLineMat.opacity = 0.95 + Math.sin(elapsedTime * 14) * 0.05;
+        laserMesh.position.y = Math.sin(elapsedTime * 3.0) * 0.75;
+        targetRingMat.opacity = 0.95;
+        targetRing.scale.setScalar(1 + Math.sin(elapsedTime * 5) * 0.15);
         targetRing.rotation.z = elapsedTime * 1.5;
+
+        scanRingMat.opacity = 0;
+      } else if (mode === 'scan') {
+        // Cornea Scan Beam active
+        scanRingMat.opacity = 0.75 + Math.sin(elapsedTime * 4) * 0.2;
+        scanRingMesh.position.z = 1.64 + Math.sin(elapsedTime * 2.5) * 0.08;
+        scanRingMesh.rotation.z = elapsedTime * 0.8;
+
+        laserLineMat.opacity = 0;
+        targetRingMat.opacity = 0;
       } else {
         laserLineMat.opacity = 0;
         targetRingMat.opacity = 0;
+        scanRingMat.opacity = 0;
       }
 
       renderer.render(scene, camera);
@@ -266,41 +300,75 @@ export default function EyeVisualizerCanvas() {
       }
       renderer.dispose();
     };
-  }, [lasikActive]);
+  }, []); // [] ONCE ON MOUNT = 0ms INSTANT RESPONSE!
 
   return (
     <div className="relative w-full h-full min-h-[380px] lg:min-h-[480px] flex flex-col items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/15 via-[#B8ED78]/10 to-transparent rounded-full blur-3xl pointer-events-none transform scale-90" />
 
+      {/* Top Floating HUD Status Badge */}
+      <div className="absolute top-3 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#070C14]/80 border border-[#35A6B7]/40 backdrop-blur-md">
+        {activeMode === 'scan' ? (
+          <>
+            <Activity className="w-3.5 h-3.5 text-[#35A6B7] animate-pulse" />
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider">3D Cornea Biometric Scan</span>
+          </>
+        ) : (
+          <>
+            <Zap className="w-3.5 h-3.5 text-[#B8ED78] animate-bounce" />
+            <span className="text-[11px] font-bold text-[#B8ED78] uppercase tracking-wider">Femtosecond Laser Active</span>
+          </>
+        )}
+      </div>
+
+      {/* Top-Right Biometric Readings Box (Appears during Scan Mode) */}
+      {activeMode === 'scan' && (
+        <div className="absolute top-3 right-4 z-20 hidden sm:flex flex-col gap-1 p-2.5 rounded-xl bg-[#070C14]/85 border border-[#35A6B7]/30 backdrop-blur-md text-[10px] text-slate-300">
+          <div className="flex items-center gap-1.5 text-[#B8ED78] font-bold">
+            <CheckCircle2 className="w-3 h-3" />
+            <span>Cornea Thickness: 540 µm</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-slate-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#35A6B7]" />
+            <span>Eye Pressure (IOP): 14 mmHg</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-slate-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#51AABC]" />
+            <span>Lens Clarity: 99.8% Clear</span>
+          </div>
+        </div>
+      )}
+
+      {/* 3D WebGL Canvas Container */}
       <div 
         ref={mountRef} 
         className="w-full h-[360px] sm:h-[440px] lg:h-[480px] cursor-grab active:cursor-grabbing z-10"
       />
 
-      {/* Button 1: Left Bottom Corner Floating Box */}
+      {/* Button 1: Left Bottom Corner - 3D Cornea Scan */}
       <button
-        onClick={() => setLasikActive(false)}
-        className={`absolute bottom-4 left-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-300 backdrop-blur-md ${
-          !lasikActive
+        onClick={() => setActiveMode('scan')}
+        className={`absolute bottom-4 left-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+          activeMode === 'scan'
             ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
-            : 'bg-[#0E1726]/85 text-slate-300 border border-slate-700 hover:text-white hover:border-[#B8ED78]'
+            : 'bg-[#0E1726]/85 text-slate-300 border border-slate-700 hover:text-white hover:border-[#35A6B7]'
         }`}
       >
-        <Eye className="w-4 h-4" />
-        <span>3D Eye View</span>
+        <Scan className="w-4 h-4 text-slate-950" />
+        <span>3D Cornea Scan</span>
       </button>
 
-      {/* Button 2: Right Bottom Corner Floating Box */}
+      {/* Button 2: Right Bottom Corner - Instant LASIK Laser */}
       <button
-        onClick={() => setLasikActive(!lasikActive)}
-        className={`absolute bottom-4 right-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-300 backdrop-blur-md ${
-          lasikActive
+        onClick={() => setActiveMode('lasik')}
+        className={`absolute bottom-4 right-4 z-20 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+          activeMode === 'lasik'
             ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
             : 'bg-[#0E1726]/85 text-[#B8ED78] border border-[#B8ED78]/40 hover:bg-[#B8ED78]/20'
         }`}
       >
-        <Zap className="w-4 h-4 fill-[#B8ED78]" />
-        <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser View'}</span>
+        <Zap className="w-4 h-4 fill-[#B8ED78] text-slate-950" />
+        <span>LASIK Laser View</span>
       </button>
     </div>
   );
