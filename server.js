@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const GMAIL_USER = process.env.GMAIL_USER || '21amtics441@gmail.com';
-const GMAIL_APP_PASS = process.env.GMAIL_APP_PASS || 'ruwrrwmrfieterig'; // 16-char app password
+const GMAIL_APP_PASS = process.env.GMAIL_APP_PASS || 'ruwrrwmrfieterig';
 
 const createTransporter = (pass) => nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -41,145 +41,237 @@ app.post('/api/book-appointment', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Patient name and phone number are required.' });
   }
 
-  // 1. Hospital Admin Notification Email Template
+  // 1. Hospital Admin Email Template (Perfect Responsive Alignment & Formatting)
   const adminHtmlContent = `
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
       <meta charset="utf-8">
-      <style>
-        body { font-family: 'Plus Jakarta Sans', 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #070C14; color: #f1f5f9; margin: 0; padding: 20px; }
-        .card { max-width: 650px; margin: 0 auto; background: #0E1726; border-radius: 20px; border: 1px solid rgba(53, 166, 183, 0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
-        .header { background: linear-gradient(135deg, #070C14 0%, #0E1726 100%); padding: 30px 25px; text-align: center; border-bottom: 2px solid #35A6B7; }
-        .logo-title { color: #B8ED78; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
-        .sub-title { color: #35A6B7; font-size: 13px; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
-        .content { padding: 30px 25px; }
-        .alert-badge { display: inline-block; background: rgba(184, 237, 120, 0.15); color: #B8ED78; border: 1px solid rgba(184, 237, 120, 0.4); padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
-        .table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        .td-label { color: #94a3b8; font-size: 13px; font-weight: 600; padding: 10px 14px; background: rgba(7, 12, 20, 0.6); border-top-left-radius: 10px; border-bottom-left-radius: 10px; width: 140px; }
-        .td-val { color: #ffffff; font-size: 15px; font-weight: 700; padding: 10px 14px; background: rgba(7, 12, 20, 0.6); border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
-        .highlight-phone { color: #B8ED78 !important; font-size: 17px !important; text-decoration: none; }
-        .highlight-service { color: #35A6B7 !important; }
-        .action-btns { margin-top: 25px; display: flex; gap: 12px; }
-        .btn-call { flex: 1; display: inline-block; text-align: center; background: linear-gradient(135deg, #B8ED78 0%, #35A6B7 100%); color: #070C14; font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 12px 20px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 15px rgba(184,237,120,0.3); }
-        .footer { background: #070C14; padding: 20px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #1e293b; }
-      </style>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New OPD Appointment Alert</title>
     </head>
-    <body>
-      <div class="card">
-        <div class="header">
-          <h1 class="logo-title">👁️ RISHABH EYECARE HOSPITAL</h1>
-          <div class="sub-title">& Laser Center • Surat, Gujarat</div>
-        </div>
-        <div class="content">
-          <div class="alert-badge">🚨 New OPD Appointment Alert</div>
-          
-          <table class="table">
-            <tr>
-              <td class="td-label">Patient Name</td>
-              <td class="td-val">${name}</td>
-            </tr>
-            <tr>
-              <td class="td-label">Phone Number</td>
-              <td class="td-val"><a href="tel:${phone}" class="highlight-phone">📞 ${phone}</a></td>
-            </tr>
-            ${email ? `
-            <tr>
-              <td class="td-label">Patient Email</td>
-              <td class="td-val" style="color:#51AABC;">${email}</td>
-            </tr>
-            ` : ''}
-            <tr>
-              <td class="td-label">Doctor Choice</td>
-              <td class="td-val">${doctor || 'Dr. Hetalkumar R. Yagnik'}</td>
-            </tr>
-            <tr>
-              <td class="td-label">Required Service</td>
-              <td class="td-val highlight-service">${service || 'Cataract Surgery (Phaco)'}</td>
-            </tr>
-            <tr>
-              <td class="td-label">Preferred Date</td>
-              <td class="td-val">${preferredDate || 'Earliest Available'}</td>
-            </tr>
-            <tr>
-              <td class="td-label">Time Slot</td>
-              <td class="td-val">${preferredTime || 'Morning'}</td>
-            </tr>
-            ${notes ? `
-            <tr>
-              <td class="td-label">Patient Notes</td>
-              <td class="td-val" style="font-weight:400; font-style:italic; color:#cbd5e1;">"${notes}"</td>
-            </tr>
-            ` : ''}
-          </table>
+    <body style="margin: 0; padding: 20px 10px; background-color: #04070D; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+      
+      <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #0A101D; border-radius: 20px; border: 1px solid rgba(53, 166, 183, 0.4); overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.6);">
+        
+        <!-- Header -->
+        <tr>
+          <td align="center" style="padding: 28px 20px; background: linear-gradient(180deg, #070C14 0%, #0D1627 100%); border-bottom: 2px solid #35A6B7;">
+            <div style="font-size: 22px; font-weight: 900; color: #B8ED78; letter-spacing: -0.5px; margin-bottom: 4px;">
+              👁️ RISHABH EYECARE HOSPITAL
+            </div>
+            <div style="font-size: 11px; font-weight: 700; color: #35A6B7; text-transform: uppercase; letter-spacing: 1.5px;">
+              Hospital & Laser Center • Surat, Gujarat
+            </div>
+          </td>
+        </tr>
 
-          <div style="margin-top: 25px;">
-            <a href="tel:${phone}" class="btn-call">📞 Call Patient Directly (${phone})</a>
-          </div>
-        </div>
-        <div class="footer">
-          Received via Rishabh Eye Hospital Online Booking Engine • Surat, Gujarat
-        </div>
-      </div>
+        <!-- Body Content -->
+        <tr>
+          <td style="padding: 24px 20px;">
+            
+            <!-- Alert Pill Badge -->
+            <div style="text-align: center; margin-bottom: 20px;">
+              <span style="display: inline-block; background-color: rgba(184, 237, 120, 0.12); color: #B8ED78; border: 1px solid rgba(184, 237, 120, 0.4); padding: 6px 16px; border-radius: 30px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+                🚨 NEW OPD APPOINTMENT REQUEST
+              </span>
+            </div>
+
+            <!-- Details Form Table -->
+            <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: separate; border-spacing: 0 8px;">
+              
+              <tr>
+                <td width="35%" style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-left: 3px solid #35A6B7;">
+                  Patient Name
+                </td>
+                <td width="65%" style="padding: 12px 14px; background-color: #060B14; color: #FFFFFF; font-size: 15px; font-weight: 800; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  ${name}
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-left: 3px solid #B8ED78;">
+                  Phone Number
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  <a href="tel:${phone}" style="color: #B8ED78; font-size: 17px; font-weight: 800; text-decoration: none;">
+                    📞 ${phone}
+                  </a>
+                </td>
+              </tr>
+
+              ${email ? `
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-left: 3px solid #51AABC;">
+                  Patient Email
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  <a href="mailto:${email}" style="color: #51AABC; font-size: 14px; font-weight: 700; text-decoration: none;">
+                    ✉️ ${email}
+                  </a>
+                </td>
+              </tr>
+              ` : ''}
+
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                  Doctor Choice
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #FFFFFF; font-size: 14px; font-weight: 700; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  ${doctor || 'Dr. Hetalkumar R. Yagnik'}
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                  Required Service
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #35A6B7; font-size: 14px; font-weight: 800; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  ${service || 'Cataract Surgery (Phaco)'}
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                  Preferred Date
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #FFFFFF; font-size: 14px; font-weight: 700; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  📅 ${preferredDate || 'Earliest Available'}
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                  Time Slot
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #FFFFFF; font-size: 14px; font-weight: 700; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  ⏰ ${preferredTime || 'Morning (9:00 AM - 1:00 PM)'}
+                </td>
+              </tr>
+
+              ${notes ? `
+              <tr>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #94A3B8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                  Patient Notes
+                </td>
+                <td style="padding: 12px 14px; background-color: #060B14; color: #CBD5E1; font-size: 13px; font-style: italic; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                  "${notes}"
+                </td>
+              </tr>
+              ` : ''}
+
+            </table>
+
+            <!-- Action Button -->
+            <div style="margin-top: 24px; text-align: center;">
+              <a href="tel:${phone}" style="display: block; width: 100%; box-sizing: border-box; padding: 15px 20px; background: linear-gradient(135deg, #B8ED78 0%, #35A6B7 100%); color: #04070D; font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; border-radius: 14px; text-align: center; box-shadow: 0 6px 20px rgba(184, 237, 120, 0.3);">
+                📞 Call Patient Directly (${phone})
+              </a>
+            </div>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td align="center" style="padding: 18px 20px; background-color: #060B14; border-top: 1px solid #162032; color: #64748B; font-size: 11px;">
+            Rishabh Eyecare Hospital Online Booking Engine • Surat, Gujarat
+          </td>
+        </tr>
+
+      </table>
+
     </body>
     </html>
   `;
 
-  // 2. Patient Confirmation Email Template
+  // 2. Patient Auto-Reply Email Template (Concise, Clear & Clean Theory)
   const patientHtmlContent = `
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
       <meta charset="utf-8">
-      <style>
-        body { font-family: 'Plus Jakarta Sans', 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #070C14; color: #f1f5f9; margin: 0; padding: 20px; }
-        .card { max-width: 650px; margin: 0 auto; background: #0E1726; border-radius: 20px; border: 1px solid rgba(184, 237, 120, 0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
-        .header { background: linear-gradient(135deg, #070C14 0%, #0E1726 100%); padding: 30px 25px; text-align: center; border-bottom: 2px solid #B8ED78; }
-        .logo-title { color: #B8ED78; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
-        .sub-title { color: #35A6B7; font-size: 13px; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
-        .content { padding: 30px 25px; }
-        .welcome-title { font-size: 20px; font-weight: 700; color: #ffffff; margin-top: 0; margin-bottom: 12px; }
-        .status-box { background: rgba(53, 166, 183, 0.15); border: 1px solid #35A6B7; border-left: 4px solid #B8ED78; padding: 16px; border-radius: 12px; margin: 20px 0; }
-        .status-title { font-size: 14px; font-weight: 700; color: #B8ED78; margin: 0 0 6px 0; text-transform: uppercase; }
-        .status-desc { font-size: 13px; color: #e2e8f0; margin: 0; line-height: 1.5; }
-        .hospital-info { background: rgba(7, 12, 20, 0.8); border: 1px solid #1e293b; padding: 20px; border-radius: 14px; margin-top: 25px; }
-        .hospital-info h4 { color: #35A6B7; margin-top: 0; margin-bottom: 10px; font-size: 15px; }
-        .info-item { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
-        .footer { background: #070C14; padding: 20px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #1e293b; }
-      </style>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Appointment Confirmation - Rishabh Eye Hospital</title>
     </head>
-    <body>
-      <div class="card">
-        <div class="header">
-          <h1 class="logo-title">👁️ RISHABH EYECARE HOSPITAL</h1>
-          <div class="sub-title">Hospital & Laser Center • Surat</div>
-        </div>
-        <div class="content">
-          <div class="welcome-title">Dear ${name},</div>
-          <p style="font-size:14px; color:#cbd5e1; line-height:1.6; margin-top:0;">
-            Thank you for choosing <strong>Rishabh Eye Hospital & Laser Center, Surat</strong>. We have successfully received your appointment request.
-          </p>
+    <body style="margin: 0; padding: 20px 10px; background-color: #04070D; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+      
+      <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #0A101D; border-radius: 20px; border: 1px solid rgba(184, 237, 120, 0.4); overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.6);">
+        
+        <!-- Header -->
+        <tr>
+          <td align="center" style="padding: 28px 20px; background: linear-gradient(180deg, #070C14 0%, #0D1627 100%); border-bottom: 2px solid #B8ED78;">
+            <div style="font-size: 22px; font-weight: 900; color: #B8ED78; letter-spacing: -0.5px; margin-bottom: 4px;">
+              👁️ RISHABH EYECARE HOSPITAL
+            </div>
+            <div style="font-size: 11px; font-weight: 700; color: #35A6B7; text-transform: uppercase; letter-spacing: 1.5px;">
+              Hospital & Laser Center • Surat, Gujarat
+            </div>
+          </td>
+        </tr>
 
-          <div class="status-box">
-            <div class="status-title">⏳ Appointment Request Received & Under Review</div>
-            <p class="status-desc">
-              Humne aapka appointment request receive kar liya hai. Hamari medical OPD team aapke requested doctor (<strong>${doctor}</strong>) aur requested slot (<strong>${preferredDate || 'Upcoming Date'} - ${preferredTime}</strong>) ko check karke aapko <strong>${phone}</strong> par call karke appointment confirm karegi.
-            </p>
-          </div>
+        <!-- Body Content -->
+        <tr>
+          <td style="padding: 28px 24px;">
+            
+            <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-bottom: 12px;">
+              Dear ${name},
+            </div>
 
-          <div class="hospital-info">
-            <h4>🏥 Rishabh Eye Hospital & Laser Center Details</h4>
-            <div class="info-item">📍 <strong>Address:</strong> The Lenora, 201-202, New City Light Rd, beside Naveli Hospital, Althan, Surat, Gujarat 395007</div>
-            <div class="info-item">📞 <strong>24/7 OPD Helpline:</strong> 074055 63636</div>
-            <div class="info-item">👨‍⚕️ <strong>Senior Super-Consultant:</strong> Dr. Hetalkumar R. Yagnik (17+ Years Experience)</div>
-            <div class="info-item">👩‍⚕️ <strong>Consultant Surgeon:</strong> Dr. Shefali H. Yagnik</div>
-            <div class="info-item">⭐ <strong>Facilities:</strong> German Modular OT, American Phaco Cataract System, Bladeless LASIK, In-House Optical Shop.</div>
-          </div>
-        </div>
-        <div class="footer">
-          Rishabh Eyecare Hospital & Laser Center • Althan, Surat, Gujarat 395007 • 074055 63636
-        </div>
-      </div>
+            <!-- Concise Clear Message Box -->
+            <div style="background-color: rgba(53, 166, 183, 0.12); border-left: 4px solid #B8ED78; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+              <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #E2E8F0;">
+                We have successfully received your appointment request. Our medical OPD team is reviewing your requested slot details and will contact you through a phone call on <strong style="color: #B8ED78;">${phone}</strong> shortly to confirm your consultation.
+              </p>
+            </div>
+
+            <!-- Emergency / Immediate Reach Out Note -->
+            <div style="background-color: #060B14; border: 1px solid rgba(81, 170, 188, 0.3); border-radius: 14px; padding: 18px; margin-bottom: 24px;">
+              <div style="font-size: 12px; font-weight: 800; color: #35A6B7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">
+                🚨 For Any Emergency or Immediate Inquiry
+              </div>
+              <div style="font-size: 14px; color: #FFFFFF; font-weight: 700;">
+                Please reach out to our 24/7 Helpline directly: 
+                <a href="tel:07405563636" style="color: #B8ED78; text-decoration: none; font-size: 16px; margin-left: 4px;">📞 074055 63636</a>
+              </div>
+            </div>
+
+            <!-- Booking Receipt Summary -->
+            <div style="background-color: #060B14; border: 1px solid #1E293B; border-radius: 14px; padding: 18px;">
+              <div style="font-size: 13px; font-weight: 800; color: #B8ED78; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
+                📋 Requested Booking Summary
+              </div>
+              
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #CBD5E1;">
+                <tr>
+                  <td style="padding: 4px 0; color: #94A3B8; width: 35%;">Doctor:</td>
+                  <td style="padding: 4px 0; color: #FFFFFF; font-weight: 700;">${doctor || 'Dr. Hetalkumar R. Yagnik'}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 4px 0; color: #94A3B8;">Service:</td>
+                  <td style="padding: 4px 0; color: #35A6B7; font-weight: 700;">${service || 'Cataract Surgery (Phaco)'}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 4px 0; color: #94A3B8;">Preferred Slot:</td>
+                  <td style="padding: 4px 0; color: #FFFFFF; font-weight: 700;">${preferredDate || 'Earliest Available'} • ${preferredTime || 'Morning'}</td>
+                </tr>
+              </table>
+            </div>
+
+          </td>
+        </tr>
+
+        <!-- Hospital Location & Footer -->
+        <tr>
+          <td align="center" style="padding: 20px; background-color: #060B14; border-top: 1px solid #162032; color: #64748B; font-size: 11px; line-height: 1.5;">
+            <strong style="color: #94A3B8;">Rishabh Eyecare Hospital & Laser Center</strong><br>
+            The Lenora, 201-202, New City Light Rd, Althan, Surat, Gujarat 395007<br>
+            24/7 OPD Helpline: 074055 63636
+          </td>
+        </tr>
+
+      </table>
+
     </body>
     </html>
   `;
@@ -189,7 +281,7 @@ app.post('/api/book-appointment', async (req, res) => {
     await activeTransporter.sendMail({
       from: `"Rishabh Eye Hospital" <${GMAIL_USER}>`,
       to: GMAIL_USER,
-      subject: `🚨 New Appointment Alert: ${name} (${phone}) - ${service || 'Consultation'}`,
+      subject: `🚨 New OPD Appointment Alert: ${name} (${phone})`,
       html: adminHtmlContent
     });
 
@@ -198,7 +290,7 @@ app.post('/api/book-appointment', async (req, res) => {
       await activeTransporter.sendMail({
         from: `"Rishabh Eye Hospital" <${GMAIL_USER}>`,
         to: email,
-        subject: `Appointment Request Received - Rishabh Eye Hospital, Surat`,
+        subject: `Appointment Received - Rishabh Eye Hospital, Surat`,
         html: patientHtmlContent
       });
     }
