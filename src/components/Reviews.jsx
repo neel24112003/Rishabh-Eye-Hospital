@@ -137,9 +137,10 @@ export default function Reviews() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative flex flex-col justify-between"
             >
-              <Quote className="absolute top-6 right-6 w-10 h-10 text-[#35A6B7]/15 pointer-events-none" />
+              {/* Lime Green Theme Quote Icon in Extreme Top Right Corner */}
+              <Quote className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 text-[#B8ED78]/20 pointer-events-none z-0" />
 
-              <div>
+              <div className="relative z-10">
                 {/* Rating & Treatment */}
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                   <div className="flex text-[#B8ED78]">
@@ -148,7 +149,7 @@ export default function Reviews() {
                     ))}
                   </div>
 
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#35A6B7]/15 text-[#35A6B7] border border-[#35A6B7]/30">
+                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shadow-sm">
                     {review.treatment}
                   </span>
                 </div>
