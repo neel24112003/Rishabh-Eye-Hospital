@@ -140,21 +140,20 @@ export default function Reviews() {
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative flex flex-col justify-between"
             >
               <div className="relative z-10">
-                {/* Rating & Treatment & Quote Icon (100% Single Horizontal Line on Mobile & Desktop) */}
+                {/* Rating (Left) & Treatment Badge + Quote Icon (Right - 100% Single Horizontal Line) */}
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="flex text-[#B8ED78] shrink-0">
-                      {[...Array(review.rating)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#B8ED78]" />
-                      ))}
-                    </div>
+                  <div className="flex text-[#B8ED78] shrink-0">
+                    {[...Array(review.rating)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#B8ED78]" />
+                    ))}
+                  </div>
 
+                  <div className="flex items-center gap-2 min-w-0">
                     <span className="px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis">
                       {review.treatment}
                     </span>
+                    <Quote className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8ED78]/60 shrink-0" />
                   </div>
-
-                  <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-[#B8ED78]/35 shrink-0" />
                 </div>
 
                 <p className="text-slate-200 text-sm leading-relaxed italic mb-6">
