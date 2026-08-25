@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, MessageCircle, ShieldCheck, ChevronDown, Loader2 } from 'lucide-react';
+import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, ShieldCheck, ChevronDown, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function ContactMap({ onBookSuccess }) {
@@ -317,25 +317,15 @@ export default function ContactMap({ onBookSuccess }) {
                 />
               </div>
 
-              <div className="p-4 pt-3 flex items-center justify-between gap-3">
+              <div className="p-4 pt-3 flex items-center">
                 <a
                   href="https://maps.google.com/?q=The+Lenora+New+City+Light+Rd+Althan+Surat"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-2.5 rounded-xl bg-[#35A6B7] hover:bg-[#B8ED78] text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#35A6B7] to-[#B8ED78] text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition-opacity shadow-lg"
                 >
-                  <Navigation className="w-3.5 h-3.5" />
+                  <Navigation className="w-4 h-4" />
                   <span>Get GPS Directions</span>
-                </a>
-
-                <a
-                  href="https://wa.me/917405563636?text=Hello%20Rishabh%20Eye%20Hospital,%20I%20want%20to%20inquire%20about%20an%20appointment."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-2.5 px-4 rounded-xl glass-panel border border-[#B8ED78]/40 text-[#B8ED78] font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#B8ED78]/10 transition-colors"
-                >
-                  <MessageCircle className="w-3.5 h-3.5" />
-                  <span>WhatsApp</span>
                 </a>
               </div>
             </div>
