@@ -25,13 +25,17 @@ export default function AppointmentModal({ isOpen, onClose }) {
     setIsSubmitting(true);
 
     try {
-      await fetch('http://localhost:5001/api/book-appointment', {
+      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+      const res = await fetch(`${API_BASE}/api/book-appointment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
+      if (!res.ok) {
+        console.warn(`[AppointmentModal] API returned status ${res.status}`);
+      }
     } catch (err) {
-      console.warn('API Email notice:', err);
+      console.warn('[AppointmentModal] API Email notice:', err);
     } finally {
       setIsSubmitting(false);
       setSubmitted(true);

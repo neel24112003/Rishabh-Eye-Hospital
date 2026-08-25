@@ -51,9 +51,9 @@ export default function Hero({ onOpenAppointment }) {
               </span>
             </motion.div>
 
-            {/* Headline */}
-            <motion.h1 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] mb-6">
-              Empowering Clear Vision With{' '}
+            {/* Headline - Guaranteed 2 Lines */}
+            <motion.h1 variants={itemVariants} className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.15rem] xl:text-5xl font-extrabold tracking-tight text-white leading-[1.18] mb-6">
+              <span className="block">Empowering Clear Vision With</span>
               <span className="text-gradient-lime block mt-1">
                 Futuristic Precision
               </span>
