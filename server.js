@@ -185,7 +185,7 @@ app.post('/api/book-appointment', async (req, res) => {
     </html>
   `;
 
-  // 2. Patient Auto-Reply Email Template (Concise, Clear & Clean Theory)
+  // 2. Patient Auto-Reply Email Template (Perfect Aligned Requested Summary Box)
   const patientHtmlContent = `
     <!DOCTYPE html>
     <html lang="en">
@@ -214,12 +214,12 @@ app.post('/api/book-appointment', async (req, res) => {
         <tr>
           <td style="padding: 28px 24px;">
             
-            <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-bottom: 12px;">
+            <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-bottom: 14px;">
               Dear ${name},
             </div>
 
             <!-- Concise Clear Message Box -->
-            <div style="background-color: rgba(53, 166, 183, 0.12); border-left: 4px solid #B8ED78; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+            <div style="background-color: rgba(53, 166, 183, 0.12); border-left: 4px solid #B8ED78; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
               <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #E2E8F0;">
                 We have successfully received your appointment request. Our medical OPD team is reviewing your requested slot details and will contact you through a phone call on <strong style="color: #B8ED78;">${phone}</strong> shortly to confirm your consultation.
               </p>
@@ -236,24 +236,47 @@ app.post('/api/book-appointment', async (req, res) => {
               </div>
             </div>
 
-            <!-- Booking Receipt Summary -->
-            <div style="background-color: #060B14; border: 1px solid #1E293B; border-radius: 14px; padding: 18px;">
-              <div style="font-size: 13px; font-weight: 800; color: #B8ED78; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
-                📋 Requested Booking Summary
+            <!-- Perfectly Aligned Booking Summary Table Card -->
+            <div style="background-color: #060B14; border: 1px solid rgba(184, 237, 120, 0.3); border-radius: 16px; padding: 20px;">
+              <div style="font-size: 12px; font-weight: 800; color: #B8ED78; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px;">
+                📋 REQUESTED BOOKING SUMMARY
               </div>
               
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #CBD5E1;">
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: separate; border-spacing: 0 8px;">
                 <tr>
-                  <td style="padding: 4px 0; color: #94A3B8; width: 35%;">Doctor:</td>
-                  <td style="padding: 4px 0; color: #FFFFFF; font-weight: 700;">${doctor || 'Dr. Hetalkumar R. Yagnik'}</td>
+                  <td width="38%" style="padding: 10px 12px; background-color: #0B1220; color: #94A3B8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 2px solid #35A6B7;">
+                    Doctor
+                  </td>
+                  <td width="62%" style="padding: 10px 12px; background-color: #0B1220; color: #FFFFFF; font-size: 14px; font-weight: 800; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                    ${doctor || 'Dr. Hetalkumar R. Yagnik'}
+                  </td>
                 </tr>
+
                 <tr>
-                  <td style="padding: 4px 0; color: #94A3B8;">Service:</td>
-                  <td style="padding: 4px 0; color: #35A6B7; font-weight: 700;">${service || 'Cataract Surgery (Phaco)'}</td>
+                  <td style="padding: 10px 12px; background-color: #0B1220; color: #94A3B8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 2px solid #B8ED78;">
+                    Service
+                  </td>
+                  <td style="padding: 10px 12px; background-color: #0B1220; color: #35A6B7; font-size: 14px; font-weight: 800; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                    ${service || 'Cataract Surgery (Phaco)'}
+                  </td>
                 </tr>
+
                 <tr>
-                  <td style="padding: 4px 0; color: #94A3B8;">Preferred Slot:</td>
-                  <td style="padding: 4px 0; color: #FFFFFF; font-weight: 700;">${preferredDate || 'Earliest Available'} • ${preferredTime || 'Morning'}</td>
+                  <td style="padding: 10px 12px; background-color: #0B1220; color: #94A3B8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 2px solid #51AABC;">
+                    Preferred Date
+                  </td>
+                  <td style="padding: 10px 12px; background-color: #0B1220; color: #FFFFFF; font-size: 14px; font-weight: 800; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                    📅 ${preferredDate || 'Earliest Available'}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding: 10px 12px; background-color: #0B1220; color: #94A3B8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 2px solid #B8ED78;">
+                    Time Slot
+                  </td>
+                  <td style="padding: 10px 12px; background-color: #0B1220; color: #FFFFFF; font-size: 14px; font-weight: 800; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                    ⏰ ${preferredTime || 'Morning (9:00 AM - 1:00 PM)'}
+                  </td>
                 </tr>
               </table>
             </div>
