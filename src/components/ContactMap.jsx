@@ -47,7 +47,8 @@ export default function ContactMap({ onBookSuccess }) {
     }
   };
 
-  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.238644342204!2d72.7981504!3d21.1429486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be053cb3f3458d9%3A0xbbfd11a7b8e1f0e4!2sThe%20Lenora%2C%20New%20City%20Light%20Rd%2C%20Althan%2C%20Surat%2C%20Gujarat%20395007!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
+  // Google Maps Natural Color Embed URL with Official Place Card Info
+  const mapEmbedUrl = "https://maps.google.com/maps?q=Rishabh+Eyecare+Hospital+%26+Laser+Center,+The+Lenora,+201-202,+New+City+Light+Rd,+Althan,+Surat,+Gujarat+395007&t=&z=16&ie=UTF8&iwloc=B&output=embed";
 
   return (
     <section id="contact" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
@@ -305,11 +306,11 @@ export default function ContactMap({ onBookSuccess }) {
 
               <div className="relative flex-1 min-h-[350px] rounded-2xl overflow-hidden mt-3 border border-slate-800">
                 <iframe
-                  title="Rishabh Eye Hospital Location Map Surat"
+                  title="Rishabh Eyecare Hospital Location Map Surat"
                   src={mapEmbedUrl}
                   width="100%"
                   height="100%"
-                  style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) contrast(1.2)" }}
+                  style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -319,7 +320,7 @@ export default function ContactMap({ onBookSuccess }) {
 
               <div className="p-4 pt-3 flex items-center">
                 <a
-                  href="https://maps.google.com/?q=The+Lenora+New+City+Light+Rd+Althan+Surat"
+                  href="https://maps.google.com/?q=Rishabh+Eyecare+Hospital+The+Lenora+New+City+Light+Rd+Althan+Surat"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-[#35A6B7] to-[#B8ED78] text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition-opacity shadow-lg"
