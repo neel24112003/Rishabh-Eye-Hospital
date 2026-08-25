@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AboutHospital from './components/AboutHospital';
@@ -9,30 +9,35 @@ import EventGallery from './components/EventGallery';
 import Reviews from './components/Reviews';
 import ContactMap from './components/ContactMap';
 import Footer from './components/Footer';
-import AppointmentModal from './components/AppointmentModal';
 import { Phone } from 'lucide-react';
 
 export default function App() {
-  const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
+  // Smooth scroll directly to the main Appointment Booking section (#contact)
+  const handleScrollToAppointment = () => {
+    const contactElement = document.getElementById('contact');
+    if (contactElement) {
+      contactElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#070C14] text-slate-100 selection:bg-[#B8ED78] selection:text-slate-900 overflow-x-hidden relative">
       {/* Sticky Header Navbar */}
-      <Navbar onOpenAppointment={() => setAppointmentModalOpen(true)} />
+      <Navbar onOpenAppointment={handleScrollToAppointment} />
 
       {/* Main Content Sections */}
       <main>
         {/* Hero Section with 3D Cyber Eye Visualizer */}
-        <Hero onOpenAppointment={() => setAppointmentModalOpen(true)} />
+        <Hero onOpenAppointment={handleScrollToAppointment} />
 
         {/* Doctors Section */}
-        <Doctors onOpenAppointment={() => setAppointmentModalOpen(true)} />
+        <Doctors onOpenAppointment={handleScrollToAppointment} />
 
         {/* About Hospital Section */}
         <AboutHospital />
 
         {/* Services Section */}
-        <Services onOpenAppointment={() => setAppointmentModalOpen(true)} />
+        <Services onOpenAppointment={handleScrollToAppointment} />
 
         {/* Equipment Section */}
         <Equipment />
@@ -43,18 +48,12 @@ export default function App() {
         {/* Reviews Section */}
         <Reviews />
 
-        {/* Contact & Map Section */}
+        {/* Contact & Map Section (Main Appointment Booking Form) */}
         <ContactMap onBookSuccess={() => {}} />
       </main>
 
       {/* Footer */}
-      <Footer />
-
-      {/* Global Appointment Modal */}
-      <AppointmentModal
-        isOpen={appointmentModalOpen}
-        onClose={() => setAppointmentModalOpen(false)}
-      />
+      <Footer onOpenAppointment={handleScrollToAppointment} />
 
       {/* Floating Quick Contact Widgets (Right Bottom) */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
