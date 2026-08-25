@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Eye, Zap, Sparkles } from 'lucide-react';
+import { Eye, Zap } from 'lucide-react';
 
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
   const [lasikActive, setLasikActive] = useState(false);
-  const [activeMode, setActiveMode] = useState('3d');
 
   useEffect(() => {
     const container = mountRef.current;
@@ -14,10 +13,10 @@ export default function EyeVisualizerCanvas() {
     const width = container.clientWidth || 500;
     const height = container.clientHeight || 500;
 
-    // Scene & Camera
+    // Scene & Camera (camera z=6.7 for perfect slightly smaller centered eye proportion)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.z = 6.0;
+    camera.position.z = 6.7;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
@@ -114,7 +113,6 @@ export default function EyeVisualizerCanvas() {
     eyeGroup.add(pupilMesh);
 
     // 4. Concentric Cornea Lens Dome (Radius 2.04 centered at Origin 0,0,0)
-    // Using a concentric sphere cap around (0,0,0) guarantees ZERO offset misalignment when rotating!
     const corneaGeo = new THREE.SphereGeometry(2.04, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.26);
     const corneaMat = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
@@ -243,7 +241,7 @@ export default function EyeVisualizerCanvas() {
 
       particleSystem.rotation.y = elapsedTime * 0.06;
 
-      if (lasikActive || activeMode === 'lasik') {
+      if (lasikActive) {
         laserLineMat.opacity = 0.9 + Math.sin(elapsedTime * 12) * 0.1;
         laserMesh.position.y = Math.sin(elapsedTime * 2.5) * 0.8;
         targetRingMat.opacity = 0.9;
@@ -268,56 +266,41 @@ export default function EyeVisualizerCanvas() {
       }
       renderer.dispose();
     };
-  }, [lasikActive, activeMode]);
+  }, [lasikActive]);
 
   return (
-    <div className="relative w-full h-full min-h-[380px] lg:min-h-[500px] flex flex-col items-center justify-center">
+    <div className="relative w-full h-full min-h-[380px] lg:min-h-[480px] flex flex-col items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/15 via-[#B8ED78]/10 to-transparent rounded-full blur-3xl pointer-events-none transform scale-90" />
 
       <div 
         ref={mountRef} 
-        className="w-full h-[360px] sm:h-[440px] lg:h-[500px] cursor-grab active:cursor-grabbing z-10"
+        className="w-full h-[360px] sm:h-[440px] lg:h-[480px] cursor-grab active:cursor-grabbing z-10"
       />
 
-      {/* Styled Responsive Control Pill Bar */}
-      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl glass-panel border border-[#35A6B7]/40 shadow-2xl backdrop-blur-md max-w-[96%]">
+      {/* Sleek Centered Dual Control Buttons (3D Eye View & LASIK Laser View) */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center gap-2 p-1.5 rounded-2xl glass-panel border border-[#35A6B7]/40 shadow-2xl backdrop-blur-md">
         <button
-          onClick={() => { setActiveMode('3d'); setLasikActive(false); }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-200 ${
-            activeMode === '3d' && !lasikActive
+          onClick={() => setLasikActive(false)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+            !lasikActive
               ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-md shadow-[#35A6B7]/30'
               : 'text-slate-300 hover:text-white'
           }`}
         >
-          <Eye className="w-3.5 h-3.5" />
+          <Eye className="w-4 h-4" />
           <span>3D Eye View</span>
         </button>
 
         <button
-          onClick={() => {
-            setLasikActive(!lasikActive);
-            setActiveMode(lasikActive ? '3d' : 'lasik');
-          }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-200 ${
-            lasikActive || activeMode === 'lasik'
+          onClick={() => setLasikActive(!lasikActive)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+            lasikActive
               ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-md shadow-[#B8ED78]/40'
-              : 'text-[#B8ED78] bg-[#B8ED78]/10 border border-[#B8ED78]/30'
+              : 'text-[#B8ED78] bg-[#B8ED78]/10 border border-[#B8ED78]/30 hover:bg-[#B8ED78]/20'
           }`}
         >
-          <Zap className="w-3.5 h-3.5 fill-[#B8ED78]" />
-          <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser'}</span>
-        </button>
-
-        <button
-          onClick={() => { setActiveMode('topography'); setLasikActive(false); }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-200 ${
-            activeMode === 'topography'
-              ? 'bg-gradient-to-r from-[#51AABC] to-[#B8ED78] text-slate-950 shadow-md shadow-[#51AABC]/30'
-              : 'text-slate-300 hover:text-white'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Corneal Map</span>
+          <Zap className="w-4 h-4 fill-[#B8ED78]" />
+          <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser View'}</span>
         </button>
       </div>
     </div>
