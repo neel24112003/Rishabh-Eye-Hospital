@@ -206,7 +206,7 @@ export default function ContactMap({ onBookSuccess }) {
                         <option value="Dr. Hetalkumar R. Yagnik">Dr. Hetalkumar R. Yagnik (Super-Consultant)</option>
                         <option value="Dr. Shefali H. Yagnik">Dr. Shefali H. Yagnik (Retina & Pediatric)</option>
                       </select>
-                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <ChevronDown className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
                     </div>
                   </div>
 
@@ -226,7 +226,7 @@ export default function ContactMap({ onBookSuccess }) {
                         <option value="Retina Evaluation">Retina Care & Evaluation</option>
                         <option value="Comprehensive Checkup">Comprehensive Eye Checkup</option>
                       </select>
-                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <ChevronDown className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
                     </div>
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export default function ContactMap({ onBookSuccess }) {
                         <option value="Afternoon (2:00 PM - 5:00 PM)">Afternoon (2:00 PM - 5:00 PM)</option>
                         <option value="Evening (5:00 PM - 8:30 PM)">Evening (5:00 PM - 8:30 PM)</option>
                       </select>
-                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <ChevronDown className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
                     </div>
                   </div>
                 </div>

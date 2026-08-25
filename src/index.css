@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: dark;
   --theme-lime: #B8ED78;
   --theme-teal: #35A6B7;
   --theme-aqua: #51AABC;
@@ -21,6 +22,12 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #35A6B7;
+}
+
+/* Form Input Dark Calendar & Controls Fix */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 /* Optimized Lightweight Glassmorphism Utilities (GPU Accelerated) */
