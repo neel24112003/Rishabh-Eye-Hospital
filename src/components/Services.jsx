@@ -242,11 +242,13 @@ export default function Services({ onOpenAppointment }) {
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#0E1726] border border-[#35A6B7]/40 flex items-center justify-center text-[#35A6B7] group-hover:scale-110 transition-transform">
-                      <Icon className="w-6 h-6" />
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
+                      <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                        <Icon className="w-6 h-6" />
+                      </div>
                     </div>
 
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono text-slate-300 bg-slate-800 border border-slate-700">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-[#B8ED78]/15 text-[#B8ED78] border border-[#B8ED78]/30">
                       {service.time}
                     </span>
                   </div>
@@ -264,7 +266,7 @@ export default function Services({ onOpenAppointment }) {
                   <span className="text-[11px] font-semibold text-[#B8ED78]">OPD Daily Available</span>
                   <button
                     onClick={onOpenAppointment}
-                    className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-[#35A6B7] text-slate-200 hover:text-slate-950 font-bold text-xs transition-colors"
+                    className="px-3.5 py-1.5 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
                   >
                     Consult
                   </button>
