@@ -185,7 +185,7 @@ app.post('/api/book-appointment', async (req, res) => {
     </html>
   `;
 
-  // 2. Patient Auto-Reply Email Template (Perfect Aligned Requested Summary Box)
+  // 2. Patient Auto-Reply Email Template (100% Pure English Message)
   const patientHtmlContent = `
     <!DOCTYPE html>
     <html lang="en">
@@ -218,10 +218,13 @@ app.post('/api/book-appointment', async (req, res) => {
               Dear ${name},
             </div>
 
-            <!-- Concise Clear Message Box -->
+            <!-- Concise Clear English Message Box -->
             <div style="background-color: rgba(53, 166, 183, 0.12); border-left: 4px solid #B8ED78; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+              <div style="font-size: 12px; font-weight: 800; color: #B8ED78; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">
+                ⏳ APPOINTMENT REQUEST RECEIVED & UNDER REVIEW
+              </div>
               <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #E2E8F0;">
-                We have successfully received your appointment request. Our medical OPD team is reviewing your requested slot details and will contact you through a phone call on <strong style="color: #B8ED78;">${phone}</strong> shortly to confirm your consultation.
+                We have received your appointment request. The Rishabh Eye Hospital medical OPD team is reviewing your requested doctor (<strong>${doctor || 'Dr. Hetalkumar R. Yagnik'}</strong>) and preferred slot (<strong>${preferredDate || 'Earliest Available'} • ${preferredTime || 'Morning'}</strong>) and will contact you via a phone call on <strong style="color: #B8ED78;">${phone}</strong> shortly to confirm your appointment.
               </p>
             </div>
 

@@ -146,8 +146,8 @@ export default function ContactMap({ onBookSuccess }) {
               >
                 <CheckCircle2 className="w-16 h-16 text-[#B8ED78] mx-auto mb-4 animate-bounce" />
                 <h4 className="font-display text-2xl font-extrabold text-white mb-2">Appointment Request Received!</h4>
-                <p className="text-sm text-slate-200 max-w-md mx-auto mb-6">
-                  Thank you, <strong className="text-white">{formData.name}</strong>. Aapka request receive ho gaya hai. Rishabh Eye Hospital OPD team is reviewing your slot and will call you on <strong className="text-[#B8ED78]">{formData.phone}</strong> shortly to confirm!
+                <p className="text-sm text-slate-200 max-w-md mx-auto mb-6 leading-relaxed">
+                  Thank you, <strong className="text-white">{formData.name}</strong>. We have successfully received your appointment request. The Rishabh Eye Hospital OPD team is reviewing your requested slot and will call you on <strong className="text-[#B8ED78]">{formData.phone}</strong> shortly to confirm your consultation!
                 </p>
                 <button
                   onClick={() => setBookingSubmitted(false)}
