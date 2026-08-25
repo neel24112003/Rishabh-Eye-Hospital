@@ -79,9 +79,28 @@ export default function AboutHospital() {
               </span>
             </div>
 
-            <p className="font-sans text-base sm:text-lg md:text-xl font-normal text-slate-200 leading-relaxed border-l-4 border-[#B8ED78] pl-6 py-2 my-4">
-              Rishabh Eyecare Hospital and Laser Center is a state-of-the-art hospital featuring ample fully AC waiting space, fully modular international-standard German Operation Theatre, and American world-class Phaco system for cataract surgery. We provide an in-house optical shop for all classes, best-in-class investigative instruments, and laser spectacle removal facility, performed by Senior Super-Consultant Dr. Hetalkumar Yagnik having a vast experience of 17 years with a proven track record of all surgeries executed successfully. We offer all types of ophthalmic checkups and surgeries with spectacle and contact lens dispensing under one roof. Rishabh Eyecare Hospital has started its new setup with ultramodern facilities for our patients.
-            </p>
+            {/* Spacious & Readable Overview Text Box */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-[#070C14]/85 border-l-4 border-l-[#B8ED78] border border-[#35A6B7]/30 shadow-xl my-6">
+              <div className="space-y-4 font-sans text-slate-200 text-base sm:text-lg md:text-[1.125rem] leading-[1.85] tracking-wide">
+                <p>
+                  <strong className="text-white font-bold">Rishabh Eyecare Hospital & Laser Center</strong> is a state-of-the-art ophthalmic facility featuring ample fully AC waiting space, international-standard{' '}
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 font-semibold text-xs sm:text-sm align-middle">
+                    German Modular OT
+                  </span>{' '}
+                  with zero-laminar airflow, and world-class{' '}
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40 font-semibold text-xs sm:text-sm align-middle">
+                    American Phaco System
+                  </span>{' '}
+                  for sutureless cataract surgery.
+                </p>
+
+                <p>
+                  We offer an in-house optical shop for all classes, advanced diagnostic instruments, and bladeless laser spectacle removal facilities — led by Senior Super-Consultant{' '}
+                  <strong className="text-white font-extrabold underline decoration-[#B8ED78] decoration-2 underline-offset-4">Dr. Hetalkumar Yagnik</strong>{' '}
+                  having a vast experience of <span className="text-[#B8ED78] font-bold">17+ years</span> with an unblemished 100% successful surgical record. All checkups, surgeries, and spectacle dispensing are provided under one roof.
+                </p>
+              </div>
+            </div>
 
             {/* Doctors Showcase Bar */}
             <div className="mt-8 flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-slate-800">
