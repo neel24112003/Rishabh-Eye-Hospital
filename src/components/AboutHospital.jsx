@@ -53,8 +53,9 @@ export default function AboutHospital() {
             <span>State of Art Ophthalmic Infrastructure</span>
           </div>
 
-          <h2 className="font-display text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight whitespace-nowrap text-center">
-            Rishabh Eyecare Hospital & <span className="text-gradient-lime">Laser Center</span>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight text-center leading-tight">
+            <span className="inline-block">Rishabh Eyecare Hospital &</span>{' '}
+            <span className="text-gradient-lime inline-block">Laser Center</span>
           </h2>
         </div>
 

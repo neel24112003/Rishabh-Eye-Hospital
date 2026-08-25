@@ -140,13 +140,13 @@ export default function ContactMap({ onBookSuccess }) {
           <div className="lg:col-span-7 glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/40 shadow-2xl relative flex flex-col justify-between h-full">
             
             {/* Left Header */}
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-slate-800">
               <div>
-                <h3 className="font-display text-2xl font-bold text-white">Schedule Appointment</h3>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-white">Schedule Appointment</h3>
                 <p className="text-xs text-slate-400">Direct Email Notification to Hospital & Patient Confirmation</p>
               </div>
 
-              <span className="px-3 py-1 rounded-full text-xs font-mono bg-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40 shrink-0">
+              <span className="px-3 py-1 rounded-full text-[11px] sm:text-xs font-mono bg-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40 shrink-0 self-start sm:self-auto">
                 EMAIL SYNC ACTIVE
               </span>
             </div>
@@ -321,16 +321,16 @@ export default function ContactMap({ onBookSuccess }) {
           <div className="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/40 shadow-2xl relative flex flex-col justify-between h-full">
             
             {/* Right Header (Matching Height & Border) */}
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-slate-800">
               <div>
-                <h3 className="font-display text-2xl font-bold text-white flex items-center gap-2">
-                  <Navigation className="w-5 h-5 text-[#B8ED78]" />
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+                  <Navigation className="w-5 h-5 text-[#B8ED78] shrink-0" />
                   <span>Hospital Location</span>
                 </h3>
                 <p className="text-xs text-slate-400">Live Interactive Directions & Map Landmark</p>
               </div>
 
-              <span className="px-3 py-1 rounded-full text-xs font-mono bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shrink-0">
+              <span className="px-3 py-1 rounded-full text-[11px] sm:text-xs font-mono bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shrink-0 self-start sm:self-auto">
                 LIVE GOOGLE MAP
               </span>
             </div>
