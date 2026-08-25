@@ -10,8 +10,8 @@ export default function Services({ onOpenAppointment }) {
       id: "cataract",
       title: "Cataract Surgery (Phaco)",
       badge: "American Phaco System",
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80",
       shortDesc: "Micro-incision sutureless cataract removal with premium multifocal & toric lens implantation.",
-      icon: Eye,
       details: {
         duration: "15 - 20 Mins",
         anesthesia: "No-Injection Topical Drops",
@@ -28,8 +28,8 @@ export default function Services({ onOpenAppointment }) {
       id: "lasik",
       title: "Bladeless LASIK",
       badge: "Spectacle Removal",
+      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
       shortDesc: "Advanced computer-guided refractive laser procedure to eliminate glasses permanently.",
-      icon: Zap,
       details: {
         duration: "10 Mins per eye",
         anesthesia: "Numbing Drops",
@@ -46,8 +46,8 @@ export default function Services({ onOpenAppointment }) {
       id: "icl",
       title: "ICL Lens Implantation",
       badge: "High Power Correction",
+      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80",
       shortDesc: "Implantable Collamer Lens placement for patients not suited for conventional LASIK.",
-      icon: Sparkles,
       details: {
         duration: "20 Mins",
         anesthesia: "Drop Anesthesia",
@@ -64,8 +64,8 @@ export default function Services({ onOpenAppointment }) {
       id: "glaucoma",
       title: "Glaucoma Care & Surgery",
       badge: "Intraocular Pressure Control",
+      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80",
       shortDesc: "Early diagnosis, trabeculectomy & valve implants to prevent irreversible optic nerve damage.",
-      icon: Shield,
       details: {
         duration: "30 - 45 Mins",
         anesthesia: "Local Anesthesia",
@@ -85,8 +85,8 @@ export default function Services({ onOpenAppointment }) {
       id: "retina",
       title: "Retina Evaluation & Care",
       badge: "Diabetic Screening",
+      image: "/images/hospital-interior-3.jpg",
       shortDesc: "Screens and evaluates the back of the eye for diabetic retinopathy, macula & blood vessel health.",
-      icon: Eye,
       time: "30 Mins",
       specs: [
         "Digital fundus retinal imaging",
@@ -98,8 +98,8 @@ export default function Services({ onOpenAppointment }) {
       id: "squint",
       title: "Squint & Pediatric Eye Care",
       badge: "Ocular Alignment",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
       shortDesc: "Surgical and orthoptic correction of eye misalignment and amblyopia (lazy eye) in children & adults.",
-      icon: Activity,
       time: "25 Mins",
       specs: [
         "Extraocular muscle alignment surgery",
@@ -111,8 +111,8 @@ export default function Services({ onOpenAppointment }) {
       id: "oculoplastic",
       title: "Oculoplastic & DCR",
       badge: "Eyelid & Lacrimal Surgery",
+      image: "/images/hospital-interior-4.jpg",
       shortDesc: "Reconstructive surgeries for drooping eyelids (ptosis), watery eyes (lacrimal blockage), and eyelid tumors.",
-      icon: Shield,
       time: "40 Mins",
       specs: [
         "Dacryocystorhinostomy (DCR) watery eye relief",
@@ -124,8 +124,8 @@ export default function Services({ onOpenAppointment }) {
       id: "checkup",
       title: "Comprehensive Eye Checkup",
       badge: "Full OPD Diagnostics",
+      image: "/images/hospital-interior-1.jpg",
       shortDesc: "Complete 12-point computer diagnostic eye examination including auto-refraction, slit lamp & pressure check.",
-      icon: Award,
       time: "20 Mins",
       specs: [
         "Computerized auto-refraction & prescription",
@@ -165,58 +165,57 @@ export default function Services({ onOpenAppointment }) {
 
         {/* Surgical Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {surgicalServices.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="glass-panel rounded-3xl p-6 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
-                      <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                    </div>
-
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#B8ED78]/15 text-[#B8ED78] border border-[#B8ED78]/30">
-                      {service.badge}
-                    </span>
-                  </div>
-
-                  <h4 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
-                    {service.title}
-                  </h4>
-
-                  <p className="text-slate-300 text-xs leading-relaxed mb-6">
-                    {service.shortDesc}
-                  </p>
+          {surgicalServices.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
+            >
+              <div>
+                {/* Real Procedure Photo Header */}
+                <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/20" />
+                  
+                  <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-950/80 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
+                    {service.badge}
+                  </span>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => setSelectedService(service)}
-                    className="text-xs font-semibold text-[#35A6B7] hover:text-[#B8ED78] flex items-center gap-1 transition-colors"
-                  >
-                    <span>View Technical Specs</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
+                <h4 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
+                  {service.title}
+                </h4>
 
-                  <button
-                    onClick={onOpenAppointment}
-                    className="px-3.5 py-1.5 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
-                  >
-                    Book
-                  </button>
-                </div>
-              </motion.div>
-            );
-          })}
+                <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                  {service.shortDesc}
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setSelectedService(service)}
+                  className="text-xs font-semibold text-[#35A6B7] hover:text-[#B8ED78] flex items-center gap-1 transition-colors"
+                >
+                  <span>View Technical Specs</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  onClick={onOpenAppointment}
+                  className="px-3 py-1 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
+                >
+                  Book
+                </button>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Diagnostic Category Header */}
@@ -229,51 +228,50 @@ export default function Services({ onOpenAppointment }) {
 
         {/* Diagnostic Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {diagnosticServices.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="glass-panel rounded-3xl p-6 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
-                      <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                    </div>
-
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-[#B8ED78]/15 text-[#B8ED78] border border-[#B8ED78]/30">
-                      {service.time}
-                    </span>
-                  </div>
-
-                  <h4 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
-                    {service.title}
-                  </h4>
-
-                  <p className="text-slate-300 text-xs leading-relaxed mb-4">
-                    {service.shortDesc}
-                  </p>
+          {diagnosticServices.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
+            >
+              <div>
+                {/* Real Diagnostic Photo Header */}
+                <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/20" />
+                  
+                  <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-950/80 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
+                    {service.time}
+                  </span>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                  <span className="text-[11px] font-semibold text-[#B8ED78]">OPD Daily Available</span>
-                  <button
-                    onClick={onOpenAppointment}
-                    className="px-3.5 py-1.5 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
-                  >
-                    Consult
-                  </button>
-                </div>
-              </motion.div>
-            );
-          })}
+                <h4 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
+                  {service.title}
+                </h4>
+
+                <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                  {service.shortDesc}
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                <span className="text-[11px] font-semibold text-[#B8ED78]">OPD Daily Available</span>
+                <button
+                  onClick={onOpenAppointment}
+                  className="px-3 py-1 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
+                >
+                  Consult
+                </button>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
       </div>
