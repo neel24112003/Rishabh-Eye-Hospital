@@ -149,16 +149,6 @@ export default function HospitalGallery() {
                     {item.description}
                   </p>
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-[#35A6B7] font-semibold">
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#B8ED78]" />
-                    Surat Hospital Facility
-                  </span>
-                  <span className="text-slate-400 group-hover:text-[#B8ED78] transition-colors flex items-center gap-1">
-                    Click to Enlarge 🔍
-                  </span>
-                </div>
               </div>
             </motion.div>
           ))}
