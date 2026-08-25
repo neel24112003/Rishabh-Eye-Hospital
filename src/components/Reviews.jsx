@@ -137,12 +137,12 @@ export default function Reviews() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative flex flex-col justify-between"
             >
-              {/* Lime Green Theme Quote Icon in Extreme Top Right Corner */}
-              <Quote className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 text-[#B8ED78]/20 pointer-events-none z-0" />
+              {/* Lime Green Theme Quote Icon in Top Right Corner */}
+              <Quote className="absolute top-4 right-4 w-7 h-7 sm:w-8 sm:h-8 text-[#B8ED78]/25 pointer-events-none z-0" />
 
               <div className="relative z-10">
-                {/* Rating & Treatment */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                {/* Rating & Treatment (pr-12 ensures 100% zero overlap with Quote icon) */}
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pr-10 sm:pr-12">
                   <div className="flex text-[#B8ED78]">
                     {[...Array(review.rating)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-[#B8ED78]" />
