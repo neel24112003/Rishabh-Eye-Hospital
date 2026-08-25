@@ -139,7 +139,9 @@ export default function Navbar({ onOpenAppointment }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[62px] z-30 lg:hidden px-3 pt-1 pb-4"
+            className={`fixed inset-x-0 z-30 lg:hidden px-3 pt-1 pb-4 transition-all duration-300 ${
+              scrolled ? 'top-[58px]' : 'top-[72px]'
+            }`}
           >
             <div className="glass-panel border border-[#35A6B7]/40 rounded-2xl p-4 shadow-2xl backdrop-blur-2xl bg-[#070C14]/98 flex flex-col gap-2">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-1">
