@@ -175,17 +175,6 @@ export default function Reviews() {
           ))}
         </div>
 
-        {/* Write Review Trigger Button */}
-        <div className="text-center">
-          <button
-            onClick={() => setReviewModalOpen(true)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl glass-panel border border-[#B8ED78]/40 text-[#B8ED78] hover:bg-[#B8ED78]/10 font-bold text-xs tracking-wider uppercase transition-all shadow-lg"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Share Your Patient Experience</span>
-          </button>
-        </div>
-
       </div>
 
       {/* Write Review Modal */}
