@@ -40,10 +40,10 @@ export default function Navbar({ onOpenAppointment }) {
     { name: 'Home', href: '#home', id: 'home' },
     { name: 'Doctors', href: '#doctors', id: 'doctors' },
     { name: 'About', href: '#about', id: 'about' },
-    { name: 'Hospital Interior', href: '#infrastructure', id: 'infrastructure' },
+    { name: 'Hospital Gallery', href: '#infrastructure', id: 'infrastructure' },
     { name: 'Services', href: '#services', id: 'services' },
     { name: 'Equipment', href: '#equipment', id: 'equipment' },
-    { name: 'Events', href: '#gallery', id: 'gallery' },
+    { name: 'Event Gallery', href: '#gallery', id: 'gallery' },
     { name: 'Reviews', href: '#reviews', id: 'reviews' },
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];

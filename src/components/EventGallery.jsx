@@ -6,39 +6,39 @@ export default function EventGallery() {
   const slides = [
     {
       id: 1,
-      title: "Spacious AC Patient Reception & Waiting Hall",
-      category: "Hospital Lounge",
-      image: "/images/hospital-interior-1.jpg"
+      title: "German Modular OT Surgical Suite",
+      category: "Surgical OT Infrastructure",
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 2,
-      title: "Precision Ophthalmic Diagnostic & Refraction Suite",
-      category: "Diagnostic Suite",
-      image: "/images/hospital-interior-2.jpg"
+      title: "Bladeless LASIK Refractive Laser Suite",
+      category: "Spectacle Removal Laser",
+      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 3,
-      title: "Dr. Hetalkumar Yagnik Super-Consultant Chamber",
-      category: "Dr. Yagnik Suite",
-      image: "/images/hospital-interior-3.jpg"
+      title: "Free Cataract Screening & Medical Eye Camp",
+      category: "Community Outreach Event",
+      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 4,
-      title: "Automated OPD Examination Workstation",
-      category: "OPD Diagnostics",
-      image: "/images/hospital-interior-4.jpg"
+      title: "High-Precision Retinal Fundus Diagnostics",
+      category: "Clinical Workshop",
+      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 5,
-      title: "Advanced Computerized Eye Testing Equipment",
-      category: "Diagnostic Tech",
-      image: "/images/hospital-interior-2.jpg"
+      title: "Pediatric Vision Screening & Squint Alignment Event",
+      category: "Pediatric Eye Care",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 6,
-      title: "Climate Controlled Sterile Patient Lounge",
-      category: "Hospital Infrastructure",
-      image: "/images/hospital-interior-1.jpg"
+      title: "Advanced Microsurgical Tech Seminar",
+      category: "Surgeon Masterclass",
+      image: "https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?auto=format&fit=crop&w=1200&q=80"
     }
   ];
 
@@ -66,11 +66,11 @@ export default function EventGallery() {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7] uppercase tracking-wider mb-4">
             <Building2 className="w-3.5 h-3.5 text-[#B8ED78]" />
-            <span>State-of-the-Art Visual Tour</span>
+            <span>Ophthalmic Events & Surgical Highlights</span>
           </div>
 
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Hospital Gallery & <span className="text-gradient-lime">Infrastructure</span>
+            Event <span className="text-gradient-lime">Gallery</span>
           </h2>
         </div>
 
