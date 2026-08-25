@@ -68,7 +68,7 @@ export default function Hero({ onOpenAppointment }) {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 mb-10 w-full sm:w-auto">
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
               <button
                 onClick={onOpenAppointment}
                 className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] shadow-xl shadow-[#B8ED78]/20 hover:shadow-[#B8ED78]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group"
@@ -85,30 +85,6 @@ export default function Hero({ onOpenAppointment }) {
                 <Zap className="w-4 h-4 text-[#35A6B7] group-hover:text-[#B8ED78] transition-colors" />
                 <span>Explore LASIK & Treatments</span>
               </a>
-            </motion.div>
-
-            {/* Key Feature Trust Pills */}
-            <motion.div variants={itemVariants} className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full border-t border-slate-800/80 pt-6">
-              <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-[#35A6B7]/10 border border-[#35A6B7]/30 text-[#35A6B7]">
-                  <CheckCircle2 className="w-4 h-4" />
-                </div>
-                <span className="text-xs text-slate-300 font-medium">German Standard OT</span>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-[#B8ED78]/10 border border-[#B8ED78]/30 text-[#B8ED78]">
-                  <Award className="w-4 h-4" />
-                </div>
-                <span className="text-xs text-slate-300 font-medium">17+ Years Legacy</span>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-[#51AABC]/10 border border-[#51AABC]/30 text-[#51AABC]">
-                  <Shield className="w-4 h-4" />
-                </div>
-                <span className="text-xs text-slate-300 font-medium">American Phaco System</span>
-              </div>
             </motion.div>
           </motion.div>
 
