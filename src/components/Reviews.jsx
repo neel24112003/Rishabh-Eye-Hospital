@@ -3,53 +3,55 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const DEFAULT_REVIEWS = [
+  {
+    id: 1,
+    name: "Rajesh V. Patel",
+    location: "New City Light, Surat",
+    treatment: "Cataract Surgery",
+    doctor: "Dr. Hetalkumar Yagnik",
+    rating: 5,
+    date: "2 weeks ago",
+    text: "Dr. Hetalkumar Yagnik performed Phaco cataract surgery on both my eyes. The German modular OT and American machine are truly impressive. My vision was restored to 6/6 within 24 hours without any pain. Highly recommended!",
+    verified: true
+  },
+  {
+    id: 2,
+    name: "Pooja M. Shah",
+    location: "Vesu, Surat",
+    treatment: "Bladeless LASIK",
+    doctor: "Dr. Hetalkumar Yagnik",
+    rating: 5,
+    date: "1 month ago",
+    text: "I had -5.5 D glasses power for 12 years. After LASIK at Rishabh Eye Hospital, I have 100% clear vision without spectacles. The hospital is super clean, fully AC, and the entire team is extremely supportive.",
+    verified: true
+  },
+  {
+    id: 3,
+    name: "Anilbhai K. Desai",
+    location: "Adajan, Surat",
+    treatment: "Retina Care",
+    doctor: "Dr. Shefali Yagnik",
+    rating: 5,
+    date: "3 weeks ago",
+    text: "Dr. Shefali Yagnik is extremely patient and thorough. She mapped my diabetic retina scan digitally and explained every detail clearly. Excellent diagnostic equipment and friendly staff.",
+    verified: true
+  },
+  {
+    id: 4,
+    name: "Meenaben H. Mehta",
+    location: "Althan, Surat",
+    treatment: "ICL Implant",
+    doctor: "Dr. Hetalkumar Yagnik",
+    rating: 5,
+    date: "2 months ago",
+    text: "Because of thin cornea I was rejected for LASIK elsewhere, but Dr. Yagnik suggested ICL surgery. The procedure took just 15 minutes and the result is miraculous! Very thankful to Rishabh Hospital.",
+    verified: true
+  }
+];
+
 export default function Reviews() {
-  const [reviewsList, setReviewsList] = useState([
-    {
-      id: 1,
-      name: "Rajesh V. Patel",
-      location: "New City Light, Surat",
-      treatment: "Cataract Surgery (Phaco)",
-      doctor: "Dr. Hetalkumar Yagnik",
-      rating: 5,
-      date: "2 weeks ago",
-      text: "Dr. Hetalkumar Yagnik performed Phaco cataract surgery on both my eyes. The German modular OT and American machine are truly impressive. My vision was restored to 6/6 within 24 hours without any pain. Highly recommended!",
-      verified: true
-    },
-    {
-      id: 2,
-      name: "Pooja M. Shah",
-      location: "Vesu, Surat",
-      treatment: "Bladeless LASIK Surgery",
-      doctor: "Dr. Hetalkumar Yagnik",
-      rating: 5,
-      date: "1 month ago",
-      text: "I had -5.5 D glasses power for 12 years. After LASIK at Rishabh Eye Hospital, I have 100% clear vision without spectacles. The hospital is super clean, fully AC, and the entire team is extremely supportive.",
-      verified: true
-    },
-    {
-      id: 3,
-      name: "Anilbhai K. Desai",
-      location: "Adajan, Surat",
-      treatment: "Retina Care & Checkup",
-      doctor: "Dr. Shefali Yagnik",
-      rating: 5,
-      date: "3 weeks ago",
-      text: "Dr. Shefali Yagnik is extremely patient and thorough. She mapped my diabetic retina scan digitally and explained every detail clearly. Excellent diagnostic equipment and friendly staff.",
-      verified: true
-    },
-    {
-      id: 4,
-      name: "Meenaben H. Mehta",
-      location: "Althan, Surat",
-      treatment: "ICL Implant",
-      doctor: "Dr. Hetalkumar Yagnik",
-      rating: 5,
-      date: "2 months ago",
-      text: "Because of thin cornea I was rejected for LASIK elsewhere, but Dr. Yagnik suggested ICL surgery. The procedure took just 15 minutes and the result is miraculous! Very thankful to Rishabh Hospital.",
-      verified: true
-    }
-  ]);
+  const [reviewsList, setReviewsList] = useState(DEFAULT_REVIEWS);
 
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [newReview, setNewReview] = useState({
@@ -137,21 +139,22 @@ export default function Reviews() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative flex flex-col justify-between"
             >
-              {/* Lime Green Theme Quote Icon in Top Right Corner */}
-              <Quote className="absolute top-4 right-4 w-7 h-7 sm:w-8 sm:h-8 text-[#B8ED78]/25 pointer-events-none z-0" />
-
               <div className="relative z-10">
-                {/* Rating & Treatment (pr-12 ensures 100% zero overlap with Quote icon) */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pr-10 sm:pr-12">
-                  <div className="flex text-[#B8ED78]">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#B8ED78]" />
-                    ))}
+                {/* Rating & Treatment & Quote Icon (100% Single Horizontal Line on Mobile & Desktop) */}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex text-[#B8ED78] shrink-0">
+                      {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#B8ED78]" />
+                      ))}
+                    </div>
+
+                    <span className="px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                      {review.treatment}
+                    </span>
                   </div>
 
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shadow-sm">
-                    {review.treatment}
-                  </span>
+                  <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-[#B8ED78]/35 shrink-0" />
                 </div>
 
                 <p className="text-slate-200 text-sm leading-relaxed italic mb-6">
