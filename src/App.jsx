@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AboutHospital from './components/AboutHospital';
+import HospitalGallery from './components/HospitalGallery';
 import Doctors from './components/Doctors';
 import Services from './components/Services';
 import Equipment from './components/Equipment';
@@ -35,6 +36,9 @@ export default function App() {
 
         {/* About Hospital Section */}
         <AboutHospital />
+
+        {/* Hospital Interior & Infrastructure Gallery Section */}
+        <HospitalGallery />
 
         {/* Services Section */}
         <Services onOpenAppointment={handleScrollToAppointment} />

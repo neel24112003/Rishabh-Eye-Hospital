@@ -16,7 +16,7 @@ export default function Navbar({ onOpenAppointment }) {
       }
 
       // ScrollSpy
-      const sections = ['home', 'about', 'doctors', 'services', 'equipment', 'gallery', 'reviews', 'contact'];
+      const sections = ['home', 'doctors', 'about', 'infrastructure', 'services', 'equipment', 'gallery', 'reviews', 'contact'];
       const scrollPos = window.scrollY + 180;
 
       for (const section of sections) {
@@ -38,11 +38,12 @@ export default function Navbar({ onOpenAppointment }) {
 
   const navLinks = [
     { name: 'Home', href: '#home', id: 'home' },
-    { name: 'About Hospital', href: '#about', id: 'about' },
     { name: 'Doctors', href: '#doctors', id: 'doctors' },
+    { name: 'About', href: '#about', id: 'about' },
+    { name: 'Hospital Interior', href: '#infrastructure', id: 'infrastructure' },
     { name: 'Services', href: '#services', id: 'services' },
     { name: 'Equipment', href: '#equipment', id: 'equipment' },
-    { name: 'Gallery', href: '#gallery', id: 'gallery' },
+    { name: 'Events', href: '#gallery', id: 'gallery' },
     { name: 'Reviews', href: '#reviews', id: 'reviews' },
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];
