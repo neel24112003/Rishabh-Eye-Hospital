@@ -17,9 +17,9 @@ export default function EyeVisualizerCanvas() {
     // Scene & Camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.z = 6.2;
+    camera.position.z = 6.0;
 
-    // Renderer (Performance Capped)
+    // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
@@ -56,7 +56,7 @@ export default function EyeVisualizerCanvas() {
     for (let i = 0; i < 180; i++) {
       const angle = (i * Math.PI * 2) / 180;
       const length = 90 + Math.random() * 150;
-      const alpha = 0.2 + Math.random() * 0.4;
+      const alpha = 0.25 + Math.random() * 0.4;
       ctx.strokeStyle = i % 2 === 0 ? `rgba(184, 237, 120, ${alpha})` : `rgba(53, 166, 183, ${alpha})`;
       ctx.beginPath();
       ctx.moveTo(centerX + Math.cos(angle) * 50, centerY + Math.sin(angle) * 50);
@@ -80,11 +80,11 @@ export default function EyeVisualizerCanvas() {
 
     const irisTexture = new THREE.CanvasTexture(canvasIris);
 
-    // Eyeball Sclera
-    const scleraGeo = new THREE.SphereGeometry(2, 48, 48);
+    // 1. Concentric Eyeball Sclera (Sphere Radius 2.0 at Origin)
+    const scleraGeo = new THREE.SphereGeometry(2.0, 64, 64);
     const scleraMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf0f7fc,
-      roughness: 0.12,
+      color: 0xf4f9fd,
+      roughness: 0.15,
       metalness: 0.05,
       clearcoat: 1.0,
       clearcoatRoughness: 0.05,
@@ -92,44 +92,46 @@ export default function EyeVisualizerCanvas() {
     const sclera = new THREE.Mesh(scleraGeo, scleraMat);
     eyeGroup.add(sclera);
 
-    // Iris Disc
-    const irisGeo = new THREE.RingGeometry(0.32, 1.35, 48, 8);
+    // 2. Concentric Iris Disc (Front Position Z=1.62)
+    const irisGeo = new THREE.RingGeometry(0.3, 1.28, 64, 8);
     const irisMat = new THREE.MeshStandardMaterial({
       map: irisTexture,
       side: THREE.DoubleSide,
       roughness: 0.15,
       metalness: 0.2,
       emissive: new THREE.Color(0x1b7b93),
-      emissiveIntensity: 0.4,
+      emissiveIntensity: 0.35,
     });
     const irisMesh = new THREE.Mesh(irisGeo, irisMat);
-    irisMesh.position.z = 1.58;
+    irisMesh.position.set(0, 0, 1.62);
     eyeGroup.add(irisMesh);
 
-    // Pupil
-    const pupilGeo = new THREE.CircleGeometry(0.36, 24);
+    // 3. Pupil Disc (Z=1.63)
+    const pupilGeo = new THREE.CircleGeometry(0.33, 32);
     const pupilMat = new THREE.MeshBasicMaterial({ color: 0x020408 });
     const pupilMesh = new THREE.Mesh(pupilGeo, pupilMat);
-    pupilMesh.position.z = 1.59;
+    pupilMesh.position.set(0, 0, 1.63);
     eyeGroup.add(pupilMesh);
 
-    // Cornea Dome
-    const corneaGeo = new THREE.SphereGeometry(1.38, 48, 48, 0, Math.PI * 2, 0, Math.PI * 0.45);
+    // 4. Concentric Cornea Lens Dome (Radius 2.04 centered at Origin 0,0,0)
+    // Using a concentric sphere cap around (0,0,0) guarantees ZERO offset misalignment when rotating!
+    const corneaGeo = new THREE.SphereGeometry(2.04, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.26);
     const corneaMat = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.28,
       roughness: 0.02,
-      transmission: 0.96,
+      transmission: 0.95,
       clearcoat: 1.0,
+      ior: 1.38,
     });
     const corneaMesh = new THREE.Mesh(corneaGeo, corneaMat);
     corneaMesh.rotation.x = Math.PI / 2;
-    corneaMesh.position.z = 1.15;
+    corneaMesh.position.set(0, 0, 0);
     eyeGroup.add(corneaMesh);
 
     // Orbiting Particles (Lightweight)
-    const particleCount = 160;
+    const particleCount = 140;
     const particleGeo = new THREE.BufferGeometry();
     const particlePos = new Float32Array(particleCount * 3);
     const particleColors = new Float32Array(particleCount * 3);
@@ -138,7 +140,7 @@ export default function EyeVisualizerCanvas() {
     const cTeal = new THREE.Color(0x35a6b7);
 
     for (let i = 0; i < particleCount; i++) {
-      const radius = 2.4 + Math.random() * 0.7;
+      const radius = 2.4 + Math.random() * 0.6;
       const theta = Math.random() * Math.PI * 2;
       const phi = (Math.random() - 0.5) * Math.PI * 0.7;
 
@@ -181,7 +183,7 @@ export default function EyeVisualizerCanvas() {
     laserMesh.position.z = 2.15;
     laserGroup.add(laserMesh);
 
-    const targetRingGeo = new THREE.RingGeometry(0.1, 0.75, 24);
+    const targetRingGeo = new THREE.RingGeometry(0.1, 0.7, 24);
     const targetRingMat = new THREE.MeshBasicMaterial({
       color: 0xb8ed78,
       transparent: true,
@@ -189,7 +191,7 @@ export default function EyeVisualizerCanvas() {
       side: THREE.DoubleSide,
     });
     const targetRing = new THREE.Mesh(targetRingGeo, targetRingMat);
-    targetRing.position.z = 2.02;
+    targetRing.position.z = 2.05;
     laserGroup.add(targetRing);
 
     // Studio Lights
@@ -269,18 +271,19 @@ export default function EyeVisualizerCanvas() {
   }, [lasikActive, activeMode]);
 
   return (
-    <div className="relative w-full h-full min-h-[420px] lg:min-h-[540px] flex flex-col items-center justify-center">
+    <div className="relative w-full h-full min-h-[380px] lg:min-h-[500px] flex flex-col items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/15 via-[#B8ED78]/10 to-transparent rounded-full blur-3xl pointer-events-none transform scale-90" />
 
       <div 
         ref={mountRef} 
-        className="w-full h-[400px] sm:h-[480px] lg:h-[550px] cursor-grab active:cursor-grabbing z-10"
+        className="w-full h-[360px] sm:h-[440px] lg:h-[500px] cursor-grab active:cursor-grabbing z-10"
       />
 
-      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-center gap-2 p-1.5 rounded-2xl glass-panel border border-[#35A6B7]/30 shadow-2xl backdrop-blur-md max-w-[95%]">
+      {/* Styled Responsive Control Pill Bar */}
+      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl glass-panel border border-[#35A6B7]/40 shadow-2xl backdrop-blur-md max-w-[96%]">
         <button
           onClick={() => { setActiveMode('3d'); setLasikActive(false); }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-200 ${
             activeMode === '3d' && !lasikActive
               ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-md shadow-[#35A6B7]/30'
               : 'text-slate-300 hover:text-white'
@@ -295,19 +298,19 @@ export default function EyeVisualizerCanvas() {
             setLasikActive(!lasikActive);
             setActiveMode(lasikActive ? '3d' : 'lasik');
           }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-200 ${
             lasikActive || activeMode === 'lasik'
               ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-md shadow-[#B8ED78]/40'
               : 'text-[#B8ED78] bg-[#B8ED78]/10 border border-[#B8ED78]/30'
           }`}
         >
           <Zap className="w-3.5 h-3.5 fill-[#B8ED78]" />
-          <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser Beam'}</span>
+          <span>{lasikActive ? 'Stop Laser' : 'LASIK Laser'}</span>
         </button>
 
         <button
           onClick={() => { setActiveMode('topography'); setLasikActive(false); }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-200 ${
             activeMode === 'topography'
               ? 'bg-gradient-to-r from-[#51AABC] to-[#B8ED78] text-slate-950 shadow-md shadow-[#51AABC]/30'
               : 'text-slate-300 hover:text-white'
