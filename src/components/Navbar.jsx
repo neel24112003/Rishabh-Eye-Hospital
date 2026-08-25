@@ -135,13 +135,13 @@ export default function Navbar({ onOpenAppointment }) {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-x-0 top-20 z-30 lg:hidden p-4"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 top-[62px] z-30 lg:hidden px-3 pt-1 pb-4"
           >
-            <div className="glass-panel border border-[#35A6B7]/40 rounded-2xl p-5 shadow-2xl backdrop-blur-2xl bg-[#070C14]/95 flex flex-col gap-3">
+            <div className="glass-panel border border-[#35A6B7]/40 rounded-2xl p-4 shadow-2xl backdrop-blur-2xl bg-[#070C14]/98 flex flex-col gap-2">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-1">
                 <span className="text-xs font-bold text-[#B8ED78] tracking-wider uppercase">Menu Navigation</span>
                 <span className="text-[11px] text-slate-400 font-mono">Surat Center</span>
