@@ -8,7 +8,7 @@ export default function Doctors() {
       name: "Dr. Hetalkumar R. Yagnik",
       title: "Senior Super-Consultant Ophthalmic Surgeon",
       experience: "17+ Years Experience",
-      avatarInitials: "HY",
+      image: "/images/dr-hetal-yagnik.png",
       badgeColor: "from-[#35A6B7] to-[#B8ED78]",
       description: "Vast experience of 17 years with an unblemished track record of all surgeries executed successfully. Pioneer in American Phaco Cataract Surgeries, Bladeless LASIK spectacle removal, and ICL implants.",
       specialties: [
@@ -25,7 +25,7 @@ export default function Doctors() {
       name: "Dr. Shefali H. Yagnik",
       title: "Consultant Ophthalmic Surgeon",
       experience: "14+ Years Experience",
-      avatarInitials: "SY",
+      image: "/images/dr-shefali-yagnik.png",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
       description: "Specialized consultant in Medical Retina, Pediatric Eye Diagnostics, Squint Alignment, and Oculoplastic Reconstructive Surgeries with compassionate patient-centric care.",
       specialties: [
@@ -69,21 +69,24 @@ export default function Doctors() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.15 }}
-              className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-start"
+              className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-stretch overflow-hidden"
             >
-              {/* Doctor Avatar Badge */}
-              <div className="relative w-full sm:w-48 h-56 sm:h-full rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-lg bg-gradient-to-b from-[#0E1726] to-[#070C14] flex flex-col items-center justify-center p-6 text-center">
-                <div className={`w-20 h-20 rounded-2xl bg-gradient-to-tr ${doctor.badgeColor} p-0.5 shadow-xl mb-3 group-hover:scale-105 transition-transform`}>
-                  <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center font-display font-black text-2xl text-[#B8ED78]">
-                    {doctor.avatarInitials}
-                  </div>
-                </div>
+              {/* Doctor Real Photo Portrait Card */}
+              <div className="relative w-full sm:w-56 h-72 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
+                <img
+                  src={doctor.image}
+                  alt={doctor.name}
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
 
-                <div className="font-bold text-white text-sm">{doctor.name.split(' ')[0]} {doctor.name.split(' ')[1]}</div>
-                <div className="text-[11px] text-[#35A6B7] font-semibold mt-0.5">{doctor.experience}</div>
-
-                <div className="mt-4 py-1 px-3 rounded-full bg-[#B8ED78]/15 border border-[#B8ED78]/40 text-[10px] font-bold text-[#B8ED78]">
-                  SURAT CLINIC
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10">
+                  <span className="px-2.5 py-1 rounded-full bg-slate-950/80 text-[10px] font-bold text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
+                    {doctor.experience}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-full bg-[#35A6B7]/80 text-[10px] font-bold text-white border border-[#35A6B7]/40 backdrop-blur-md">
+                    SURAT
+                  </span>
                 </div>
               </div>
 
