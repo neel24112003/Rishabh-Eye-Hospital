@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
@@ -8,29 +9,27 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-const APP_PASS = 'bsqoekwpbzqnjaks'; // 16-char app password
+const GMAIL_USER = process.env.GMAIL_USER || '21amtics441@gmail.com';
+const GMAIL_APP_PASS = process.env.GMAIL_APP_PASS || 'ruwrrwmrfieterig'; // 16-char app password
 
 const createTransporter = (pass) => nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
   auth: {
-    user: '21amtics441@gmail.com',
-    pass: pass
+    user: GMAIL_USER,
+    pass: pass.replace(/\s+/g, '')
   }
 });
 
-let activeTransporter = createTransporter(APP_PASS);
+let activeTransporter = createTransporter(GMAIL_APP_PASS);
 
 activeTransporter.verify((error) => {
   if (error) {
-    activeTransporter = createTransporter('bsqoekwpbzqnjaksx');
-    activeTransporter.verify((err2) => {
-      if (err2) console.error('❌ Gmail Auth Warning:', err2.message);
-      else console.log('✅ Gmail SMTP Authenticated successfully!');
-    });
+    console.error('❌ Gmail Auth Warning:', error.message);
+    console.error('👉 Please generate a new 16-character Gmail App Password at: https://myaccount.google.com/apppasswords');
   } else {
-    console.log('✅ Gmail SMTP Authenticated successfully on port 465!');
+    console.log(`✅ Gmail SMTP Authenticated successfully for ${GMAIL_USER} on port 465!`);
   }
 });
 
@@ -63,7 +62,6 @@ app.post('/api/book-appointment', async (req, res) => {
         .highlight-service { color: #35A6B7 !important; }
         .action-btns { margin-top: 25px; display: flex; gap: 12px; }
         .btn-call { flex: 1; display: inline-block; text-align: center; background: linear-gradient(135deg, #B8ED78 0%, #35A6B7 100%); color: #070C14; font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 12px 20px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 15px rgba(184,237,120,0.3); }
-        .btn-whatsapp { flex: 1; display: inline-block; text-align: center; background: #25D366; color: #ffffff; font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 12px 20px; border-radius: 12px; text-decoration: none; }
         .footer { background: #070C14; padding: 20px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #1e293b; }
       </style>
     </head>
@@ -116,7 +114,7 @@ app.post('/api/book-appointment', async (req, res) => {
           </table>
 
           <div style="margin-top: 25px;">
-            <a href="tel:${phone}" class="btn-call">📞 Call Patient Directly</a>
+            <a href="tel:${phone}" class="btn-call">📞 Call Patient Directly (${phone})</a>
           </div>
         </div>
         <div class="footer">
@@ -143,7 +141,7 @@ app.post('/api/book-appointment', async (req, res) => {
         .welcome-title { font-size: 20px; font-weight: 700; color: #ffffff; margin-top: 0; margin-bottom: 12px; }
         .status-box { background: rgba(53, 166, 183, 0.15); border: 1px solid #35A6B7; border-left: 4px solid #B8ED78; padding: 16px; border-radius: 12px; margin: 20px 0; }
         .status-title { font-size: 14px; font-weight: 700; color: #B8ED78; margin: 0 0 6px 0; text-transform: uppercase; }
-        .status-desc { font-size: 13px; color: #e2e8f0; margin: 0; leading-height: 1.5; }
+        .status-desc { font-size: 13px; color: #e2e8f0; margin: 0; line-height: 1.5; }
         .hospital-info { background: rgba(7, 12, 20, 0.8); border: 1px solid #1e293b; padding: 20px; border-radius: 14px; margin-top: 25px; }
         .hospital-info h4 { color: #35A6B7; margin-top: 0; margin-bottom: 10px; font-size: 15px; }
         .info-item { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
@@ -189,8 +187,8 @@ app.post('/api/book-appointment', async (req, res) => {
   try {
     // Send email to Hospital Admin
     await activeTransporter.sendMail({
-      from: '"Rishabh Eye Hospital" <21amtics441@gmail.com>',
-      to: '21amtics441@gmail.com',
+      from: `"Rishabh Eye Hospital" <${GMAIL_USER}>`,
+      to: GMAIL_USER,
       subject: `🚨 New Appointment Alert: ${name} (${phone}) - ${service || 'Consultation'}`,
       html: adminHtmlContent
     });
@@ -198,7 +196,7 @@ app.post('/api/book-appointment', async (req, res) => {
     // Send confirmation email to patient if email provided
     if (email && email.includes('@')) {
       await activeTransporter.sendMail({
-        from: '"Rishabh Eye Hospital" <21amtics441@gmail.com>',
+        from: `"Rishabh Eye Hospital" <${GMAIL_USER}>`,
         to: email,
         subject: `Appointment Request Received - Rishabh Eye Hospital, Surat`,
         html: patientHtmlContent
