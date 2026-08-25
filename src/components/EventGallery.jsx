@@ -6,39 +6,39 @@ export default function EventGallery() {
   const slides = [
     {
       id: 1,
-      title: "Modular German Operation Theatre",
-      category: "Surgical OT Infrastructure",
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: 2,
-      title: "Bladeless LASIK Refractive Laser Suite",
-      category: "Laser Spectacle Removal",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: 3,
-      title: "Alcon Laureate American Phaco Suite",
-      category: "American Cataract Tech",
-      image: "/images/hospital-interior-2.jpg"
-    },
-    {
-      id: 4,
-      title: "Spacious Fully AC Patient Lounge",
-      category: "Hospital Ambiance",
+      title: "Spacious AC Patient Reception & Waiting Hall",
+      category: "Hospital Lounge",
       image: "/images/hospital-interior-1.jpg"
     },
     {
-      id: 5,
-      title: "Super-Consultant Examination Suite",
-      category: "Dr. Yagnik Chamber",
+      id: 2,
+      title: "Precision Ophthalmic Diagnostic & Refraction Suite",
+      category: "Diagnostic Suite",
+      image: "/images/hospital-interior-2.jpg"
+    },
+    {
+      id: 3,
+      title: "Dr. Hetalkumar Yagnik Super-Consultant Chamber",
+      category: "Dr. Yagnik Suite",
       image: "/images/hospital-interior-3.jpg"
     },
     {
-      id: 6,
-      title: "Automated OPD Diagnostic Workstation",
-      category: "Digital Eye Diagnostics",
+      id: 4,
+      title: "Automated OPD Examination Workstation",
+      category: "OPD Diagnostics",
       image: "/images/hospital-interior-4.jpg"
+    },
+    {
+      id: 5,
+      title: "Advanced Computerized Eye Testing Equipment",
+      category: "Diagnostic Tech",
+      image: "/images/hospital-interior-2.jpg"
+    },
+    {
+      id: 6,
+      title: "Climate Controlled Sterile Patient Lounge",
+      category: "Hospital Infrastructure",
+      image: "/images/hospital-interior-1.jpg"
     }
   ];
 
