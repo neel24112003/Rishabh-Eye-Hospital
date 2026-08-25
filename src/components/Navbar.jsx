@@ -40,10 +40,10 @@ export default function Navbar({ onOpenAppointment }) {
     { name: 'Home', href: '#home', id: 'home' },
     { name: 'Doctors', href: '#doctors', id: 'doctors' },
     { name: 'About', href: '#about', id: 'about' },
-    { name: 'Hospital Gallery', href: '#infrastructure', id: 'infrastructure' },
+    { name: 'Hospital Interior', href: '#infrastructure', id: 'infrastructure' },
     { name: 'Services', href: '#services', id: 'services' },
     { name: 'Equipment', href: '#equipment', id: 'equipment' },
-    { name: 'Event Gallery', href: '#gallery', id: 'gallery' },
+    { name: 'Events', href: '#gallery', id: 'gallery' },
     { name: 'Reviews', href: '#reviews', id: 'reviews' },
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];
@@ -89,7 +89,7 @@ export default function Navbar({ onOpenAppointment }) {
                 <a
                   key={link.id}
                   href={link.href}
-                  className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-300 ${
+                  className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all duration-300 ${
                     isActive
                       ? 'text-[#070C14] font-bold'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/40'

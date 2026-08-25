@@ -79,7 +79,7 @@ export default function HospitalGallery() {
           </div>
 
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Hospital <span className="text-gradient-lime">Gallery</span>
+            Hospital <span className="text-gradient-lime">Interior</span>
           </h2>
 
           <p className="text-slate-300 text-base leading-relaxed">
