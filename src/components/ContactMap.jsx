@@ -92,11 +92,10 @@ export default function ContactMap({ onBookSuccess }) {
               </div>
             </div>
             <div>
-              <div className="text-xs text-slate-400 font-mono uppercase">Emergency & Helpline</div>
-              <div className="text-base sm:text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors leading-tight">
-                074055 63636 <span className="text-xs text-[#35A6B7] block sm:inline font-mono">/ 98982 93695</span>
+              <div className="text-xs text-slate-400 font-mono uppercase mb-0.5">Emergency & Helpline</div>
+              <div className="text-sm sm:text-base font-bold text-white group-hover:text-[#B8ED78] transition-colors leading-snug">
+                074055 63636 / 98982 93695
               </div>
-              <div className="text-[11px] text-[#35A6B7] font-semibold mt-0.5">Click to Call Directly</div>
             </div>
           </a>
 
@@ -107,7 +106,7 @@ export default function ContactMap({ onBookSuccess }) {
               </div>
             </div>
             <div>
-              <div className="text-xs text-slate-400 font-mono uppercase">Hospital Location</div>
+              <div className="text-xs text-slate-400 font-mono uppercase mb-0.5">Hospital Location</div>
               <div className="text-xs font-semibold text-slate-200 leading-snug">
                 The Lenora, 201-202, New City Light Rd, beside Naveli Hospital, Althan, Surat, Gujarat 395007
               </div>
@@ -124,11 +123,10 @@ export default function ContactMap({ onBookSuccess }) {
               </div>
             </div>
             <div className="min-w-0">
-              <div className="text-xs text-slate-400 font-mono uppercase">Official OPD Email</div>
-              <div className="text-xs sm:text-sm font-bold text-white group-hover:text-[#B8ED78] transition-colors truncate">
+              <div className="text-xs text-slate-400 font-mono uppercase mb-0.5">Official OPD Email</div>
+              <div className="text-sm font-bold text-white group-hover:text-[#B8ED78] transition-colors truncate">
                 rishabheyecare36@gmail.com
               </div>
-              <div className="text-[11px] text-[#B8ED78] font-semibold mt-0.5">Click to Send Direct Email</div>
             </div>
           </a>
         </div>
