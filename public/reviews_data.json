@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "name": "Rajesh V. Patel",
+    "location": "New City Light, Surat",
+    "treatment": "Cataract Surgery",
+    "doctor": "Dr. Hetalkumar Yagnik",
+    "rating": 5,
+    "date": "2 weeks ago",
+    "text": "Dr. Hetalkumar Yagnik performed Phaco cataract surgery on both my eyes. The German modular OT and American machine are truly impressive. My vision was restored to 6/6 within 24 hours without any pain. Highly recommended!",
+    "verified": true
+  },
+  {
+    "id": 2,
+    "name": "Pooja M. Shah",
+    "location": "Vesu, Surat",
+    "treatment": "Bladeless LASIK",
+    "doctor": "Dr. Hetalkumar Yagnik",
+    "rating": 5,
+    "date": "1 month ago",
+    "text": "I had -5.5 D glasses power for 12 years. After LASIK at Rishabh Eye Hospital, I have 100% clear vision without spectacles. The hospital is super clean, fully AC, and the entire team is extremely supportive.",
+    "verified": true
+  },
+  {
+    "id": 3,
+    "name": "Anilbhai K. Desai",
+    "location": "Adajan, Surat",
+    "treatment": "Retina Care",
+    "doctor": "Dr. Shefali Yagnik",
+    "rating": 5,
+    "date": "3 weeks ago",
+    "text": "Dr. Shefali Yagnik is extremely patient and thorough. She mapped my diabetic retina scan digitally and explained every detail clearly. Excellent diagnostic equipment and friendly staff.",
+    "verified": true
+  },
+  {
+    "id": 4,
+    "name": "Meenaben H. Mehta",
+    "location": "Althan, Surat",
+    "treatment": "ICL Implant",
+    "doctor": "Dr. Hetalkumar Yagnik",
+    "rating": 5,
+    "date": "2 months ago",
+    "text": "Because of thin cornea I was rejected for LASIK elsewhere, but Dr. Yagnik suggested ICL surgery. The procedure took just 15 minutes and the result is miraculous! Very thankful to Rishabh Hospital.",
+    "verified": true
+  }
+]

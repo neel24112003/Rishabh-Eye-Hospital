@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -68,6 +68,38 @@ export default function Reviews() {
     return DEFAULT_REVIEWS;
   });
 
+  // Fetch reviews from server/public JSON on mount for cross-device sync
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+        const res = await fetch(`${API_BASE}/api/reviews`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setReviewsList(data);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            return;
+          }
+        }
+      } catch (err) {
+        // Fallback to static JSON file
+        try {
+          const res = await fetch('/reviews_data.json');
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              setReviewsList(data);
+            }
+          }
+        } catch (e) {
+          console.warn("Fallback review fetch notice:", e);
+        }
+      }
+    };
+    fetchReviews();
+  }, []);
+
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [newReview, setNewReview] = useState({
     name: '',
@@ -79,7 +111,7 @@ export default function Reviews() {
   });
   const [submittedMessage, setSubmittedMessage] = useState(false);
 
-  const handleSubmitReview = (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!newReview.name || !newReview.text) return;
 
@@ -98,11 +130,30 @@ export default function Reviews() {
     const updated = [item, ...reviewsList];
     setReviewsList(updated);
 
-    // Save permanently to localStorage
+    // Save locally
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch (err) {
       console.error("Error saving review to localStorage:", err);
+    }
+
+    // Post to Server API for Cross-Device Global Persistence
+    try {
+      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+      const res = await fetch(`${API_BASE}/api/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+      });
+      if (res.ok) {
+        const resData = await res.json();
+        if (resData.reviews && Array.isArray(resData.reviews)) {
+          setReviewsList(resData.reviews);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(resData.reviews));
+        }
+      }
+    } catch (err) {
+      console.warn("Server review post error:", err);
     }
 
     setSubmittedMessage(true);

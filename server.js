@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -329,6 +331,78 @@ app.post('/api/book-appointment', async (req, res) => {
   }
 });
 
+// Reviews API Endpoints for Cross-Device Persistence
+const REVIEWS_FILE = path.join(process.cwd(), 'public', 'reviews_data.json');
+
+app.get('/api/reviews', (req, res) => {
+  try {
+    if (fs.existsSync(REVIEWS_FILE)) {
+      const data = fs.readFileSync(REVIEWS_FILE, 'utf8');
+      return res.status(200).json(JSON.parse(data));
+    }
+  } catch (err) {
+    console.error('❌ Error reading reviews_data.json:', err);
+  }
+  return res.status(200).json([]);
+});
+
+app.post('/api/reviews', async (req, res) => {
+  const { name, location, treatment, doctor, rating, date, text } = req.body;
+
+  if (!name || !text) {
+    return res.status(400).json({ success: false, message: 'Name and text are required.' });
+  }
+
+  const newReview = {
+    id: Date.now(),
+    name,
+    location: location || "Surat Patient",
+    treatment: treatment || "Cataract Surgery",
+    doctor: doctor || "Dr. Hetalkumar Yagnik",
+    rating: Number(rating) || 5,
+    date: date || "Just now",
+    text,
+    verified: true
+  };
+
+  try {
+    let list = [];
+    if (fs.existsSync(REVIEWS_FILE)) {
+      const existing = fs.readFileSync(REVIEWS_FILE, 'utf8');
+      list = JSON.parse(existing);
+    }
+    list.unshift(newReview);
+    fs.writeFileSync(REVIEWS_FILE, JSON.stringify(list, null, 2), 'utf8');
+
+    console.log(`✅ New patient review saved from ${name} across all devices!`);
+
+    // Notify Hospital Admin via Email about new review
+    try {
+      await activeTransporter.sendMail({
+        from: `"Rishabh Eye Hospital" <${GMAIL_USER}>`,
+        to: GMAIL_USER,
+        subject: `⭐ New Patient Review Posted by ${name} (${rating} Stars)`,
+        html: `
+          <div style="font-family: sans-serif; padding: 20px; background: #070C14; color: #fff; border-radius: 10px;">
+            <h2 style="color: #B8ED78;">⭐ New Patient Experience Review</h2>
+            <p><strong>Patient Name:</strong> ${name}</p>
+            <p><strong>Treatment:</strong> ${treatment}</p>
+            <p><strong>Rating:</strong> ${'★'.repeat(rating)} (${rating}/5)</p>
+            <p><strong>Review:</strong> "${text}"</p>
+          </div>
+        `
+      });
+    } catch (e) {
+      console.warn("Review email notice error:", e.message);
+    }
+
+    return res.status(200).json({ success: true, reviews: list });
+  } catch (err) {
+    console.error('❌ Error saving review:', err);
+    return res.status(500).json({ success: false, message: 'Failed to save review.' });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`🚀 Rishabh Eye Hospital Mail API Server running on port ${PORT}`);
+  console.log(`🚀 Rishabh Eye Hospital Mail & Reviews Server running on port ${PORT}`);
 });
