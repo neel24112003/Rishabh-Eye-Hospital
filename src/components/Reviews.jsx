@@ -68,9 +68,10 @@ export default function Reviews() {
     return DEFAULT_REVIEWS;
   });
 
-  // Fetch reviews from server/public JSON on mount for cross-device sync
+  // Fetch reviews from GitHub Raw + Server API on mount for 100% Cross-Device Worldwide Sync
   useEffect(() => {
     const fetchReviews = async () => {
+      // 1. Try local server API first
       try {
         const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
         const res = await fetch(`${API_BASE}/api/reviews`);
@@ -83,20 +84,36 @@ export default function Reviews() {
           }
         }
       } catch (err) {
-        // Fallback to static JSON file
-        try {
-          const res = await fetch('/reviews_data.json');
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-              setReviewsList(data);
+        // Server API unreachable over mobile/internet
+      }
+
+      // 2. Fetch directly from GitHub Raw JSON (Works 100% on every mobile & PC worldwide)
+      try {
+        const GITHUB_RAW_URL = `https://raw.githubusercontent.com/neel24112003/Rishabh-Eye-Hospital/main/public/reviews_data.json?t=${Date.now()}`;
+        const res = await fetch(GITHUB_RAW_URL);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            // Merge with local storage items so offline submissions are preserved
+            const saved = localStorage.getItem(STORAGE_KEY);
+            let localItems = [];
+            if (saved) {
+              try { localItems = JSON.parse(saved); } catch(e) {}
             }
+            
+            const combinedMap = new Map();
+            [...localItems, ...data].forEach(item => combinedMap.set(item.id, item));
+            const combined = Array.from(combinedMap.values());
+
+            setReviewsList(combined);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(combined));
           }
-        } catch (e) {
-          console.warn("Fallback review fetch notice:", e);
         }
+      } catch (e) {
+        console.warn("GitHub Raw review fetch notice:", e);
       }
     };
+
     fetchReviews();
   }, []);
 

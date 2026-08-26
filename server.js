@@ -4,6 +4,7 @@ import cors from 'cors';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -375,6 +376,15 @@ app.post('/api/reviews', async (req, res) => {
     fs.writeFileSync(REVIEWS_FILE, JSON.stringify(list, null, 2), 'utf8');
 
     console.log(`✅ New patient review saved from ${name} across all devices!`);
+
+    // Auto Git Sync to GitHub for Global Permanent Persistence across all devices
+    exec('git add public/reviews_data.json && git commit -m "Auto-save patient review" && git push origin main', (err, stdout, stderr) => {
+      if (err) {
+        console.warn("Git sync notice:", err.message);
+      } else {
+        console.log("✅ Review synced permanently to GitHub repo!");
+      }
+    });
 
     // Notify Hospital Admin via Email about new review
     try {
