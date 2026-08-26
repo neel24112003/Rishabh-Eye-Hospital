@@ -38,7 +38,7 @@ export default function Hero({ onOpenAppointment }) {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="lg:col-span-7 flex flex-col items-start pt-3 sm:pt-5 md:pt-7"
+            className="lg:col-span-7 flex flex-col items-start pt-6 sm:pt-8 lg:pt-10"
           >
             {/* Headline - Guaranteed 2 Lines */}
             <motion.h1 variants={itemVariants} className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.15rem] xl:text-5xl font-extrabold tracking-tight text-white leading-[1.18] mb-6">
