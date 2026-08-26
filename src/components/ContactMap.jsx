@@ -99,19 +99,24 @@ export default function ContactMap({ onBookSuccess }) {
             </div>
           </a>
 
-          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex items-center gap-4 group">
+          <a
+            href="https://maps.google.com/?q=Rishabh+Eyecare+Hospital+The+Lenora+New+City+Light+Rd+Althan+Surat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex items-center gap-4 group"
+          >
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#51AABC] to-[#35A6B7] p-0.5 shadow-lg shrink-0">
-              <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#35A6B7]">
+              <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
                 <MapPin className="w-6 h-6" />
               </div>
             </div>
             <div>
               <div className="text-xs text-slate-400 font-mono uppercase mb-0.5">Hospital Location</div>
-              <div className="text-xs font-semibold text-slate-200 leading-snug">
+              <div className="text-xs font-semibold text-slate-200 group-hover:text-[#B8ED78] transition-colors leading-snug">
                 The Lenora, 201-202, New City Light Rd, beside Naveli Hospital, Althan, Surat, Gujarat 395007
               </div>
             </div>
-          </div>
+          </a>
 
           <a
             href="mailto:rishabheyecare36@gmail.com"
