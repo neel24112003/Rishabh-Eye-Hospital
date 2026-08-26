@@ -265,17 +265,14 @@ export default function Reviews() {
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">Treatment Received</label>
-                    <select
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Cataract Surgery, Bladeless LASIK, Retina Care"
                       value={newReview.treatment}
                       onChange={(e) => setNewReview({ ...newReview, treatment: e.target.value })}
                       className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78]"
-                    >
-                      <option value="Cataract Surgery (Phaco)">Cataract Surgery (Phaco)</option>
-                      <option value="Bladeless LASIK Surgery">Bladeless LASIK Surgery</option>
-                      <option value="ICL Lens Placement">ICL Lens Placement</option>
-                      <option value="Retina Evaluation">Retina Evaluation</option>
-                      <option value="Comprehensive Eye Checkup">Comprehensive Eye Checkup</option>
-                    </select>
+                    />
                   </div>
 
                   <div>
