@@ -142,7 +142,7 @@ export default function Navbar({ onOpenAppointment }) {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu - Anchored Directly Under Header Navbar Bar */}
+      {/* Mobile Drawer Menu - Clean Nav Links + Book Button Only */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -152,15 +152,7 @@ export default function Navbar({ onOpenAppointment }) {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="lg:hidden w-full overflow-hidden bg-[#070C14]/98 backdrop-blur-2xl border-b border-[#35A6B7]/40 shadow-2xl shadow-[#070C14]"
           >
-            <div className="max-w-7xl mx-auto px-4 pt-3 pb-6 flex flex-col gap-2 max-h-[82vh] overflow-y-auto">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-1">
-                <span className="text-xs font-bold text-[#B8ED78] tracking-wider uppercase flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#B8ED78] animate-pulse" />
-                  Menu Navigation
-                </span>
-                <span className="text-[11px] text-slate-400 font-mono">Rishabh Eye Hospital</span>
-              </div>
-
+            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1.5 max-h-[82vh] overflow-y-auto">
               {navLinks.map((link) => (
                 <a
                   key={link.id}
@@ -177,7 +169,7 @@ export default function Navbar({ onOpenAppointment }) {
                 </a>
               ))}
 
-              <div className="pt-4 border-t border-slate-800 flex flex-col gap-3 mt-2">
+              <div className="pt-3 border-t border-slate-800 mt-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -189,32 +181,6 @@ export default function Navbar({ onOpenAppointment }) {
                   <Calendar className="w-4 h-4 text-slate-950" />
                   <span>Book Consultation Now</span>
                 </button>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <a
-                    href="tel:07405563636"
-                    className="py-2.5 px-3 rounded-xl glass-panel border border-[#35A6B7]/40 text-[#B8ED78] font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#35A6B7]/20"
-                  >
-                    <Phone className="w-3.5 h-3.5" />
-                    <span>074055 63636</span>
-                  </a>
-
-                  <a
-                    href="tel:9898293695"
-                    className="py-2.5 px-3 rounded-xl glass-panel border border-[#35A6B7]/40 text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#35A6B7]/20"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-[#35A6B7]" />
-                    <span>98982 93695</span>
-                  </a>
-                </div>
-
-                <a
-                  href="mailto:rishabheyecare36@gmail.com"
-                  className="w-full py-2.5 rounded-xl glass-panel border border-slate-800 text-slate-300 font-semibold text-xs flex items-center justify-center gap-2 hover:text-[#B8ED78] hover:border-[#B8ED78]/30"
-                >
-                  <Mail className="w-3.5 h-3.5 text-[#35A6B7]" />
-                  <span>rishabheyecare36@gmail.com</span>
-                </a>
               </div>
             </div>
           </motion.div>
