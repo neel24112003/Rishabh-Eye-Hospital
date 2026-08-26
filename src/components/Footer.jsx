@@ -140,10 +140,24 @@ export default function Footer() {
                 </span>
               </div>
 
+              <div className="flex items-start gap-3">
+                <Phone className="w-4 h-4 text-[#35A6B7] shrink-0 mt-0.5" />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                  <a href="tel:07405563636" className="text-white font-bold hover:text-[#B8ED78] transition-colors">
+                    074055 63636
+                  </a>
+                  <span className="hidden sm:inline text-slate-600">•</span>
+                  <a href="tel:9898293695" className="text-white font-bold hover:text-[#B8ED78] transition-colors">
+                    98982 93695
+                  </a>
+                  <span className="text-[11px] text-[#35A6B7] font-semibold">(24/7 OPD Helpline)</span>
+                </div>
+              </div>
+
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-[#35A6B7] shrink-0" />
-                <a href="tel:07405563636" className="text-white font-bold hover:text-[#B8ED78] transition-colors">
-                  074055 63636 (24/7 OPD Helpline)
+                <Mail className="w-4 h-4 text-[#B8ED78] shrink-0" />
+                <a href="mailto:rishabheyecare36@gmail.com" className="text-white font-semibold hover:text-[#B8ED78] transition-colors">
+                  rishabheyecare36@gmail.com
                 </a>
               </div>
 

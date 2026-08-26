@@ -93,8 +93,8 @@ export default function ContactMap({ onBookSuccess }) {
             </div>
             <div>
               <div className="text-xs text-slate-400 font-mono uppercase">Emergency & Helpline</div>
-              <div className="text-xl font-bold text-white group-hover:text-[#B8ED78] transition-colors">
-                074055 63636
+              <div className="text-base sm:text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors leading-tight">
+                074055 63636 <span className="text-xs text-[#35A6B7] block sm:inline font-mono">/ 98982 93695</span>
               </div>
               <div className="text-[11px] text-[#35A6B7] font-semibold mt-0.5">Click to Call Directly</div>
             </div>
@@ -114,18 +114,23 @@ export default function ContactMap({ onBookSuccess }) {
             </div>
           </div>
 
-          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex items-center gap-4 group">
+          <a
+            href="mailto:rishabheyecare36@gmail.com"
+            className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex items-center gap-4 group"
+          >
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#B8ED78] to-[#51AABC] p-0.5 shadow-lg shrink-0">
-              <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78]">
-                <Clock className="w-6 h-6" />
+              <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                <Mail className="w-6 h-6" />
               </div>
             </div>
-            <div>
-              <div className="text-xs text-slate-400 font-mono uppercase">OPD Timings</div>
-              <div className="text-sm font-bold text-white">Mon - Sat: 9:00 AM - 8:30 PM</div>
-              <div className="text-[11px] text-[#B8ED78] font-semibold mt-0.5">Direct Email Dispatch & Auto-Reply</div>
+            <div className="min-w-0">
+              <div className="text-xs text-slate-400 font-mono uppercase">Official OPD Email</div>
+              <div className="text-xs sm:text-sm font-bold text-white group-hover:text-[#B8ED78] transition-colors truncate">
+                rishabheyecare36@gmail.com
+              </div>
+              <div className="text-[11px] text-[#B8ED78] font-semibold mt-0.5">Click to Send Direct Email</div>
             </div>
-          </div>
+          </a>
         </div>
 
         {/* Form + Map Grid (Identical Padding & Alignment) */}

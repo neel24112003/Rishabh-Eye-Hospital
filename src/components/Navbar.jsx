@@ -182,7 +182,15 @@ export default function Navbar({ onOpenAppointment }) {
                   className="w-full py-2.5 rounded-xl glass-panel border border-[#35A6B7]/40 text-[#B8ED78] font-bold text-xs flex items-center justify-center gap-2"
                 >
                   <Phone className="w-3.5 h-3.5" />
-                  <span>Call Hotline: 074055 63636</span>
+                  <span>Call: 074055 63636 / 98982 93695</span>
+                </a>
+
+                <a
+                  href="mailto:rishabheyecare36@gmail.com"
+                  className="w-full py-2 rounded-xl glass-panel border border-slate-800 text-slate-300 font-semibold text-[11px] flex items-center justify-center gap-2 hover:text-[#B8ED78]"
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#35A6B7]" />
+                  <span>rishabheyecare36@gmail.com</span>
                 </a>
               </div>
             </div>
