@@ -40,17 +40,6 @@ export default function Hero({ onOpenAppointment }) {
             animate="visible"
             className="lg:col-span-7 flex flex-col items-start"
           >
-            {/* Top Pill Badge */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#B8ED78]/40 mb-6 shadow-lg shadow-[#B8ED78]/10">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B8ED78] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B8ED78]"></span>
-              </span>
-              <span className="text-xs font-semibold tracking-wider text-[#B8ED78] uppercase">
-                Surat's Premier Ophthalmic & Laser Hub
-              </span>
-            </motion.div>
-
             {/* Headline - Guaranteed 2 Lines */}
             <motion.h1 variants={itemVariants} className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.15rem] xl:text-5xl font-extrabold tracking-tight text-white leading-[1.18] mb-6">
               <span className="block">Empowering Clear Vision With</span>
