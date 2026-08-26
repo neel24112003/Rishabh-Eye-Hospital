@@ -150,7 +150,7 @@ export default function ContactMap({ onBookSuccess }) {
               </div>
 
               <span className="px-3 py-1 rounded-full text-[11px] sm:text-xs font-mono bg-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40 shrink-0 self-start sm:self-auto">
-                EMAIL SYNC ACTIVE
+                BOOK NOW
               </span>
             </div>
 
