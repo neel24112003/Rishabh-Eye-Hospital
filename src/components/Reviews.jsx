@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles } from 'lucide-react';
+import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const DEFAULT_REVIEWS = [
@@ -265,14 +265,20 @@ export default function Reviews() {
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">Treatment Received</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Cataract Surgery, Bladeless LASIK, Retina Care"
-                      value={newReview.treatment}
-                      onChange={(e) => setNewReview({ ...newReview, treatment: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78]"
-                    />
+                    <div className="relative">
+                      <select
+                        value={newReview.treatment}
+                        onChange={(e) => setNewReview({ ...newReview, treatment: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#09111E] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] appearance-none cursor-pointer pr-10 shadow-inner"
+                      >
+                        <option value="Cataract Surgery" className="bg-[#0E1726] text-white">Cataract Surgery</option>
+                        <option value="Bladeless LASIK" className="bg-[#0E1726] text-white">Bladeless LASIK</option>
+                        <option value="ICL Lens Placement" className="bg-[#0E1726] text-white">ICL Lens Placement</option>
+                        <option value="Retina Care" className="bg-[#0E1726] text-white">Retina Care</option>
+                        <option value="Comprehensive Eye Checkup" className="bg-[#0E1726] text-white">Comprehensive Eye Checkup</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                   </div>
 
                   <div>
