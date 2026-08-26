@@ -9,19 +9,23 @@
   --theme-aqua: #51AABC;
 }
 
-/* Remove mobile browser default blue tap highlight & blue focus ring on interactive elements */
-* {
+/* Universal Nuclear Tap Highlight & Appearance Reset for Mobile Browsers */
+*, *::before, *::after, html, body, button, a, svg, path, div, span {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
 }
 
 button, a, input, select, textarea {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   -webkit-tap-highlight-color: transparent !important;
-  -webkit-touch-callout: none;
 }
 
-button:focus, button:focus-visible, a:focus, a:focus-visible {
+button, button:focus, button:active, button:hover, button:focus-visible,
+a, a:focus, a:active, a:hover, a:focus-visible {
   outline: none !important;
   box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 /* Custom Scrollbar */
