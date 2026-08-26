@@ -30,11 +30,11 @@ export default function HospitalGallery() {
     },
     {
       id: 4,
-      title: "State-of-the-Art OPD Examination Suite",
+      title: "OPD Patient Waiting Lounge & Accreditation Wall",
       category: "OPD",
-      categoryLabel: "👁️ OPD Examination & Slit Lamp Unit",
+      categoryLabel: "🛋️ OPD Patient Waiting Lounge",
       image: "/images/hospital-interior-4.jpg",
-      description: "Comprehensive automated workstation with motorized patient examination chairs, Zeiss slit-lamp microscopy, and digital keratometry."
+      description: "Spacious air-conditioned OPD waiting lounge featuring ergonomic sofa seating, optical studio view, and hospital vision & accreditation wall."
     },
     {
       id: 5,
