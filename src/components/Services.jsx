@@ -220,7 +220,7 @@ export default function Services({ onOpenAppointment }) {
 
         {/* Diagnostic Category Header */}
         <div className="mb-8 flex items-center gap-3">
-          <div className="w-2.5 h-7 rounded-full bg-gradient-to-b from-[#35A6B7] to-[#51AABC]" />
+          <div className="w-2.5 h-7 rounded-full bg-gradient-to-b from-[#B8ED78] to-[#35A6B7]" />
           <h3 className="font-display text-xl font-bold text-white uppercase tracking-wide">
             2. Diagnostic & Clinical Services
           </h3>
