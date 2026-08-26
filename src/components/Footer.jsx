@@ -45,7 +45,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               {/* Facebook */}
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/Rishabheyecare36/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl glass-panel border border-[#35A6B7]/30 flex items-center justify-center text-slate-300 hover:text-[#B8ED78] hover:border-[#B8ED78]/50 hover:scale-110 transition-all duration-300 shadow-md group"
@@ -58,7 +58,7 @@ export default function Footer() {
 
               {/* Instagram */}
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/rishabh_eyecare/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl glass-panel border border-[#35A6B7]/30 flex items-center justify-center text-slate-300 hover:text-[#B8ED78] hover:border-[#B8ED78]/50 hover:scale-110 transition-all duration-300 shadow-md group"
