@@ -137,15 +137,17 @@ export default function AboutHospital() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="glass-panel rounded-2xl p-6 border border-[#35A6B7]/25 hover:border-[#B8ED78]/50 glass-card-hover group relative"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-tr ${item.color} p-0.5 mb-5 shadow-lg`}>
-                  <div className="w-full h-full bg-[#070C14] rounded-[10px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                    <IconComp className="w-6 h-6" />
+                <div className="flex items-center gap-3.5 mb-3">
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-tr ${item.color} p-0.5 shadow-lg shrink-0`}>
+                    <div className="w-full h-full bg-[#070C14] rounded-[10px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                      <IconComp className="w-5 h-5" />
+                    </div>
                   </div>
-                </div>
 
-                <h3 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
-                  {item.title}
-                </h3>
+                  <h3 className="font-display text-base sm:text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors leading-tight">
+                    {item.title}
+                  </h3>
+                </div>
 
                 <p className="text-slate-300 text-xs leading-relaxed">
                   {item.desc}
