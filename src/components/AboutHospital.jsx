@@ -49,8 +49,7 @@ export default function AboutHospital() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight text-center leading-tight">
-            <span className="inline-block">Rishabh Eyecare Hospital &</span>{' '}
-            <span className="text-gradient-lime inline-block">Laser Center</span>
+            About <span className="text-gradient-lime">Rishabh Eyecare Hospital & Laser Center</span>
           </h2>
         </div>
 
