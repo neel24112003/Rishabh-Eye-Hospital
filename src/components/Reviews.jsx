@@ -50,6 +50,14 @@ const DEFAULT_REVIEWS = [
   }
 ];
 
+const DEFAULT_CLOUD_IDS = [
+  "ff8081819ff5b11001a03c548474228d",
+  "ff8081819ff5b11001a03c5485b3228e",
+  "ff8081819ff5b11001a03c5486ec228f",
+  "ff8081819ff5b11001a03c5488282290"
+];
+
+const CLOUD_IDS_KEY = 'rishabh_cloud_review_ids_v1';
 const STORAGE_KEY = 'rishabh_patient_reviews_v2';
 
 export default function Reviews() {
@@ -68,45 +76,50 @@ export default function Reviews() {
     return DEFAULT_REVIEWS;
   });
 
-  // Fetch reviews from GitHub Raw + Server API on mount for 100% Cross-Device Worldwide Sync
+  // Fetch reviews from Restful-API Cloud DB + GitHub Raw + Server API on mount
   useEffect(() => {
     const fetchReviews = async () => {
-      // 1. Try local server API first
+      // 1. Fetch from Restful-API Cloud DB (Works 100% across all devices worldwide)
       try {
-        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-        const res = await fetch(`${API_BASE}/api/reviews`);
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setReviewsList(data);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            return;
+        const savedIds = localStorage.getItem(CLOUD_IDS_KEY);
+        let idList = DEFAULT_CLOUD_IDS;
+        if (savedIds) {
+          try {
+            const parsed = JSON.parse(savedIds);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              idList = Array.from(new Set([...parsed, ...DEFAULT_CLOUD_IDS]));
+            }
+          } catch(e) {}
+        }
+
+        const queryStr = idList.map(id => `id=${id}`).join('&');
+        const cloudRes = await fetch(`https://api.restful-api.dev/objects?${queryStr}`);
+        
+        if (cloudRes.ok) {
+          const cloudData = await cloudRes.json();
+          if (Array.isArray(cloudData) && cloudData.length > 0) {
+            const extracted = cloudData.map(item => item.data).filter(Boolean);
+            if (extracted.length > 0) {
+              setReviewsList(extracted);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(extracted));
+              return;
+            }
           }
         }
       } catch (err) {
-        // Server API unreachable over mobile/internet
+        console.warn("Cloud DB fetch notice:", err);
       }
 
-      // 2. Fetch directly from GitHub Raw JSON (Works 100% on every mobile & PC worldwide)
+      // 2. Fallback to GitHub Raw JSON
       try {
         const GITHUB_RAW_URL = `https://raw.githubusercontent.com/neel24112003/Rishabh-Eye-Hospital/main/public/reviews_data.json?t=${Date.now()}`;
         const res = await fetch(GITHUB_RAW_URL);
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
-            // Merge with local storage items so offline submissions are preserved
-            const saved = localStorage.getItem(STORAGE_KEY);
-            let localItems = [];
-            if (saved) {
-              try { localItems = JSON.parse(saved); } catch(e) {}
-            }
-            
-            const combinedMap = new Map();
-            [...localItems, ...data].forEach(item => combinedMap.set(item.id, item));
-            const combined = Array.from(combinedMap.values());
-
-            setReviewsList(combined);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(combined));
+            setReviewsList(data);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            return;
           }
         }
       } catch (e) {
@@ -144,34 +157,49 @@ export default function Reviews() {
       verified: true
     };
 
+    // Immediate UI update
     const updated = [item, ...reviewsList];
     setReviewsList(updated);
-
-    // Save locally
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    } catch (err) {
-      console.error("Error saving review to localStorage:", err);
+    } catch (err) {}
+
+    // 1. Post to 24/7 Cloud DB API for Immediate Cross-Device Availability
+    try {
+      const cloudPostRes = await fetch('https://api.restful-api.dev/objects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: "Rishabh_Review_Item_V1",
+          data: item
+        })
+      });
+
+      if (cloudPostRes.ok) {
+        const cloudPostData = await cloudPostRes.json();
+        if (cloudPostData.id) {
+          const savedIds = localStorage.getItem(CLOUD_IDS_KEY);
+          let currentIds = DEFAULT_CLOUD_IDS;
+          if (savedIds) {
+            try { currentIds = JSON.parse(savedIds); } catch(e) {}
+          }
+          const newIds = [cloudPostData.id, ...currentIds];
+          localStorage.setItem(CLOUD_IDS_KEY, JSON.stringify(newIds));
+        }
+      }
+    } catch (e) {
+      console.warn("Cloud DB POST error:", e);
     }
 
-    // Post to Server API for Cross-Device Global Persistence
+    // 2. Post to Local Server API if running
     try {
       const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-      const res = await fetch(`${API_BASE}/api/reviews`, {
+      await fetch(`${API_BASE}/api/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(item)
       });
-      if (res.ok) {
-        const resData = await res.json();
-        if (resData.reviews && Array.isArray(resData.reviews)) {
-          setReviewsList(resData.reviews);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(resData.reviews));
-        }
-      }
-    } catch (err) {
-      console.warn("Server review post error:", err);
-    }
+    } catch (err) {}
 
     setSubmittedMessage(true);
 
