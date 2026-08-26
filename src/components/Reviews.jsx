@@ -50,12 +50,29 @@ const DEFAULT_REVIEWS = [
   }
 ];
 
+const STORAGE_KEY = 'rishabh_patient_reviews_v2';
+
 export default function Reviews() {
-  const [reviewsList, setReviewsList] = useState(DEFAULT_REVIEWS);
+  const [reviewsList, setReviewsList] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error("Error reading saved reviews:", e);
+    }
+    return DEFAULT_REVIEWS;
+  });
 
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [newReview, setNewReview] = useState({
     name: '',
+    location: 'Surat, Gujarat',
+    doctor: 'Dr. Hetalkumar Yagnik',
     treatment: 'Cataract Surgery',
     rating: 5,
     text: ''
@@ -69,16 +86,25 @@ export default function Reviews() {
     const item = {
       id: Date.now(),
       name: newReview.name,
-      location: "Surat Patient",
+      location: newReview.location || "Surat Patient",
       treatment: newReview.treatment,
-      doctor: "Dr. Hetalkumar Yagnik",
+      doctor: newReview.doctor || "Dr. Hetalkumar Yagnik",
       rating: Number(newReview.rating),
       date: "Just now",
       text: newReview.text,
       verified: true
     };
 
-    setReviewsList([item, ...reviewsList]);
+    const updated = [item, ...reviewsList];
+    setReviewsList(updated);
+
+    // Save permanently to localStorage
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    } catch (err) {
+      console.error("Error saving review to localStorage:", err);
+    }
+
     setSubmittedMessage(true);
 
     confetti({
@@ -91,7 +117,14 @@ export default function Reviews() {
     setTimeout(() => {
       setSubmittedMessage(false);
       setReviewModalOpen(false);
-      setNewReview({ name: '', treatment: 'Cataract Surgery', rating: 5, text: '' });
+      setNewReview({
+        name: '',
+        location: 'Surat, Gujarat',
+        doctor: 'Dr. Hetalkumar Yagnik',
+        treatment: 'Cataract Surgery',
+        rating: 5,
+        text: ''
+      });
     }, 2000);
   };
 
@@ -125,6 +158,16 @@ export default function Reviews() {
             </div>
             <span className="text-slate-500">•</span>
             <span className="text-slate-300 text-xs font-medium">Over 2,500+ 5-Star Reviews in Surat</span>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setReviewModalOpen(true)}
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-xl shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:scale-105 active:scale-95 transition-all duration-300"
+            >
+              <Plus className="w-4 h-4 text-slate-950 stroke-[3]" />
+              <span>Share Your Patient Experience</span>
+            </button>
           </div>
         </div>
 
