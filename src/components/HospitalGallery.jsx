@@ -6,11 +6,11 @@ export default function HospitalGallery() {
   const galleryItems = [
     {
       id: 1,
-      title: "Spacious Executive Reception & Waiting Lounge",
+      title: "Spacious Executive Reception",
       category: "Lounge",
-      categoryLabel: "🛋️ Patient Waiting Lounge",
+      categoryLabel: "🏢 Executive Reception Desk",
       image: "/images/hospital-interior-1.jpg",
-      description: "Designed for ultimate patient comfort featuring ergonomic seating, soothing warm lighting, tranquil spiritual corner, and digital queue display system."
+      description: "Designed for seamless patient check-in featuring modern reception counter, warm lighting, spiritual corner, and digital queue display system."
     },
     {
       id: 2,
