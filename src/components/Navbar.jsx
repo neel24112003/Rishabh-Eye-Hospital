@@ -48,6 +48,20 @@ export default function Navbar({ onOpenAppointment }) {
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
+  const handleNavClick = (e, id) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        const yOffset = -75;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 40);
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
       {/* Main Glassmorphism Navbar */}
@@ -60,7 +74,11 @@ export default function Navbar({ onOpenAppointment }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo Branding */}
-          <a href="#home" className="flex items-center gap-3 group">
+          <a
+            href="#home"
+            onClick={(e) => handleNavClick(e, 'home')}
+            className="flex items-center gap-3 group"
+          >
             <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-[#35A6B7] via-[#51AABC] to-[#B8ED78] p-0.5 shadow-lg shadow-[#35A6B7]/30 group-hover:scale-105 transition-transform duration-300">
               <div className="w-full h-full bg-[#070C14] rounded-[10px] flex items-center justify-center">
                 <Eye className="w-5 h-5 text-[#B8ED78] group-hover:rotate-12 transition-transform duration-300" />
@@ -89,6 +107,7 @@ export default function Navbar({ onOpenAppointment }) {
                 <a
                   key={link.id}
                   href={link.href}
+                  onClick={(e) => handleNavClick(e, link.id)}
                   className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all duration-300 ${
                     isActive
                       ? 'text-[#070C14] font-bold'
@@ -157,7 +176,7 @@ export default function Navbar({ onOpenAppointment }) {
                 <a
                   key={link.id}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, link.id)}
                   className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     activeSection === link.id
                       ? 'bg-gradient-to-r from-[#35A6B7]/30 to-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40 font-bold shadow-md'
