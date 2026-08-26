@@ -142,12 +142,12 @@ export default function Footer() {
 
               <div className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-[#35A6B7] shrink-0 mt-0.5" />
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                  <a href="tel:07405563636" className="text-white font-bold hover:text-[#B8ED78] transition-colors">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                  <a href="tel:07405563636" className="text-slate-300 font-semibold hover:text-[#B8ED78] transition-colors">
                     074055 63636
                   </a>
-                  <span className="hidden sm:inline text-slate-600">•</span>
-                  <a href="tel:9898293695" className="text-white font-bold hover:text-[#B8ED78] transition-colors">
+                  <span className="hidden sm:inline text-slate-500 font-normal">|</span>
+                  <a href="tel:9898293695" className="text-slate-300 font-semibold hover:text-[#B8ED78] transition-colors">
                     98982 93695
                   </a>
                   <span className="text-[11px] text-[#35A6B7] font-semibold">(24/7 OPD Helpline)</span>
@@ -156,14 +156,14 @@ export default function Footer() {
 
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-[#B8ED78] shrink-0" />
-                <a href="mailto:rishabheyecare36@gmail.com" className="text-white font-semibold hover:text-[#B8ED78] transition-colors">
+                <a href="mailto:rishabheyecare36@gmail.com" className="text-slate-300 font-semibold hover:text-[#B8ED78] transition-colors">
                   rishabheyecare36@gmail.com
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <ShieldCheck className="w-4 h-4 text-[#B8ED78] shrink-0" />
-                <span className="text-slate-300 font-mono">Senior Super-Consultant: Dr. Hetalkumar R. Yagnik</span>
+                <span className="text-slate-300 font-mono">Senior Super-Consultants: Dr. Hetalkumar R. Yagnik & Dr. Shefali H. Yagnik</span>
               </div>
 
               <div className="mt-4 p-3 rounded-xl glass-panel border border-[#35A6B7]/30 text-[11px] text-slate-300 flex items-center justify-between">

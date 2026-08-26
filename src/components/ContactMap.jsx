@@ -93,8 +93,8 @@ export default function ContactMap({ onBookSuccess }) {
             </div>
             <div>
               <div className="text-xs text-slate-400 font-mono uppercase mb-0.5">Emergency & Helpline</div>
-              <div className="text-sm sm:text-base font-bold text-white group-hover:text-[#B8ED78] transition-colors leading-snug">
-                074055 63636 / 98982 93695
+              <div className="text-sm sm:text-base font-semibold text-slate-300 group-hover:text-[#B8ED78] transition-colors leading-snug">
+                074055 63636 <span className="text-slate-500 font-normal">|</span> 98982 93695
               </div>
             </div>
           </a>
@@ -129,7 +129,7 @@ export default function ContactMap({ onBookSuccess }) {
             </div>
             <div className="min-w-0">
               <div className="text-xs text-slate-400 font-mono uppercase mb-0.5">Official OPD Email</div>
-              <div className="text-sm font-bold text-white group-hover:text-[#B8ED78] transition-colors truncate">
+              <div className="text-sm font-semibold text-slate-300 group-hover:text-[#B8ED78] transition-colors truncate">
                 rishabheyecare36@gmail.com
               </div>
             </div>
