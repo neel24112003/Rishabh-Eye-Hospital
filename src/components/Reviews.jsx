@@ -159,16 +159,6 @@ export default function Reviews() {
             <span className="text-slate-500">•</span>
             <span className="text-slate-300 text-xs font-medium">Over 2,500+ 5-Star Reviews in Surat</span>
           </div>
-
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={() => setReviewModalOpen(true)}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-xl shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:scale-105 active:scale-95 transition-all duration-300"
-            >
-              <Plus className="w-4 h-4 text-slate-950 stroke-[3]" />
-              <span>Share Your Patient Experience</span>
-            </button>
-          </div>
         </div>
 
         {/* Reviews Grid */}
@@ -218,6 +208,17 @@ export default function Reviews() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Share Patient Experience Button (Positioned Below Comments Grid) */}
+        <div className="flex justify-center">
+          <button
+            onClick={() => setReviewModalOpen(true)}
+            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-xl shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:scale-105 active:scale-95 transition-all duration-300"
+          >
+            <Plus className="w-4 h-4 text-slate-950 stroke-[3]" />
+            <span>Share Your Patient Experience</span>
+          </button>
         </div>
 
       </div>
