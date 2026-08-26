@@ -35,6 +35,38 @@ export default function HospitalGallery() {
       categoryLabel: "👁️ OPD Examination & Slit Lamp Unit",
       image: "/images/hospital-interior-4.jpg",
       description: "Comprehensive automated workstation with motorized patient examination chairs, Zeiss slit-lamp microscopy, and digital keratometry."
+    },
+    {
+      id: 5,
+      title: "VIP Patient Recovery & Refreshment Suite",
+      category: "Lounge",
+      categoryLabel: "🛋️ VIP Executive Suite",
+      image: "/images/hospital-interior-5.jpg",
+      description: "Air-conditioned private recovery lounge with ergonomic seating, entertainment screen, and soothing environment for post-procedure relaxation."
+    },
+    {
+      id: 6,
+      title: "In-House Optical Boutique & Eyewear Studio",
+      category: "Optical",
+      categoryLabel: "👓 Optical & Lens Fitting Unit",
+      image: "/images/hospital-interior-6.jpg",
+      description: "Comprehensive optical showroom displaying premium brand spectacle frames, anti-glare lenses, and customized spectacle fitting."
+    },
+    {
+      id: 7,
+      title: "German Modular Operation Theatre & OT Suite",
+      category: "OT",
+      categoryLabel: "🏥 Modular Surgical OT",
+      image: "/images/hospital-interior-7.jpg",
+      description: "Ultra-sterile Class-100 surgical suite equipped with advanced Zeiss operating microscope, American Phacoemulsification unit, and sterile air circulation."
+    },
+    {
+      id: 8,
+      title: "Specialist Doctor Consultation & Refraction Suite",
+      category: "Chambers",
+      categoryLabel: "👨‍⚕️ Advanced Diagnostic Room",
+      image: "/images/hospital-interior-8.jpg",
+      description: "State-of-the-art consultation workstation featuring automated refractometer, digital chart projector, motorized patient examination chair, and counselling space."
     }
   ];
 
@@ -83,7 +115,7 @@ export default function HospitalGallery() {
 
           {/* Filter Category Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
-            {['All', 'Lounge', 'Diagnostics', 'Chambers', 'OPD'].map((tab) => (
+            {['All', 'Lounge', 'Diagnostics', 'Chambers', 'OPD', 'OT', 'Optical'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
