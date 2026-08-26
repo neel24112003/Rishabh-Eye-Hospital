@@ -38,7 +38,7 @@ export default function Hero({ onOpenAppointment }) {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="lg:col-span-7 flex flex-col items-start pt-1 sm:pt-2"
+            className="lg:col-span-7 flex flex-col items-start pt-3 sm:pt-5 md:pt-7"
           >
             {/* Headline - Guaranteed 2 Lines */}
             <motion.h1 variants={itemVariants} className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.15rem] xl:text-5xl font-extrabold tracking-tight text-white leading-[1.18] mb-6">
@@ -57,7 +57,7 @@ export default function Hero({ onOpenAppointment }) {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-6">
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-7">
               <button
                 onClick={onOpenAppointment}
                 className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] shadow-xl shadow-[#B8ED78]/20 hover:shadow-[#B8ED78]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group"
@@ -76,11 +76,11 @@ export default function Hero({ onOpenAppointment }) {
               </a>
             </motion.div>
 
-            {/* Hospital Official Slogan */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl glass-panel border border-[#35A6B7]/30 bg-[#070C14]/60">
-              <div className="w-2 h-2 rounded-full bg-[#B8ED78] shadow-[0_0_8px_#B8ED78]" />
-              <p className="text-slate-200 text-xs sm:text-sm font-semibold tracking-wide">
-                <span className="text-[#B8ED78]">"Clear Vision, Better Life</span> — We Care For Your Eyes"
+            {/* Hospital Official Slogan - Prominent & Bold */}
+            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl glass-panel border border-[#B8ED78]/40 bg-[#070C14]/80 shadow-lg shadow-[#B8ED78]/10 hover:border-[#B8ED78]/70 transition-all duration-300">
+              <Sparkles className="w-5 h-5 text-[#B8ED78] shrink-0 animate-pulse" />
+              <p className="text-white text-sm sm:text-base font-extrabold tracking-wide">
+                <span className="text-gradient-lime">Clear Vision, Better Life</span> — We Care For Your Eyes
               </p>
             </motion.div>
           </motion.div>
