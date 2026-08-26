@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, Phone, Calendar, Menu, X, ShieldCheck, ChevronRight, MapPin } from 'lucide-react';
+import { Eye, Phone, Calendar, Menu, X, ShieldCheck, ChevronRight, MapPin, Mail } from 'lucide-react';
 
 export default function Navbar({ onOpenAppointment }) {
   const [scrolled, setScrolled] = useState(false);
@@ -142,22 +142,23 @@ export default function Navbar({ onOpenAppointment }) {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu - Anchored Directly Under Header Navbar Bar */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className={`fixed inset-x-0 z-30 lg:hidden px-3 pt-1 pb-4 transition-all duration-300 ${
-              scrolled ? 'top-[58px]' : 'top-[72px]'
-            }`}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="lg:hidden w-full overflow-hidden bg-[#070C14]/98 backdrop-blur-2xl border-b border-[#35A6B7]/40 shadow-2xl shadow-[#070C14]"
           >
-            <div className="glass-panel border border-[#35A6B7]/40 rounded-2xl p-4 shadow-2xl backdrop-blur-2xl bg-[#070C14]/98 flex flex-col gap-2">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-1">
-                <span className="text-xs font-bold text-[#B8ED78] tracking-wider uppercase">Menu Navigation</span>
-                <span className="text-[11px] text-slate-400 font-mono">Surat Center</span>
+            <div className="max-w-7xl mx-auto px-4 pt-3 pb-6 flex flex-col gap-2 max-h-[82vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-1">
+                <span className="text-xs font-bold text-[#B8ED78] tracking-wider uppercase flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#B8ED78] animate-pulse" />
+                  Menu Navigation
+                </span>
+                <span className="text-[11px] text-slate-400 font-mono">Rishabh Eye Hospital</span>
               </div>
 
               {navLinks.map((link) => (
@@ -165,40 +166,51 @@ export default function Navbar({ onOpenAppointment }) {
                   key={link.id}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     activeSection === link.id
-                      ? 'bg-gradient-to-r from-[#35A6B7]/20 to-[#B8ED78]/10 text-[#B8ED78] border border-[#B8ED78]/30 font-bold'
-                      : 'text-slate-200 hover:bg-slate-800/60 hover:text-white'
+                      ? 'bg-gradient-to-r from-[#35A6B7]/30 to-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40 font-bold shadow-md'
+                      : 'text-slate-100 hover:bg-slate-800/80 hover:text-white border border-transparent'
                   }`}
                 >
                   <span>{link.name}</span>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                  <ChevronRight className={`w-4 h-4 ${activeSection === link.id ? 'text-[#B8ED78]' : 'text-slate-500'}`} />
                 </a>
               ))}
 
-              <div className="pt-3 border-t border-slate-800 flex flex-col gap-2.5 mt-2">
+              <div className="pt-4 border-t border-slate-800 flex flex-col gap-3 mt-2">
                 <button
+                  type="button"
                   onClick={() => {
                     setMobileMenuOpen(false);
                     onOpenAppointment();
                   }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#B8ED78]/20"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all"
                 >
-                  <Calendar className="w-4 h-4" />
-                  <span>Book Appointment Now</span>
+                  <Calendar className="w-4 h-4 text-slate-950" />
+                  <span>Book Consultation Now</span>
                 </button>
 
-                <a
-                  href="tel:07405563636"
-                  className="w-full py-2.5 rounded-xl glass-panel border border-[#35A6B7]/40 text-[#B8ED78] font-bold text-xs flex items-center justify-center gap-2"
-                >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>Call: 074055 63636 / 98982 93695</span>
-                </a>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a
+                    href="tel:07405563636"
+                    className="py-2.5 px-3 rounded-xl glass-panel border border-[#35A6B7]/40 text-[#B8ED78] font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#35A6B7]/20"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>074055 63636</span>
+                  </a>
+
+                  <a
+                    href="tel:9898293695"
+                    className="py-2.5 px-3 rounded-xl glass-panel border border-[#35A6B7]/40 text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#35A6B7]/20"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#35A6B7]" />
+                    <span>98982 93695</span>
+                  </a>
+                </div>
 
                 <a
                   href="mailto:rishabheyecare36@gmail.com"
-                  className="w-full py-2 rounded-xl glass-panel border border-slate-800 text-slate-300 font-semibold text-[11px] flex items-center justify-center gap-2 hover:text-[#B8ED78]"
+                  className="w-full py-2.5 rounded-xl glass-panel border border-slate-800 text-slate-300 font-semibold text-xs flex items-center justify-center gap-2 hover:text-[#B8ED78] hover:border-[#B8ED78]/30"
                 >
                   <Mail className="w-3.5 h-3.5 text-[#35A6B7]" />
                   <span>rishabheyecare36@gmail.com</span>
