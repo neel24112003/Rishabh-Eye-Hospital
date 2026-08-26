@@ -58,25 +58,59 @@ const DEFAULT_CLOUD_IDS = [
 ];
 
 const CLOUD_IDS_KEY = 'rishabh_cloud_review_ids_v1';
-const STORAGE_KEY = 'rishabh_patient_reviews_v2';
+const LOCAL_USER_REVIEWS_KEY = 'rishabh_user_submitted_reviews_v5';
+const STORAGE_KEY = 'rishabh_patient_reviews_v3';
 
-export default function Reviews() {
-  const [reviewsList, setReviewsList] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      }
-    } catch (e) {
-      console.error("Error reading saved reviews:", e);
+// Utility helper to safely load locally submitted user reviews
+const getLocalUserReviews = () => {
+  try {
+    const saved = localStorage.getItem(LOCAL_USER_REVIEWS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
     }
-    return DEFAULT_REVIEWS;
+  } catch (e) {}
+  return [];
+};
+
+// Bulletproof merger to combine user-submitted, fetched server/github, and default reviews without data loss
+const mergeAllReviews = (fetchedList = []) => {
+  const localUser = getLocalUserReviews();
+  const map = new Map();
+
+  // 1. Highest priority: User submitted reviews on this device
+  localUser.forEach((item) => {
+    if (item && item.text) {
+      const key = item.id || `${item.name}-${item.text}`;
+      map.set(key, item);
+    }
   });
 
-  // Fetch reviews from all available APIs + GitHub Raw on mount
+  // 2. Next: Fetched reviews from API / GitHub
+  fetchedList.forEach((item) => {
+    if (item && item.text) {
+      const key = item.id || `${item.name}-${item.text}`;
+      if (!map.has(key)) {
+        map.set(key, item);
+      }
+    }
+  });
+
+  // 3. Fallback: Default verified hospital reviews
+  DEFAULT_REVIEWS.forEach((item) => {
+    const key = item.id || `${item.name}-${item.text}`;
+    if (!map.has(key)) {
+      map.set(key, item);
+    }
+  });
+
+  return Array.from(map.values());
+};
+
+export default function Reviews() {
+  const [reviewsList, setReviewsList] = useState(() => mergeAllReviews([]));
+
+  // Fetch reviews from APIs + GitHub Raw on mount, and seamlessly merge with local state
   useEffect(() => {
     const fetchReviews = async () => {
       const endpoints = [
@@ -93,8 +127,9 @@ export default function Reviews() {
             const data = await res.json();
             const list = Array.isArray(data) ? data : (data.reviews || []);
             if (list.length > 0) {
-              setReviewsList(list);
-              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e){}
+              const merged = mergeAllReviews(list);
+              setReviewsList(merged);
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(merged)); } catch(e){}
               break;
             }
           }
@@ -134,14 +169,21 @@ export default function Reviews() {
       verified: true
     };
 
-    // Immediate state & local storage update
-    const updated = [item, ...reviewsList];
-    setReviewsList(updated);
+    // 1. Save directly into persistent local user reviews storage
+    const currentLocal = getLocalUserReviews();
+    const updatedLocal = [item, ...currentLocal];
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      localStorage.setItem(LOCAL_USER_REVIEWS_KEY, JSON.stringify(updatedLocal));
     } catch (err) {}
 
-    // Post to all active backend endpoints simultaneously
+    // 2. Immediately update state with merged reviews list
+    const updatedList = mergeAllReviews([]);
+    setReviewsList(updatedList);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
+    } catch (err) {}
+
+    // 3. Post to all active backend endpoints simultaneously for cross-device sync
     const submitEndpoints = [
       '/api/reviews',
       'http://192.168.1.5:5001/api/reviews',
