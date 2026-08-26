@@ -170,16 +170,68 @@ export default function Reviews() {
   });
   const [submittedMessage, setSubmittedMessage] = useState(false);
 
-  const handleSubmitReview = async (e) => {
+// Helper to intelligently get the correct Doctor name based on review content & doctor choice
+const getDoctorName = (review) => {
+  if (!review) return "Dr. Hetalkumar R. Yagnik";
+  const text = (review.text || "").toLowerCase();
+  if (text.includes("hetalkumar") || text.includes("hetal")) {
+    return "Dr. Hetalkumar R. Yagnik";
+  }
+  if (text.includes("shefali")) {
+    return "Dr. Shefali H. Yagnik";
+  }
+  return review.doctor || "Dr. Hetalkumar R. Yagnik";
+};
+
+// Dynamic relative time calculator (e.g., "Just now", "25 mins ago", "3 hours ago", "2 days ago", "3 weeks ago")
+const getFormattedDate = (item) => {
+  if (!item) return "Recently";
+  
+  if (item.date && item.date !== "Just now" && !item.createdAt && isNaN(Number(item.id))) {
+    return item.date;
+  }
+
+  const timestamp = item.createdAt || (typeof item.id === 'number' && item.id > 1000000000000 ? item.id : null);
+  if (!timestamp) {
+    return item.date || "Recently";
+  }
+
+  const now = Date.now();
+  const diffMs = Math.max(0, now - timestamp);
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+  const diffMonths = Math.floor(diffDays / 30);
+
+  if (diffSecs < 60) {
+    return "Just now";
+  } else if (diffMins < 60) {
+    return `${diffMins} ${diffMins === 1 ? 'min' : 'mins'} ago`;
+  } else if (diffHours < 24) {
+    return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+  } else if (diffDays < 7) {
+    return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+  } else if (diffWeeks < 5) {
+    return `${diffWeeks} ${diffWeeks === 1 ? 'week' : 'weeks'} ago`;
+  } else {
+    return `${diffMonths} ${diffMonths === 1 ? 'month' : 'months'} ago`;
+  }
+};
+
+const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!newReview.name || !newReview.text) return;
 
+    const nowTime = Date.now();
     const item = {
-      id: Date.now(),
+      id: nowTime,
+      createdAt: nowTime,
       name: newReview.name,
       location: newReview.location || "Surat Patient",
       treatment: newReview.treatment,
-      doctor: newReview.doctor || "Dr. Hetalkumar Yagnik",
+      doctor: newReview.doctor || "Dr. Hetalkumar R. Yagnik",
       rating: Number(newReview.rating),
       date: "Just now",
       text: newReview.text,
@@ -307,10 +359,10 @@ export default function Reviews() {
                     <span>{review.name}</span>
                     <CheckCircle2 className="w-4 h-4 text-[#B8ED78]" />
                   </div>
-                  <div className="text-xs text-slate-400 font-mono">{review.location} • {review.doctor}</div>
+                  <div className="text-xs text-slate-400 font-mono">{review.location} • {getDoctorName(review)}</div>
                 </div>
 
-                <span className="text-[11px] text-slate-500 font-mono">{review.date}</span>
+                <span className="text-[11px] text-slate-500 font-mono">{getFormattedDate(review)}</span>
               </div>
             </motion.div>
           ))}
