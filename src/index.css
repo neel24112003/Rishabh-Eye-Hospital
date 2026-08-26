@@ -9,6 +9,21 @@
   --theme-aqua: #51AABC;
 }
 
+/* Remove mobile browser default blue tap highlight & blue focus ring on interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none;
+}
+
+button:focus, button:focus-visible, a:focus, a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;

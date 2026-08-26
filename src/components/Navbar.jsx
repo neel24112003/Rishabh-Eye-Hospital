@@ -123,10 +123,11 @@ export default function Navbar({ onOpenAppointment }) {
           {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl glass-panel border border-[#35A6B7]/30 text-slate-200 hover:text-[#B8ED78] focus:outline-none"
+            className="lg:hidden p-2.5 rounded-xl glass-panel border border-[#35A6B7]/40 text-slate-100 active:scale-95 transition-all duration-200 outline-none focus:outline-none focus:ring-0 select-none"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-[#B8ED78]" /> : <Menu className="w-6 h-6 text-white" />}
           </button>
         </div>
       </div>
