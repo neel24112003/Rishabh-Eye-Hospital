@@ -187,11 +187,6 @@ export default function Reviews() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-[#B8ED78]/40 text-xs font-semibold text-[#B8ED78] uppercase tracking-wider mb-4 shadow-lg shadow-[#B8ED78]/10">
-            <UserCheck className="w-3.5 h-3.5 text-[#35A6B7]" />
-            <span>Verified Patient Experiences</span>
-          </div>
-
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
             Patient Stories & <span className="text-gradient-lime">Reviews</span>
           </h2>

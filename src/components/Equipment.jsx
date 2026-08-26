@@ -60,11 +60,6 @@ export default function Equipment() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7] uppercase tracking-wider mb-4">
-            <Activity className="w-3.5 h-3.5 text-[#B8ED78]" />
-            <span>State-of-Art Medical Technology</span>
-          </div>
-
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
             International Standard <span className="text-gradient-lime">Surgical Equipment</span>
           </h2>

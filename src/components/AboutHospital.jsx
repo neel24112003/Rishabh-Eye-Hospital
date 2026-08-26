@@ -46,14 +46,9 @@ export default function AboutHospital() {
     <section id="about" className="py-24 relative bg-cyber-grid radial-glow overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Pill Badge */}
+        {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#B8ED78]/40 text-xs font-semibold text-[#B8ED78] uppercase tracking-wider mb-4 shadow-lg shadow-[#B8ED78]/10">
-            <Building2 className="w-4 h-4 text-[#35A6B7]" />
-            <span>State of Art Ophthalmic Infrastructure</span>
-          </div>
-
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight text-center leading-tight">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight text-center leading-tight">
             <span className="inline-block">Rishabh Eyecare Hospital &</span>{' '}
             <span className="text-gradient-lime inline-block">Laser Center</span>
           </h2>
