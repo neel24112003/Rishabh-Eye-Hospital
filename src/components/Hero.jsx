@@ -31,14 +31,14 @@ export default function Hero({ onOpenAppointment }) {
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#B8ED78]/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
           
           {/* Left Content Column */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="lg:col-span-7 flex flex-col items-start"
+            className="lg:col-span-7 flex flex-col items-start pt-1 sm:pt-2"
           >
             {/* Headline - Guaranteed 2 Lines */}
             <motion.h1 variants={itemVariants} className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.15rem] xl:text-5xl font-extrabold tracking-tight text-white leading-[1.18] mb-6">
@@ -57,7 +57,7 @@ export default function Hero({ onOpenAppointment }) {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-6">
               <button
                 onClick={onOpenAppointment}
                 className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] shadow-xl shadow-[#B8ED78]/20 hover:shadow-[#B8ED78]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group"
@@ -74,6 +74,14 @@ export default function Hero({ onOpenAppointment }) {
                 <Zap className="w-4 h-4 text-[#35A6B7] group-hover:text-[#B8ED78] transition-colors" />
                 <span>Explore LASIK & Treatments</span>
               </a>
+            </motion.div>
+
+            {/* Hospital Official Slogan */}
+            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl glass-panel border border-[#35A6B7]/30 bg-[#070C14]/60">
+              <div className="w-2 h-2 rounded-full bg-[#B8ED78] shadow-[0_0_8px_#B8ED78]" />
+              <p className="text-slate-200 text-xs sm:text-sm font-semibold tracking-wide">
+                <span className="text-[#B8ED78]">"Clear Vision, Better Life</span> — We Care For Your Eyes"
+              </p>
             </motion.div>
           </motion.div>
 
