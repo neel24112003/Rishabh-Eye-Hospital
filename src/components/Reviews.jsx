@@ -58,19 +58,31 @@ const DEFAULT_CLOUD_IDS = [
 ];
 
 const CLOUD_IDS_KEY = 'rishabh_cloud_review_ids_v1';
-const LOCAL_USER_REVIEWS_KEY = 'rishabh_user_submitted_reviews_v5';
-const STORAGE_KEY = 'rishabh_patient_reviews_v3';
+const STORAGE_KEYS = [
+  'RISHABH_PERMANENT_USER_REVIEWS_VAULT',
+  'rishabh_user_submitted_reviews_v5',
+  'rishabh_user_submitted_reviews_v4',
+  'rishabh_user_submitted_reviews_v3',
+  'rishabh_patient_reviews_v3',
+  'rishabh_patient_reviews_v2',
+  'rishabh_patient_reviews_v1'
+];
 
-// Utility helper to safely load locally submitted user reviews
+// Utility helper to safely load locally submitted user reviews across ALL legacy & active storage keys
 const getLocalUserReviews = () => {
-  try {
-    const saved = localStorage.getItem(LOCAL_USER_REVIEWS_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch (e) {}
-  return [];
+  const allSaved = [];
+  STORAGE_KEYS.forEach((key) => {
+    try {
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          allSaved.push(...parsed);
+        }
+      }
+    } catch (e) {}
+  });
+  return allSaved;
 };
 
 // Bulletproof merger to combine user-submitted, fetched server/github, and default reviews without data loss
@@ -78,28 +90,31 @@ const mergeAllReviews = (fetchedList = []) => {
   const localUser = getLocalUserReviews();
   const map = new Map();
 
-  // 1. Highest priority: User submitted reviews on this device
+  const getUniqueKey = (item) => {
+    if (!item || !item.text) return '';
+    return `${(item.name || '').trim().toLowerCase()}_${(item.text || '').trim().toLowerCase()}`;
+  };
+
+  // 1. Highest priority: User submitted reviews on this device (scanned from all storage vaults)
   localUser.forEach((item) => {
-    if (item && item.text) {
-      const key = item.id || `${item.name}-${item.text}`;
+    const key = getUniqueKey(item);
+    if (key && !map.has(key)) {
       map.set(key, item);
     }
   });
 
   // 2. Next: Fetched reviews from API / GitHub
   fetchedList.forEach((item) => {
-    if (item && item.text) {
-      const key = item.id || `${item.name}-${item.text}`;
-      if (!map.has(key)) {
-        map.set(key, item);
-      }
+    const key = getUniqueKey(item);
+    if (key && !map.has(key)) {
+      map.set(key, item);
     }
   });
 
   // 3. Fallback: Default verified hospital reviews
   DEFAULT_REVIEWS.forEach((item) => {
-    const key = item.id || `${item.name}-${item.text}`;
-    if (!map.has(key)) {
+    const key = getUniqueKey(item);
+    if (key && !map.has(key)) {
       map.set(key, item);
     }
   });
@@ -129,7 +144,9 @@ export default function Reviews() {
             if (list.length > 0) {
               const merged = mergeAllReviews(list);
               setReviewsList(merged);
-              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(merged)); } catch(e){}
+              STORAGE_KEYS.forEach((key) => {
+                try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {}
+              });
               break;
             }
           }
@@ -169,19 +186,18 @@ export default function Reviews() {
       verified: true
     };
 
-    // 1. Save directly into persistent local user reviews storage
+    // 1. Save directly into ALL persistent local user review storage vaults
     const currentLocal = getLocalUserReviews();
     const updatedLocal = [item, ...currentLocal];
-    try {
-      localStorage.setItem(LOCAL_USER_REVIEWS_KEY, JSON.stringify(updatedLocal));
-    } catch (err) {}
+    STORAGE_KEYS.forEach((key) => {
+      try {
+        localStorage.setItem(key, JSON.stringify(updatedLocal));
+      } catch (err) {}
+    });
 
     // 2. Immediately update state with merged reviews list
     const updatedList = mergeAllReviews([]);
     setReviewsList(updatedList);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
-    } catch (err) {}
 
     // 3. Post to all active backend endpoints simultaneously for cross-device sync
     const submitEndpoints = [
