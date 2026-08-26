@@ -156,20 +156,20 @@ export default function HospitalGallery() {
 
         {/* Bottom Infrastructure Feature Bar */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+          <div className="glass-panel p-4 rounded-2xl border border-[#B8ED78]/30 text-center">
             <div className="text-xl font-extrabold text-[#B8ED78] mb-0.5">100% Hygienic</div>
             <div className="text-xs text-slate-400">Sterilized OPD & OT</div>
           </div>
-          <div className="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+          <div className="glass-panel p-4 rounded-2xl border border-[#35A6B7]/30 text-center">
             <div className="text-xl font-extrabold text-[#35A6B7] mb-0.5">Air Conditioned</div>
             <div className="text-xs text-slate-400">Climate Controlled Chambers</div>
           </div>
-          <div className="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
-            <div className="text-xl font-extrabold text-[#51AABC] mb-0.5">Spacious Lounge</div>
+          <div className="glass-panel p-4 rounded-2xl border border-[#B8ED78]/30 text-center">
+            <div className="text-xl font-extrabold text-[#B8ED78] mb-0.5">Spacious Lounge</div>
             <div className="text-xs text-slate-400">Ergonomic Patient Seating</div>
           </div>
-          <div className="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
-            <div className="text-xl font-extrabold text-white mb-0.5">Prime Location</div>
+          <div className="glass-panel p-4 rounded-2xl border border-[#35A6B7]/30 text-center">
+            <div className="text-xl font-extrabold text-[#35A6B7] mb-0.5">Prime Location</div>
             <div className="text-xs text-slate-400">New City Light, Althan</div>
           </div>
         </div>
