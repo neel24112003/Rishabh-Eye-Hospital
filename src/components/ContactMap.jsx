@@ -58,8 +58,8 @@ export default function ContactMap({ onBookSuccess }) {
     }
   };
 
-  // Google Maps Official Place Embed URL with Rating Card & Full Address Overlay
-  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.229158428807!2d72.8021113!3d21.1432832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be053229b472e3d%3A0xc3bbf4083d8e578c!2sRishabh%20Eye%20Hospital%20and%20laser%20center!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
+  // Google Maps Natural Color Embed URL with Official Place Card Info
+  const mapEmbedUrl = "https://maps.google.com/maps?q=Rishabh+Eyecare+Hospital+%26+Laser+Center,+The+Lenora,+201-202,+New+City+Light+Rd,+Althan,+Surat,+Gujarat+395007&t=&z=16&ie=UTF8&iwloc=B&output=embed";
 
   return (
     <section id="contact" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
