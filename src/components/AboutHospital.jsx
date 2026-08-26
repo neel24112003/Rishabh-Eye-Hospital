@@ -85,34 +85,38 @@ export default function AboutHospital() {
             </p>
 
             {/* Doctors Showcase Bar */}
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-slate-800">
-              <div className="flex flex-wrap items-center gap-6">
+            <div className="mt-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 pt-6 border-t border-slate-800/80">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                 {/* Dr. Hetalkumar */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#35A6B7]/20 border border-[#35A6B7] flex items-center justify-center font-bold text-[#B8ED78]">
-                    HY
-                  </div>
+                <div className="flex items-center gap-3.5 bg-[#070C14]/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl border border-[#35A6B7]/30 sm:border-none shadow-md sm:shadow-none">
+                  <img
+                    src="/images/dr-hetal-yagnik.jpg"
+                    alt="Dr. Hetalkumar R. Yagnik"
+                    className="w-12 h-12 rounded-full object-cover object-top border-2 border-[#B8ED78] shadow-lg shrink-0"
+                  />
                   <div>
-                    <div className="font-bold text-white text-sm">Dr. Hetalkumar R. Yagnik</div>
-                    <div className="text-xs text-[#35A6B7] font-medium">Senior Super-Consultant • 17+ Years Exp</div>
+                    <div className="font-bold text-white text-sm sm:text-base">Dr. Hetalkumar R. Yagnik</div>
+                    <div className="text-xs text-[#B8ED78] font-semibold">Senior Super-Consultant • 17+ Years Exp</div>
                   </div>
                 </div>
 
-                <div className="hidden md:block w-px h-8 bg-slate-800" />
+                <div className="hidden sm:block w-px h-10 bg-slate-800" />
 
                 {/* Dr. Shefali */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#35A6B7]/20 border border-[#35A6B7] flex items-center justify-center font-bold text-[#B8ED78]">
-                    SY
-                  </div>
+                <div className="flex items-center gap-3.5 bg-[#070C14]/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl border border-[#35A6B7]/30 sm:border-none shadow-md sm:shadow-none">
+                  <img
+                    src="/images/dr-shefali-yagnik.jpg"
+                    alt="Dr. Shefali H. Yagnik"
+                    className="w-12 h-12 rounded-full object-cover object-top border-2 border-[#35A6B7] shadow-lg shrink-0"
+                  />
                   <div>
-                    <div className="font-bold text-white text-sm">Dr. Shefali H. Yagnik</div>
-                    <div className="text-xs text-[#35A6B7] font-medium">Consultant Ophthalmic Surgeon • 14+ Years Exp</div>
+                    <div className="font-bold text-white text-sm sm:text-base">Dr. Shefali H. Yagnik</div>
+                    <div className="text-xs text-[#35A6B7] font-semibold">Consultant Ophthalmic Surgeon • 14+ Years Exp</div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl glass-panel border border-[#B8ED78]/30 text-xs font-semibold text-[#B8ED78]">
+              <div className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl glass-panel border border-[#B8ED78]/40 text-xs font-bold text-[#B8ED78] shadow-md shrink-0">
                 <CheckCircle2 className="w-4 h-4 text-[#B8ED78]" />
                 <span>100% Successful Surgery Record</span>
               </div>
