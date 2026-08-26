@@ -413,6 +413,6 @@ app.post('/api/reviews', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Rishabh Eye Hospital Mail & Reviews Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Rishabh Eye Hospital Mail & Reviews Server running on http://0.0.0.0:${PORT} (Access via http://192.168.1.5:${PORT} on local network)`);
 });

@@ -76,54 +76,31 @@ export default function Reviews() {
     return DEFAULT_REVIEWS;
   });
 
-  // Fetch reviews from Restful-API Cloud DB + GitHub Raw + Server API on mount
+  // Fetch reviews from all available APIs + GitHub Raw on mount
   useEffect(() => {
     const fetchReviews = async () => {
-      // 1. Fetch from Restful-API Cloud DB (Works 100% across all devices worldwide)
-      try {
-        const savedIds = localStorage.getItem(CLOUD_IDS_KEY);
-        let idList = DEFAULT_CLOUD_IDS;
-        if (savedIds) {
-          try {
-            const parsed = JSON.parse(savedIds);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              idList = Array.from(new Set([...parsed, ...DEFAULT_CLOUD_IDS]));
-            }
-          } catch(e) {}
-        }
+      const endpoints = [
+        '/api/reviews',
+        'http://192.168.1.5:5001/api/reviews',
+        'http://localhost:5001/api/reviews',
+        `https://raw.githubusercontent.com/neel24112003/Rishabh-Eye-Hospital/main/public/reviews_data.json?t=${Date.now()}`
+      ];
 
-        const queryStr = idList.map(id => `id=${id}`).join('&');
-        const cloudRes = await fetch(`https://api.restful-api.dev/objects?${queryStr}`);
-        
-        if (cloudRes.ok) {
-          const cloudData = await cloudRes.json();
-          if (Array.isArray(cloudData) && cloudData.length > 0) {
-            const extracted = cloudData.map(item => item.data).filter(Boolean);
-            if (extracted.length > 0) {
-              setReviewsList(extracted);
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(extracted));
-              return;
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            const list = Array.isArray(data) ? data : (data.reviews || []);
+            if (list.length > 0) {
+              setReviewsList(list);
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e){}
+              break;
             }
           }
+        } catch (e) {
+          // Try next endpoint
         }
-      } catch (err) {
-        console.warn("Cloud DB fetch notice:", err);
-      }
-
-      // 2. Fallback to GitHub Raw JSON
-      try {
-        const GITHUB_RAW_URL = `https://raw.githubusercontent.com/neel24112003/Rishabh-Eye-Hospital/main/public/reviews_data.json?t=${Date.now()}`;
-        const res = await fetch(GITHUB_RAW_URL);
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setReviewsList(data);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            return;
-          }
-        }
-      } catch (e) {
-        console.warn("GitHub Raw review fetch notice:", e);
       }
     };
 
@@ -157,49 +134,29 @@ export default function Reviews() {
       verified: true
     };
 
-    // Immediate UI update
+    // Immediate state & local storage update
     const updated = [item, ...reviewsList];
     setReviewsList(updated);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch (err) {}
 
-    // 1. Post to 24/7 Cloud DB API for Immediate Cross-Device Availability
-    try {
-      const cloudPostRes = await fetch('https://api.restful-api.dev/objects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: "Rishabh_Review_Item_V1",
-          data: item
-        })
-      });
+    // Post to all active backend endpoints simultaneously
+    const submitEndpoints = [
+      '/api/reviews',
+      'http://192.168.1.5:5001/api/reviews',
+      'http://localhost:5001/api/reviews'
+    ];
 
-      if (cloudPostRes.ok) {
-        const cloudPostData = await cloudPostRes.json();
-        if (cloudPostData.id) {
-          const savedIds = localStorage.getItem(CLOUD_IDS_KEY);
-          let currentIds = DEFAULT_CLOUD_IDS;
-          if (savedIds) {
-            try { currentIds = JSON.parse(savedIds); } catch(e) {}
-          }
-          const newIds = [cloudPostData.id, ...currentIds];
-          localStorage.setItem(CLOUD_IDS_KEY, JSON.stringify(newIds));
-        }
-      }
-    } catch (e) {
-      console.warn("Cloud DB POST error:", e);
-    }
-
-    // 2. Post to Local Server API if running
-    try {
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-      await fetch(`${API_BASE}/api/reviews`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item)
-      });
-    } catch (err) {}
+    submitEndpoints.forEach(async (url) => {
+      try {
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
+        });
+      } catch (err) {}
+    });
 
     setSubmittedMessage(true);
 
