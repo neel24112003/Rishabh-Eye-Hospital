@@ -42,5 +42,29 @@
     "date": "2 months ago",
     "text": "Because of thin cornea I was rejected for LASIK elsewhere, but Dr. Yagnik suggested ICL surgery. The procedure took just 15 minutes and the result is miraculous! Very thankful to Rishabh Hospital.",
     "verified": true
+  },
+  {
+    "id": 5,
+    "createdAt": 1787760000000,
+    "name": "Neel Patel",
+    "location": "Surat, Gujarat",
+    "treatment": "Cataract Surgery",
+    "doctor": "Dr. Hetalkumar R. Yagnik",
+    "rating": 5,
+    "date": "1 day ago",
+    "text": "Extremely grateful to Dr. Hetalkumar Yagnik for a seamless surgery and speedy recovery. A truly experienced surgeon who genuinely cares for his patients",
+    "verified": true
+  },
+  {
+    "id": 6,
+    "createdAt": 1787762000000,
+    "name": "Neel Patel",
+    "location": "Surat, Gujarat",
+    "treatment": "Retina Care & Consultation",
+    "doctor": "Dr. Shefali H. Yagnik",
+    "rating": 5,
+    "date": "1 day ago",
+    "text": "Dr. Shefali Yagnik is an outstanding super-consultant. Her thorough eye examination, gentle care, and detailed consultation gave us immense confidence. Highly recommended!",
+    "verified": true
   }
 ]
