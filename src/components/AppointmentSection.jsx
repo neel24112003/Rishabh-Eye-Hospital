@@ -114,7 +114,7 @@ export default function AppointmentSection() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between" autoComplete="off">
-                <div className="space-y-4 mb-6">
+                <div className="flex-1 flex flex-col space-y-4 mb-6">
                   {/* Name & Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -227,15 +227,14 @@ export default function AppointmentSection() {
                     </div>
                   </div>
 
-                  {/* Notes */}
-                  <div>
+                  {/* Notes / Message - Flex-1 to fill 100% height */}
+                  <div className="flex-1 flex flex-col min-h-[140px]">
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">Additional Notes / Symptoms (Optional)</label>
                     <textarea
-                      rows="5"
                       placeholder="Describe any eye discomfort, power details, or previous reports..."
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#B8ED78] transition-colors resize-none"
+                      className="w-full flex-1 min-h-[130px] px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#B8ED78] transition-colors resize-none"
                     />
                   </div>
                 </div>
@@ -285,8 +284,8 @@ export default function AppointmentSection() {
               </p>
 
               {/* 4 Feature Cards */}
-              <div className="space-y-4 mb-6">
-                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+              <div className="space-y-3.5 mb-6">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
@@ -296,7 +295,7 @@ export default function AppointmentSection() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <Award className="w-5 h-5" />
                   </div>
@@ -306,7 +305,7 @@ export default function AppointmentSection() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <HeartHandshake className="w-5 h-5" />
                   </div>
@@ -316,7 +315,7 @@ export default function AppointmentSection() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <Clock className="w-5 h-5" />
                   </div>
