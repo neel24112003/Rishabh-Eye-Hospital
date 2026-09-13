@@ -125,7 +125,7 @@ export default function HospitalGallery() {
                     : 'bg-[#0E1726]/80 text-slate-400 border border-slate-800 hover:text-white hover:border-[#35A6B7]/50'
                 }`}
               >
-                {tab === 'All' ? '✨ All Areas (4)' : tab}
+                {tab === 'All' ? '✨ All Areas' : tab}
               </button>
             ))}
           </div>
