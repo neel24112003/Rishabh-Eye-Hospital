@@ -11,6 +11,13 @@ import confetti from 'canvas-confetti';
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  const formatDateDisplay = (dateString) => {
+    if (!dateString) return 'Select Preferred Date';
+    const [yyyy, mm, dd] = dateString.split('-');
+    if (!yyyy || !mm || !dd) return dateString;
+    return `${dd} / ${mm} / ${yyyy}`;
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -200,14 +207,22 @@ import confetti from 'canvas-confetti';
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">Preferred Date *</label>
-                  <input
-                    type="date"
-                    required
-                    min={getTodayDate()}
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white text-xs focus:outline-none focus:border-[#B8ED78] cursor-pointer"
-                  />
+                  <div className="relative w-full">
+                    <div className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white text-xs flex items-center justify-between pointer-events-none select-none">
+                      <span className="font-semibold text-white tracking-wide">
+                        {formatDateDisplay(formData.date)}
+                      </span>
+                      <Calendar className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
+                    </div>
+                    <input
+                      type="date"
+                      required
+                      min={getTodayDate()}
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                    />
+                  </div>
                 </div>
 
                 <div>

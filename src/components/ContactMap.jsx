@@ -11,6 +11,13 @@ import confetti from 'canvas-confetti';
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  const formatDateDisplay = (dateString) => {
+    if (!dateString) return 'Select Preferred Date';
+    const [yyyy, mm, dd] = dateString.split('-');
+    if (!yyyy || !mm || !dd) return dateString;
+    return `${dd} / ${mm} / ${yyyy}`;
+  };
+
   const initialFormState = {
     name: '',
     phone: '',
@@ -267,14 +274,22 @@ import confetti from 'canvas-confetti';
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Date *</label>
-                      <input
-                        type="date"
-                        required
-                        min={getTodayDate()}
-                        value={formData.preferredDate}
-                        onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer"
-                      />
+                      <div className="relative w-full">
+                        <div className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm flex items-center justify-between pointer-events-none select-none">
+                          <span className="font-semibold text-white tracking-wide">
+                            {formatDateDisplay(formData.preferredDate)}
+                          </span>
+                          <Calendar className="w-4 h-4 text-[#B8ED78] shrink-0" />
+                        </div>
+                        <input
+                          type="date"
+                          required
+                          min={getTodayDate()}
+                          value={formData.preferredDate}
+                          onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
+                          className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                        />
+                      </div>
                     </div>
 
                     <div>
