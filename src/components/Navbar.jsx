@@ -52,14 +52,27 @@ export default function Navbar({ onOpenAppointment }) {
     if (e && e.preventDefault) e.preventDefault();
     setMobileMenuOpen(false);
 
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      if (el) {
-        const yOffset = -75;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+    const el = document.getElementById(id);
+    if (el) {
+      let top = 0;
+      let curr = el;
+      while (curr) {
+        top += curr.offsetTop;
+        curr = curr.offsetParent;
       }
-    }, 50);
+      const targetY = Math.max(0, top - 75);
+
+      // Immediate scroll
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+
+      // Fail-safe backup execution after mobile drawer animation completes (120ms & 260ms)
+      setTimeout(() => {
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      }, 120);
+      setTimeout(() => {
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      }, 260);
+    }
   };
 
   return (
@@ -193,17 +206,14 @@ export default function Navbar({ onOpenAppointment }) {
               ))}
 
               <div className="pt-3 border-t border-slate-800 mt-2">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    handleNavClick(e, 'contact');
-                    if (onOpenAppointment) onOpenAppointment();
-                  }}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all"
+                <a
+                  href="#contact"
+                  onClick={(e) => handleNavClick(e, 'contact')}
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all text-center"
                 >
-                  <Calendar className="w-4 h-4 text-slate-950" />
+                  <Calendar className="w-4 h-4 text-slate-950 shrink-0" />
                   <span>Book Consultation Now</span>
-                </button>
+                </a>
               </div>
             </div>
           </motion.div>
