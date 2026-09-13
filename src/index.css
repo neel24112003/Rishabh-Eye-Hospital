@@ -52,6 +52,8 @@ a, a:focus, a:active, a:hover, a:focus-visible {
 input[type="date"] {
   color-scheme: dark !important;
   color: #ffffff !important;
+  font-weight: 600 !important;
+  background-color: #070C14 !important;
   min-height: 44px;
 }
 
@@ -62,6 +64,7 @@ input[type="date"]::-webkit-datetime-edit-month-field,
 input[type="date"]::-webkit-datetime-edit-day-field,
 input[type="date"]::-webkit-datetime-edit-year-field {
   color: #ffffff !important;
+  font-weight: 600 !important;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

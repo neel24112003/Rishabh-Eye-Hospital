@@ -210,44 +210,17 @@ export default function AppointmentModal({ isOpen, onClose }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">Preferred Date *</label>
-                  <div className="relative w-full">
-                    <input
-                      type="text"
-                      readOnly
-                      required
-                      value={formatDateDisplay(formData.date)}
-                      onClick={() => {
-                        if (dateInputRef.current) {
-                          if (typeof dateInputRef.current.showPicker === 'function') {
-                            try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
-                          } else {
-                            dateInputRef.current.click();
-                          }
-                        }
-                      }}
-                      className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white font-semibold text-xs focus:outline-none focus:border-[#B8ED78] cursor-pointer pr-8 select-none"
-                    />
-                    <Calendar
-                      onClick={() => {
-                        if (dateInputRef.current) {
-                          if (typeof dateInputRef.current.showPicker === 'function') {
-                            try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
-                          } else {
-                            dateInputRef.current.click();
-                          }
-                        }
-                      }}
-                      className="w-3.5 h-3.5 text-[#B8ED78] absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                    />
-                    <input
-                      ref={dateInputRef}
-                      type="date"
-                      min={getTodayDate()}
-                      value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="sr-only opacity-0 w-0 h-0 absolute -z-10"
-                    />
-                  </div>
+                  <input
+                    type="date"
+                    required
+                    min={getTodayDate()}
+                    value={formData.date}
+                    onChange={(e) => {
+                      setFormData({ ...formData, date: e.target.value });
+                      e.target.blur();
+                    }}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white font-semibold text-xs focus:outline-none focus:border-[#B8ED78] cursor-pointer"
+                  />
                 </div>
 
                 <div>

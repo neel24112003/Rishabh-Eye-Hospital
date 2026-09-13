@@ -277,44 +277,17 @@ export default function ContactMap({ onBookSuccess }) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Date *</label>
-                      <div className="relative w-full">
-                        <input
-                          type="text"
-                          readOnly
-                          required
-                          value={formatDateDisplay(formData.preferredDate)}
-                          onClick={() => {
-                            if (dateInputRef.current) {
-                              if (typeof dateInputRef.current.showPicker === 'function') {
-                                try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
-                              } else {
-                                dateInputRef.current.click();
-                              }
-                            }
-                          }}
-                          className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white font-semibold text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer pr-10 select-none"
-                        />
-                        <Calendar
-                          onClick={() => {
-                            if (dateInputRef.current) {
-                              if (typeof dateInputRef.current.showPicker === 'function') {
-                                try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
-                              } else {
-                                dateInputRef.current.click();
-                              }
-                            }
-                          }}
-                          className="w-5 h-5 text-[#B8ED78] absolute right-3.5 top-1/2 -translate-y-1/2 cursor-pointer"
-                        />
-                        <input
-                          ref={dateInputRef}
-                          type="date"
-                          min={getTodayDate()}
-                          value={formData.preferredDate}
-                          onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                          className="sr-only opacity-0 w-0 h-0 absolute -z-10"
-                        />
-                      </div>
+                      <input
+                        type="date"
+                        required
+                        min={getTodayDate()}
+                        value={formData.preferredDate}
+                        onChange={(e) => {
+                          setFormData({ ...formData, preferredDate: e.target.value });
+                          e.target.blur();
+                        }}
+                        className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white font-semibold text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer"
+                      />
                     </div>
 
                     <div>
