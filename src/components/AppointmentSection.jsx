@@ -236,7 +236,7 @@ export default function AppointmentSection() {
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">Additional Notes / Symptoms (Optional)</label>
                     <textarea
-                      rows="2"
+                      rows="5"
                       placeholder="Describe any eye discomfort, power details, or previous reports..."
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
