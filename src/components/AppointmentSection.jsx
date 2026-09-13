@@ -267,68 +267,79 @@ export default function AppointmentSection() {
             )}
           </div>
 
-          {/* RIGHT COLUMN: Feature Showcase & Doctor Cards (5 Cols) */}
-          <div className="lg:col-span-5 flex flex-col justify-between gap-6">
-            
-            {/* Top Banner Card: Why Choose Rishabh Eyecare */}
-            <div className="glass-panel p-6 sm:p-7 rounded-3xl border border-[#35A6B7]/40 shadow-xl bg-gradient-to-br from-[#070C14] via-[#0E1726] to-[#070C14] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-[#B8ED78]/10 rounded-full blur-3xl pointer-events-none" />
+          {/* RIGHT COLUMN: Feature Showcase & Hospital Highlights (5 Cols) */}
+          <div className="lg:col-span-5 glass-panel p-6 sm:p-8 rounded-3xl border border-[#35A6B7]/40 shadow-2xl bg-gradient-to-br from-[#070C14] via-[#0E1726] to-[#070C14] relative overflow-hidden flex flex-col justify-between h-full">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#B8ED78]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#35A6B7]/10 rounded-full blur-3xl pointer-events-none" />
 
+            <div>
+              {/* Header Badge */}
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-5 h-5 text-[#B8ED78]" />
                 <span className="text-xs font-mono font-bold text-[#B8ED78] uppercase tracking-wider">
-                  World-Class Eye Care
+                  World-Class Eye Care • Surat
                 </span>
               </div>
 
-              <h3 className="font-display text-2xl font-extrabold text-white mb-3 leading-snug">
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-snug">
                 Why Book Consultation at Rishabh Eye Hospital?
               </h3>
 
               <p className="text-xs text-slate-300 leading-relaxed mb-6">
-                Recognized as one of Surat's premier super-specialty eye care centers with advanced surgical infrastructure and 100% patient satisfaction.
+                Recognized as one of Surat's premier super-specialty eye care centers with advanced surgical infrastructure, expert senior surgeons, and 100% patient satisfaction.
               </p>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
+              {/* 4 Feature Cards */}
+              <div className="space-y-4 mb-6">
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-white mb-0.5">German Modular Operation Theatre</h4>
-                    <p className="text-xs text-slate-400">Zero-infection laminar airflow sterile environment for all surgeries.</p>
+                    <p className="text-xs text-slate-400 leading-normal">Zero-infection laminar airflow sterile environment for all surgeries.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <Award className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-white mb-0.5">American Phaco & Bladeless LASIK</h4>
-                    <p className="text-xs text-slate-400">Pioneer in 10-minute micro-incision cataract and spectacle removal.</p>
+                    <p className="text-xs text-slate-400 leading-normal">Pioneer in 10-minute micro-incision cataract and spectacle removal.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
                     <HeartHandshake className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-white mb-0.5">30,000+ Successful Surgeries</h4>
-                    <p className="text-xs text-slate-400">Led by Senior Super-Consultants Dr. Hetalkumar & Dr. Shefali Yagnik.</p>
+                    <p className="text-xs text-slate-400 leading-normal">Led by Senior Super-Consultants Dr. Hetalkumar & Dr. Shefali Yagnik.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-[#35A6B7]/40 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-[#35A6B7]/20 border border-[#35A6B7]/40 flex items-center justify-center shrink-0 text-[#B8ED78]">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white mb-0.5">Priority OPD Token & Zero Wait Time</h4>
+                    <p className="text-xs text-slate-400 leading-normal">Online booking ensures instant slot confirmation and priority consultation.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Quick Helpline Banner */}
-            <div className="glass-panel p-6 rounded-3xl border border-[#B8ED78]/40 bg-gradient-to-r from-[#35A6B7]/20 via-[#070C14] to-[#B8ED78]/15 flex items-center justify-between gap-4">
+            {/* Bottom Quick OPD Helpline Banner */}
+            <div className="mt-4 p-4 rounded-2xl border border-[#B8ED78]/40 bg-gradient-to-r from-[#35A6B7]/20 via-[#070C14] to-[#B8ED78]/15 flex items-center justify-between gap-3 shadow-lg">
               <div>
-                <div className="text-xs font-mono font-bold text-[#B8ED78] uppercase mb-1">
+                <div className="text-[11px] font-mono font-bold text-[#B8ED78] uppercase mb-0.5">
                   Need Immediate Assistance?
                 </div>
-                <div className="text-base sm:text-lg font-bold text-white">
+                <div className="text-sm sm:text-base font-bold text-white">
                   Call OPD Helpline Now
                 </div>
                 <div className="text-xs text-slate-300 font-semibold mt-0.5">
@@ -338,12 +349,12 @@ export default function AppointmentSection() {
 
               <a
                 href="tel:07405563636"
-                className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0 hover:scale-110 active:scale-95 transition-transform flex items-center justify-center text-slate-950"
+                className="w-11 h-11 rounded-xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0 hover:scale-110 active:scale-95 transition-transform flex items-center justify-center text-slate-950"
+                aria-label="Call OPD Helpline"
               >
-                <Phone className="w-6 h-6 animate-pulse" />
+                <Phone className="w-5 h-5 animate-pulse" />
               </a>
             </div>
-
           </div>
 
         </div>
