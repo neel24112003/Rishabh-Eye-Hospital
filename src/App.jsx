@@ -15,10 +15,14 @@ import { Phone } from 'lucide-react';
 export default function App() {
   // Smooth scroll directly to the main Appointment Booking section (#contact)
   const handleScrollToAppointment = () => {
-    const contactElement = document.getElementById('contact');
-    if (contactElement) {
-      contactElement.scrollIntoView({ behavior: 'smooth' });
-    }
+    setTimeout(() => {
+      const contactElement = document.getElementById('contact');
+      if (contactElement) {
+        const yOffset = -75;
+        const y = contactElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   return (

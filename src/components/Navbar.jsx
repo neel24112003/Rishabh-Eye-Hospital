@@ -49,7 +49,7 @@ export default function Navbar({ onOpenAppointment }) {
   ];
 
   const handleNavClick = (e, id) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     setMobileMenuOpen(false);
 
     setTimeout(() => {
@@ -59,7 +59,7 @@ export default function Navbar({ onOpenAppointment }) {
         const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
-    }, 40);
+    }, 50);
   };
 
   return (
@@ -130,7 +130,11 @@ export default function Navbar({ onOpenAppointment }) {
           {/* Right Action Buttons */}
           <div className="hidden sm:flex items-center gap-3">
             <button
-              onClick={onOpenAppointment}
+              type="button"
+              onClick={(e) => {
+                handleNavClick(e, 'contact');
+                if (onOpenAppointment) onOpenAppointment();
+              }}
               className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] hover:opacity-95 shadow-lg shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:-translate-y-0.5 transition-all duration-300 active:translate-y-0 group"
             >
               <Calendar className="w-4 h-4 text-slate-950 group-hover:scale-110 transition-transform" />
@@ -191,9 +195,9 @@ export default function Navbar({ onOpenAppointment }) {
               <div className="pt-3 border-t border-slate-800 mt-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenAppointment();
+                  onClick={(e) => {
+                    handleNavClick(e, 'contact');
+                    if (onOpenAppointment) onOpenAppointment();
                   }}
                   className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all"
                 >
