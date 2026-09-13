@@ -62,7 +62,7 @@ export default function ContactMap({ onBookSuccess }) {
   const mapEmbedUrl = "https://maps.google.com/maps?q=Rishabh+Eyecare+Hospital+%26+Laser+Center,+The+Lenora,+201-202,+New+City+Light+Rd,+Althan,+Surat,+Gujarat+395007&t=&z=16&ie=UTF8&iwloc=B&output=embed";
 
   return (
-    <section id="contact" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden scroll-mt-24">
+    <section id="contact" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
       {/* Glow Orbs */}
       <div className="absolute top-1/3 left-0 w-96 h-96 bg-[#35A6B7]/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-0 w-96 h-96 bg-[#B8ED78]/10 rounded-full blur-[140px] pointer-events-none" />

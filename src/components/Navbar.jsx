@@ -50,20 +50,14 @@ export default function Navbar({ onOpenAppointment }) {
 
   const handleNavClick = (e, id) => {
     if (e && e.preventDefault) e.preventDefault();
+    setMobileMenuOpen(false);
 
-    const el = document.getElementById(id);
-    if (el) {
-      const yOffset = -80;
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    } else {
-      window.location.hash = `#${id}`;
-    }
-
-    // Delay closing drawer so mobile touch target remains 100% mounted while scroll initiates
     setTimeout(() => {
-      setMobileMenuOpen(false);
-    }, 150);
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   return (
