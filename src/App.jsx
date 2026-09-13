@@ -8,18 +8,19 @@ import Services from './components/Services';
 import Equipment from './components/Equipment';
 import EventGallery from './components/EventGallery';
 import Reviews from './components/Reviews';
-import ContactMap from './components/ContactMap';
+import AppointmentSection from './components/AppointmentSection';
+import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import { Phone } from 'lucide-react';
 
 export default function App() {
-  // Smooth scroll directly to the main Appointment Booking section (#contact)
+  // Smooth scroll directly to the main Appointment Booking section (#appointment)
   const handleScrollToAppointment = () => {
-    const contactElement = document.getElementById('contact');
-    if (contactElement) {
-      contactElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const apptElement = document.getElementById('appointment');
+    if (apptElement) {
+      apptElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-      window.location.hash = '#contact';
+      window.location.hash = '#appointment';
     }
   };
 
@@ -54,8 +55,11 @@ export default function App() {
         {/* Reviews Section */}
         <Reviews />
 
-        {/* Contact & Map Section (Main Appointment Booking Form) */}
-        <ContactMap onBookSuccess={() => {}} />
+        {/* Standalone Priority Appointment Booking Section */}
+        <AppointmentSection />
+
+        {/* Standalone Hospital Location & Contact Info Section */}
+        <ContactSection />
       </main>
 
       {/* Footer */}

@@ -16,7 +16,7 @@ export default function Navbar({ onOpenAppointment }) {
       }
 
       // ScrollSpy
-      const sections = ['home', 'doctors', 'about', 'infrastructure', 'services', 'equipment', 'gallery', 'reviews', 'contact'];
+      const sections = ['home', 'doctors', 'about', 'infrastructure', 'services', 'equipment', 'gallery', 'reviews', 'appointment', 'contact'];
       const scrollPos = window.scrollY + 180;
 
       for (const section of sections) {
@@ -45,7 +45,8 @@ export default function Navbar({ onOpenAppointment }) {
     { name: 'Equipment', href: '#equipment', id: 'equipment' },
     { name: 'Events', href: '#gallery', id: 'gallery' },
     { name: 'Reviews', href: '#reviews', id: 'reviews' },
-    { name: 'Contact', href: '#contact', id: 'contact' },
+    { name: 'Book Appointment', href: '#appointment', id: 'appointment' },
+    { name: 'Contact Us', href: '#contact', id: 'contact' },
   ];
 
   const handleNavClick = (e, id) => {
@@ -130,7 +131,7 @@ export default function Navbar({ onOpenAppointment }) {
             <button
               type="button"
               onClick={(e) => {
-                handleNavClick(e, 'contact');
+                handleNavClick(e, 'appointment');
                 if (onOpenAppointment) onOpenAppointment();
               }}
               className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] hover:opacity-95 shadow-lg shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:-translate-y-0.5 transition-all duration-300 active:translate-y-0 group"
@@ -193,7 +194,7 @@ export default function Navbar({ onOpenAppointment }) {
               <div className="pt-3 border-t border-slate-800 mt-2">
                 <button
                   type="button"
-                  onClick={(e) => handleNavClick(e, 'contact')}
+                  onClick={(e) => handleNavClick(e, 'appointment')}
                   className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all text-center touch-manipulation cursor-pointer select-none"
                 >
                   <Calendar className="w-4 h-4 text-slate-950 shrink-0 pointer-events-none" />

@@ -111,6 +111,7 @@ export default function Footer() {
                 { name: "German & American Tech", href: "#equipment" },
                 { name: "Hospital Event Gallery", href: "#gallery" },
                 { name: "Verified Patient Reviews", href: "#reviews" },
+                { name: "Book Appointment", href: "#appointment" },
                 { name: "Contact & Reach Us", href: "#contact" }
               ].map((link, idx) => (
                 <li key={idx}>
