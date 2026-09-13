@@ -3,14 +3,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, Send, CheckCircle2, ShieldCheck, Clock, User, Phone, Mail, ChevronDown, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-export default function AppointmentModal({ isOpen, onClose }) {
+  const getTodayDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     doctor: 'Dr. Hetalkumar R. Yagnik',
     service: 'Cataract Surgery (Phaco)',
-    date: '',
+    date: getTodayDate(),
     time: 'Morning (9:00 AM - 1:00 PM)',
     notes: ''
   });
@@ -192,13 +199,14 @@ export default function AppointmentModal({ isOpen, onClose }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Preferred Date</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">Preferred Date *</label>
                   <input
                     type="date"
                     required
+                    min={getTodayDate()}
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white text-xs focus:outline-none focus:border-[#B8ED78]"
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white text-xs focus:outline-none focus:border-[#B8ED78] cursor-pointer"
                   />
                 </div>
 

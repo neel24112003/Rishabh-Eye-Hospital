@@ -3,14 +3,21 @@ import { motion } from 'framer-motion';
 import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, ShieldCheck, ChevronDown, Loader2, Compass, User } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-export default function ContactMap({ onBookSuccess }) {
+  const getTodayDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   const initialFormState = {
     name: '',
     phone: '',
     email: '',
     doctor: 'Dr. Hetalkumar R. Yagnik',
     service: 'Cataract Surgery (Phaco)',
-    preferredDate: '',
+    preferredDate: getTodayDate(),
     preferredTime: 'Morning (9:00 AM - 1:00 PM)',
     notes: ''
   };
@@ -259,13 +266,14 @@ export default function ContactMap({ onBookSuccess }) {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Date</label>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Date *</label>
                       <input
                         type="date"
                         required
+                        min={getTodayDate()}
                         value={formData.preferredDate}
                         onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors"
+                        className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer"
                       />
                     </div>
 
