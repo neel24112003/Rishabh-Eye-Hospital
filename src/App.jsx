@@ -17,18 +17,9 @@ export default function App() {
   const handleScrollToAppointment = () => {
     const contactElement = document.getElementById('contact');
     if (contactElement) {
-      let top = 0;
-      let curr = contactElement;
-      while (curr) {
-        top += curr.offsetTop;
-        curr = curr.offsetParent;
-      }
-      const targetY = Math.max(0, top - 75);
-
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
-      setTimeout(() => {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }, 150);
+      contactElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.location.hash = '#contact';
     }
   };
 

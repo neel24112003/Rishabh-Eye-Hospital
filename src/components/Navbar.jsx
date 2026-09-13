@@ -49,30 +49,16 @@ export default function Navbar({ onOpenAppointment }) {
   ];
 
   const handleNavClick = (e, id) => {
-    if (e && e.preventDefault) e.preventDefault();
     setMobileMenuOpen(false);
 
-    const el = document.getElementById(id);
-    if (el) {
-      let top = 0;
-      let curr = el;
-      while (curr) {
-        top += curr.offsetTop;
-        curr = curr.offsetParent;
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.location.hash = `#${id}`;
       }
-      const targetY = Math.max(0, top - 75);
-
-      // Immediate scroll
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
-
-      // Fail-safe backup execution after mobile drawer animation completes (120ms & 260ms)
-      setTimeout(() => {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }, 120);
-      setTimeout(() => {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }, 260);
-    }
+    }, 40);
   };
 
   return (
