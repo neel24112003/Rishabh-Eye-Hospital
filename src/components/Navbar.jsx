@@ -49,16 +49,21 @@ export default function Navbar({ onOpenAppointment }) {
   ];
 
   const handleNavClick = (e, id) => {
-    setMobileMenuOpen(false);
+    if (e && e.preventDefault) e.preventDefault();
 
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -80;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    } else {
+      window.location.hash = `#${id}`;
+    }
+
+    // Delay closing drawer so mobile touch target remains 100% mounted while scroll initiates
     setTimeout(() => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.location.hash = `#${id}`;
-      }
-    }, 40);
+      setMobileMenuOpen(false);
+    }, 150);
   };
 
   return (
@@ -192,14 +197,14 @@ export default function Navbar({ onOpenAppointment }) {
               ))}
 
               <div className="pt-3 border-t border-slate-800 mt-2">
-                <a
-                  href="#contact"
+                <button
+                  type="button"
                   onClick={(e) => handleNavClick(e, 'contact')}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all text-center"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#B8ED78]/25 hover:scale-[1.01] active:scale-95 transition-all text-center touch-manipulation cursor-pointer select-none"
                 >
-                  <Calendar className="w-4 h-4 text-slate-950 shrink-0" />
-                  <span>Book Consultation Now</span>
-                </a>
+                  <Calendar className="w-4 h-4 text-slate-950 shrink-0 pointer-events-none" />
+                  <span className="pointer-events-none">Book Consultation Now</span>
+                </button>
               </div>
             </div>
           </motion.div>
