@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, Send, CheckCircle2, ShieldCheck, Clock, User, Phone, Mail, ChevronDown, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+
+export default function AppointmentModal({ isOpen, onClose }) {
+  const dateInputRef = useRef(null);
 
   const getTodayDate = () => {
     const today = new Date();
@@ -208,19 +211,41 @@ import confetti from 'canvas-confetti';
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">Preferred Date *</label>
                   <div className="relative w-full">
-                    <div className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white text-xs flex items-center justify-between pointer-events-none select-none">
-                      <span className="font-semibold text-white tracking-wide">
-                        {formatDateDisplay(formData.date)}
-                      </span>
-                      <Calendar className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
-                    </div>
                     <input
-                      type="date"
+                      type="text"
+                      readOnly
                       required
+                      value={formatDateDisplay(formData.date)}
+                      onClick={() => {
+                        if (dateInputRef.current) {
+                          if (typeof dateInputRef.current.showPicker === 'function') {
+                            try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
+                          } else {
+                            dateInputRef.current.click();
+                          }
+                        }
+                      }}
+                      className="w-full px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white font-semibold text-xs focus:outline-none focus:border-[#B8ED78] cursor-pointer pr-8 select-none"
+                    />
+                    <Calendar
+                      onClick={() => {
+                        if (dateInputRef.current) {
+                          if (typeof dateInputRef.current.showPicker === 'function') {
+                            try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
+                          } else {
+                            dateInputRef.current.click();
+                          }
+                        }
+                      }}
+                      className="w-3.5 h-3.5 text-[#B8ED78] absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                    />
+                    <input
+                      ref={dateInputRef}
+                      type="date"
                       min={getTodayDate()}
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                      className="sr-only opacity-0 w-0 h-0 absolute -z-10"
                     />
                   </div>
                 </div>

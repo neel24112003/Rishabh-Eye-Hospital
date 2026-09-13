@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, MapPin, Mail, Clock, Calendar, Send, CheckCircle2, Navigation, ShieldCheck, ChevronDown, Loader2, Compass, User } from 'lucide-react';
 import confetti from 'canvas-confetti';
+
+export default function ContactMap({ onBookSuccess }) {
+  const dateInputRef = useRef(null);
 
   const getTodayDate = () => {
     const today = new Date();
@@ -275,19 +278,41 @@ import confetti from 'canvas-confetti';
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Date *</label>
                       <div className="relative w-full">
-                        <div className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm flex items-center justify-between pointer-events-none select-none">
-                          <span className="font-semibold text-white tracking-wide">
-                            {formatDateDisplay(formData.preferredDate)}
-                          </span>
-                          <Calendar className="w-4 h-4 text-[#B8ED78] shrink-0" />
-                        </div>
                         <input
-                          type="date"
+                          type="text"
+                          readOnly
                           required
+                          value={formatDateDisplay(formData.preferredDate)}
+                          onClick={() => {
+                            if (dateInputRef.current) {
+                              if (typeof dateInputRef.current.showPicker === 'function') {
+                                try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
+                              } else {
+                                dateInputRef.current.click();
+                              }
+                            }
+                          }}
+                          className="w-full px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white font-semibold text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer pr-10 select-none"
+                        />
+                        <Calendar
+                          onClick={() => {
+                            if (dateInputRef.current) {
+                              if (typeof dateInputRef.current.showPicker === 'function') {
+                                try { dateInputRef.current.showPicker(); } catch (err) { dateInputRef.current.click(); }
+                              } else {
+                                dateInputRef.current.click();
+                              }
+                            }
+                          }}
+                          className="w-5 h-5 text-[#B8ED78] absolute right-3.5 top-1/2 -translate-y-1/2 cursor-pointer"
+                        />
+                        <input
+                          ref={dateInputRef}
+                          type="date"
                           min={getTodayDate()}
                           value={formData.preferredDate}
                           onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                          className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                          className="sr-only opacity-0 w-0 h-0 absolute -z-10"
                         />
                       </div>
                     </div>
