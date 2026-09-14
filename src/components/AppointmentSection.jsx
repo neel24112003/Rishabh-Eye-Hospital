@@ -34,14 +34,27 @@ export default function AppointmentSection() {
     setIsSubmitting(true);
 
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-      const res = await fetch(`${API_BASE}/api/book-appointment`, {
+      // 1. Try relative serverless API endpoint /api/book-appointment (Vercel / Production)
+      let res = await fetch('/api/book-appointment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
-      });
-      if (!res.ok) {
-        console.warn(`[AppointmentSection] API returned status ${res.status}`);
+      }).catch(() => null);
+
+      // 2. If relative endpoint didn't respond, fallback to VITE_API_URL or localhost:5001
+      if (!res || !res.ok) {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+        res = await fetch(`${API_BASE}/api/book-appointment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        }).catch(() => null);
+      }
+
+      if (res && res.ok) {
+        console.log('✅ Appointment email dispatched successfully!');
+      } else {
+        console.warn('[AppointmentSection] API Email server notice');
       }
     } catch (err) {
       console.warn('[AppointmentSection] API Email notice:', err);
