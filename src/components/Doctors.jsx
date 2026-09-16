@@ -7,10 +7,10 @@ export default function Doctors() {
     {
       name: "Dr. Hetalkumar R. Yagnik",
       title: "Senior Super-Consultant Ophthalmic Surgeon",
-      experience: "17+ Years Experience",
+      experience: "20+ Years Experience",
       image: "/images/dr-hetal-yagnik.jpg",
       badgeColor: "from-[#35A6B7] to-[#B8ED78]",
-      description: "Vast experience of 17 years with an unblemished track record of all surgeries executed successfully. Pioneer in American Phaco Cataract Surgeries, Bladeless LASIK spectacle removal, and ICL implants.",
+      description: "Vast experience of 20+ years with an unblemished track record of all surgeries executed successfully. Pioneer in American Phaco Cataract Surgeries, Bladeless LASIK spectacle removal, and ICL implants.",
       specialties: [
         "Phaco Cataract Surgery",
         "LASIK Spectacle Removal",
@@ -24,7 +24,7 @@ export default function Doctors() {
     {
       name: "Dr. Shefali H. Yagnik",
       title: "Consultant Ophthalmic Surgeon",
-      experience: "14+ Years Experience",
+      experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
       description: "Specialized consultant in Medical Retina, Pediatric Eye Diagnostics, Squint Alignment, and Oculoplastic Reconstructive Surgeries with compassionate patient-centric care.",

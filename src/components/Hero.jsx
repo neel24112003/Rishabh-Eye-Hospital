@@ -116,7 +116,7 @@ export default function Hero({ onOpenAppointment }) {
               <Award className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0">
-              <div className="text-xl sm:text-2xl md:text-3xl font-extrabold font-display text-white truncate">17+</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-extrabold font-display text-white truncate">20+</div>
               <div className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">Years Super-Experience</div>
             </div>
           </div>

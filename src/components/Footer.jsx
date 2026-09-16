@@ -38,7 +38,7 @@ export default function Footer() {
             </a>
 
             <p className="text-xs text-slate-300 leading-relaxed mb-6">
-              State of art hospital featuring fully AC waiting space, German modular operation theatre, American Phaco system, and bladeless LASIK spectacle removal led by Senior Super-Consultant Dr. Hetalkumar Yagnik (17+ years experience).
+              State of art hospital featuring fully AC waiting space, German modular operation theatre, American Phaco system, and bladeless LASIK spectacle removal led by Senior Super-Consultant Dr. Hetalkumar Yagnik (20+ years experience).
             </p>
 
             {/* Animated Social Icons */}

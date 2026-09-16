@@ -17,7 +17,7 @@ export default function AboutHospital() {
       color: "from-[#B8ED78] to-[#35A6B7]"
     },
     {
-      title: "17+ Years & 100% Track Record",
+      title: "20+ Years & 100% Track Record",
       desc: "Surgeries led by Senior Super-Consultant Dr. Hetalkumar Yagnik & Dr. Shefali Yagnik with an unblemished record.",
       icon: Award,
       color: "from-[#51AABC] to-[#B8ED78]"
@@ -75,7 +75,7 @@ export default function AboutHospital() {
 
             {/* Clean Normal Readable Overview Paragraph */}
             <p className="font-sans text-base sm:text-lg text-slate-200 leading-relaxed border-l-4 border-[#B8ED78] pl-5 sm:pl-6 py-2 my-6">
-              Rishabh Eyecare Hospital and Laser Center is a state-of-the-art hospital featuring ample fully AC waiting space, fully modular international-standard German Operation Theatre, and American world-class Phaco system for cataract surgery. We provide an in-house optical shop for all classes, best-in-class investigative instruments, and laser spectacle removal facility, performed by Senior Super-Consultant Dr. Hetalkumar Yagnik having a vast experience of 17 years with a proven track record of all surgeries executed successfully. We offer all types of ophthalmic checkups and surgeries with spectacle and contact lens dispensing under one roof. Rishabh Eyecare Hospital has started its new setup with ultramodern facilities for our patients.
+              Rishabh Eyecare Hospital and Laser Center is a state-of-the-art hospital featuring ample fully AC waiting space, fully modular international-standard German Operation Theatre, and American world-class Phaco system for cataract surgery. We provide an in-house optical shop for all classes, best-in-class investigative instruments, and laser spectacle removal facility, performed by Senior Super-Consultant Dr. Hetalkumar Yagnik having a vast experience of 20+ years with a proven track record of all surgeries executed successfully. We offer all types of ophthalmic checkups and surgeries with spectacle and contact lens dispensing under one roof. Rishabh Eyecare Hospital has started its new setup with ultramodern facilities for our patients.
             </p>
 
             {/* Doctors Showcase Bar */}
@@ -90,7 +90,7 @@ export default function AboutHospital() {
                   />
                   <div>
                     <div className="font-bold text-white text-sm sm:text-base">Dr. Hetalkumar R. Yagnik</div>
-                    <div className="text-xs text-[#B8ED78] font-semibold">Senior Super-Consultant • 17+ Years Exp</div>
+                    <div className="text-xs text-[#B8ED78] font-semibold">Senior Super-Consultant • 20+ Years Exp</div>
                   </div>
                 </div>
 
@@ -105,7 +105,7 @@ export default function AboutHospital() {
                   />
                   <div>
                     <div className="font-bold text-white text-sm sm:text-base">Dr. Shefali H. Yagnik</div>
-                    <div className="text-xs text-[#35A6B7] font-semibold">Consultant Ophthalmic Surgeon • 14+ Years Exp</div>
+                    <div className="text-xs text-[#35A6B7] font-semibold">Consultant Ophthalmic Surgeon • 20+ Years Exp</div>
                   </div>
                 </div>
               </div>
