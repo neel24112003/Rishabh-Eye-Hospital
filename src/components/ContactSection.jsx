@@ -38,7 +38,7 @@ export default function ContactSection() {
                 </div>
               </div>
               <h3 className="font-display text-base font-bold text-white mb-2">Hospital Address</h3>
-              <p className="text-xs text-slate-300 leading-relaxed mb-4">
+              <p className="text-xs font-semibold text-[#B8ED78] leading-relaxed mb-4">
                 The Lenora, 201-202, New City Light Rd, beside Naveli Hospital, opposite St. Thomas School, New Tirumala, Althan, Surat - 395007.
               </p>
             </div>
@@ -89,8 +89,10 @@ export default function ContactSection() {
               </div>
               <h3 className="font-display text-base font-bold text-white mb-2">Email Support</h3>
               <p className="text-xs text-slate-400 mb-2">Send Reports & Medical Inquiries</p>
-              <div className="text-xs font-bold text-slate-200 break-all mb-4">
-                rishabheyecare36@gmail.com
+              <div className="text-xs font-semibold text-[#B8ED78] break-all mb-4">
+                <a href="mailto:rishabheyecare36@gmail.com" className="hover:underline">
+                  rishabheyecare36@gmail.com
+                </a>
               </div>
             </div>
 
