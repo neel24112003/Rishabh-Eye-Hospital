@@ -6,14 +6,6 @@ export default function HospitalGallery() {
   const galleryItems = [
     {
       id: 1,
-      title: "Rishabh Eyecare Hospital Main Entrance & Exterior",
-      category: "Lounge",
-      categoryLabel: "🏢 Main Entrance & Facade",
-      image: "/images/interior/main-entrance.jpg",
-      description: "Ultramodern multi-specialty eye care center entrance at The Lenora, New City Light, Althan, Surat, equipped with grand glass facade and accessible entry."
-    },
-    {
-      id: 2,
       title: "Executive Reception & OPD Waiting Lounge",
       category: "Lounge",
       categoryLabel: "🛋️ Executive Reception & Lounge",
@@ -21,7 +13,7 @@ export default function HospitalGallery() {
       description: "Spacious climate-controlled waiting space with premium seating, digital queue management system, and welcoming patient service desk."
     },
     {
-      id: 3,
+      id: 2,
       title: "Dr. Hetalkumar R. Yagnik Senior Super-Consultant Chamber",
       category: "Chambers",
       categoryLabel: "👨‍⚕️ Senior Super-Consultant Suite",
@@ -29,7 +21,7 @@ export default function HospitalGallery() {
       description: "State-of-the-art private consultation chamber of Senior Super-Consultant Dr. Hetalkumar Yagnik (20+ Years Exp) with digital diagnostic monitors and patient counseling area."
     },
     {
-      id: 4,
+      id: 3,
       title: "Dr. Shefali H. Yagnik Consultant Ophthalmic Suite",
       category: "Chambers",
       categoryLabel: "👩‍⚕️ Consultant Ophthalmic Chamber",
@@ -37,7 +29,7 @@ export default function HospitalGallery() {
       description: "Dedicated clinical consultation chamber of Dr. Shefali H. Yagnik (20+ Years Exp) specializing in Medical Retina, Squint, and Pediatric eye care."
     },
     {
-      id: 5,
+      id: 4,
       title: "German Modular International Standard Operation Theatre",
       category: "OT",
       categoryLabel: "🏥 German Modular OT Suite",
@@ -45,7 +37,7 @@ export default function HospitalGallery() {
       description: "Fully modular international-standard German Operation Theatre with HEPA air filtration, American Phaco cataract surgical system, and 100% zero-infection safety protocols."
     },
     {
-      id: 6,
+      id: 5,
       title: "Precision Ophthalmic Diagnostic & Auto-Refraction Suite",
       category: "Diagnostics",
       categoryLabel: "🔬 High-Precision Diagnostics",
@@ -53,7 +45,7 @@ export default function HospitalGallery() {
       description: "Best-in-class investigative suite with advanced automated refractometer, digital tonometer, corneal topographer, and computerized vision analyzer."
     },
     {
-      id: 7,
+      id: 6,
       title: "In-House Optical Shop & Spectacle Studio",
       category: "Optical",
       categoryLabel: "👓 In-House Optical Studio",
@@ -61,28 +53,12 @@ export default function HospitalGallery() {
       description: "Complete spectacle and contact lens dispensing studio offering international brand frames, anti-glare lenses, and precision lens fitting under one roof."
     },
     {
-      id: 8,
-      title: "Specialist Doctor Examination & Refraction Room",
-      category: "Chambers",
-      categoryLabel: "👨‍⚕️ Specialist Diagnostic Room",
-      image: "/images/interior/specialist-suite.jpg",
-      description: "Ultramodern examination workstation with motorized slit-lamp chair, high-resolution digital chart projector, and comprehensive eye checkup instruments."
-    },
-    {
-      id: 9,
+      id: 7,
       title: "VIP Patient Recovery & Refreshment Lounge",
       category: "Lounge",
       categoryLabel: "🛋️ VIP Patient Executive Lounge",
       image: "/images/interior/vip-patient-lounge.jpg",
       description: "Private air-conditioned recovery lounge with plush reclining seating, soothing ambiance, and dedicated nursing care for post-operative patient comfort."
-    },
-    {
-      id: 10,
-      title: "Welcome Reception Desk & Patient Helpdesk",
-      category: "Lounge",
-      categoryLabel: "✨ Welcome & Registration Desk",
-      image: "/images/interior/welcome-lounge.jpg",
-      description: "Serene welcome area featuring friendly registration staff, optical display showcase, and instant appointment assistance."
     }
   ];
 
