@@ -12,8 +12,8 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-const GMAIL_USER = process.env.GMAIL_USER || '21amtics441@gmail.com';
-const GMAIL_APP_PASS = process.env.GMAIL_APP_PASS || 'ruwrrwmrfieterig';
+const GMAIL_USER = process.env.GMAIL_USER || 'rishabheyecare36@gmail.com';
+const GMAIL_APP_PASS = process.env.GMAIL_APP_PASS || 'cxkwqltrougxcwvo';
 
 const createTransporter = (pass) => nodemailer.createTransport({
   host: 'smtp.gmail.com',

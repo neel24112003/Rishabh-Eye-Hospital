@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
-const GMAIL_USER = process.env.GMAIL_USER || '21amtics441@gmail.com';
-const GMAIL_APP_PASS = (process.env.GMAIL_APP_PASS || 'ruwrrwmrfieterig').replace(/\s+/g, '');
+const GMAIL_USER = process.env.GMAIL_USER || 'rishabheyecare36@gmail.com';
+const GMAIL_APP_PASS = (process.env.GMAIL_APP_PASS || 'cxkwqltrougxcwvo').replace(/\s+/g, '');
 const HOSPITAL_EMAIL = process.env.HOSPITAL_EMAIL || 'rishabheyecare36@gmail.com';
 
 const transporter = nodemailer.createTransport({
