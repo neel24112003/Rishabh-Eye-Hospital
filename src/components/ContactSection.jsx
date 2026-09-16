@@ -30,10 +30,10 @@ export default function ContactSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           
           {/* Card 1: Address */}
-          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
+          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#35A6B7]/60 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#51AABC] p-0.5 shadow-lg mb-4">
+                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#35A6B7] group-hover:scale-110 transition-transform">
                   <MapPin className="w-6 h-6" />
                 </div>
               </div>
@@ -47,7 +47,7 @@ export default function ContactSection() {
               href={googleMapsDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#B8ED78] hover:text-white transition-colors group/link"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#35A6B7] hover:text-white transition-colors group/link"
             >
               <span>Get Directions</span>
               <Navigation className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 transition-transform" />
@@ -55,16 +55,16 @@ export default function ContactSection() {
           </div>
 
           {/* Card 2: Helpline */}
-          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
+          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#35A6B7]/60 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#51AABC] p-0.5 shadow-lg mb-4">
+                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#35A6B7] group-hover:scale-110 transition-transform">
                   <Phone className="w-6 h-6 animate-pulse" />
                 </div>
               </div>
               <h3 className="font-display text-base font-bold text-white mb-2">Helpline Numbers</h3>
               <p className="text-xs text-slate-400 mb-2">Available for OPD Booking & Emergency Care</p>
-              <div className="text-sm font-bold text-[#B8ED78] space-y-1 mb-4">
+              <div className="text-sm font-bold text-[#35A6B7] space-y-1 mb-4">
                 <div><a href="tel:07405563636" className="hover:underline">074055 63636</a></div>
                 <div><a href="tel:9898293695" className="hover:underline">98982 93695</a></div>
               </div>
@@ -80,10 +80,10 @@ export default function ContactSection() {
           </div>
 
           {/* Card 3: Email */}
-          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
+          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#35A6B7]/60 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#51AABC] p-0.5 shadow-lg mb-4">
+                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#35A6B7] group-hover:scale-110 transition-transform">
                   <Mail className="w-6 h-6" />
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function ContactSection() {
 
             <a
               href="mailto:rishabheyecare36@gmail.com"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#B8ED78] hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#35A6B7] hover:text-white transition-colors"
             >
               <span>Send Mail Notice</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -104,10 +104,10 @@ export default function ContactSection() {
           </div>
 
           {/* Card 4: OPD Hours */}
-          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
+          <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#35A6B7]/60 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#51AABC] p-0.5 shadow-lg mb-4">
+                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#35A6B7] group-hover:scale-110 transition-transform">
                   <Clock className="w-6 h-6" />
                 </div>
               </div>
@@ -116,10 +116,10 @@ export default function ContactSection() {
                 <div className="flex flex-col gap-0.5 border-b border-slate-800 pb-2">
                   <div className="flex justify-between font-semibold text-slate-200">
                     <span>Mon - Sat:</span>
-                    <span className="text-[#B8ED78]">11:00 AM - 3:00 PM</span>
+                    <span className="text-[#35A6B7] font-bold">11:00 AM - 3:00 PM</span>
                   </div>
-                  <div className="flex justify-end font-semibold text-[#B8ED78]">
-                    <span>5:00 PM - 7:00 PM</span>
+                  <div className="flex justify-end font-semibold text-[#35A6B7]">
+                    <span className="font-bold">5:00 PM - 7:00 PM</span>
                   </div>
                 </div>
                 <div className="text-[11px] font-bold text-amber-400/90 pt-0.5">
@@ -128,7 +128,7 @@ export default function ContactSection() {
               </div>
             </div>
 
-            <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+            <div className="text-[11px] font-mono text-[#35A6B7] font-bold flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-[#35A6B7]" />
               <span>Strictly Prior Appointment Only</span>
             </div>
