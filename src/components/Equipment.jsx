@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Cpu, ShieldCheck, Zap, Activity, Eye, CheckCircle2, Award, Sparkles } from 'lucide-react';
+import { ShieldCheck, Zap, Activity, Eye, CheckCircle2, Award, Sparkles } from 'lucide-react';
 
 export default function Equipment() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -171,11 +171,6 @@ export default function Equipment() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#35A6B7]/15 border border-[#35A6B7]/30 text-[#B8ED78] text-xs font-bold tracking-wider uppercase mb-4 shadow-lg shadow-[#35A6B7]/10">
-            <Cpu className="w-4 h-4" />
-            <span>Advanced Ophthalmic Technology</span>
-          </div>
-
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
             International Standard <span className="text-gradient-lime">Surgical & Diagnostic Equipment</span>
           </h2>
