@@ -17,23 +17,12 @@ export default function Footer() {
           {/* Col 1: Branding & Overview (4 cols) */}
           <div className="lg:col-span-4 flex flex-col items-start">
             <a href="#home" className="flex items-center gap-3 mb-4 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#35A6B7] via-[#51AABC] to-[#B8ED78] p-0.5 shadow-lg">
-                <div className="w-full h-full bg-[#070C14] rounded-[10px] flex items-center justify-center">
-                  <Eye className="w-5 h-5 text-[#B8ED78]" />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-display font-extrabold text-lg tracking-tight text-white">
-                    RISHABH
-                  </span>
-                  <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/30">
-                    EYECARE
-                  </span>
-                </div>
-                <span className="text-[10px] tracking-wider text-slate-400 font-medium">
-                  Hospital & Laser Center • Surat
-                </span>
+              <div className="relative h-11 sm:h-12 px-3.5 py-1.5 rounded-2xl bg-white/95 border border-[#35A6B7]/40 shadow-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                <img
+                  src="/images/logo.png"
+                  alt="Rishabh Eyecare Hospital & Laser Center"
+                  className="h-full w-auto object-contain max-h-8 sm:max-h-9"
+                />
               </div>
             </a>
 

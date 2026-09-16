@@ -77,22 +77,19 @@ export default function Navbar({ onOpenAppointment }) {
             onClick={(e) => handleNavClick(e, 'home')}
             className="flex items-center gap-3 group"
           >
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-[#35A6B7] via-[#51AABC] to-[#B8ED78] p-0.5 shadow-lg shadow-[#35A6B7]/30 group-hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-[#070C14] rounded-[10px] flex items-center justify-center">
-                <Eye className="w-5 h-5 text-[#B8ED78] group-hover:rotate-12 transition-transform duration-300" />
-              </div>
+            <div className="relative h-10 sm:h-11 px-3 py-1.5 rounded-2xl bg-white/95 border border-[#35A6B7]/40 shadow-lg shadow-[#35A6B7]/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <img
+                src="/images/logo.png"
+                alt="Rishabh Eyecare Hospital & Laser Center"
+                className="h-full w-auto object-contain max-h-7 sm:max-h-8"
+              />
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-display font-extrabold text-lg tracking-tight text-white group-hover:text-[#B8ED78] transition-colors">
-                  RISHABH
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/30">
-                  EYECARE
-                </span>
-              </div>
+            <div className="hidden sm:flex flex-col">
+              <span className="text-[11px] font-extrabold tracking-wider text-white uppercase group-hover:text-[#B8ED78] transition-colors">
+                Laser Center
+              </span>
               <span className="text-[10px] tracking-wider text-slate-400 font-medium -mt-0.5">
-                Hospital & Laser Center • Surat
+                Surat • Gujarat
               </span>
             </div>
           </a>
