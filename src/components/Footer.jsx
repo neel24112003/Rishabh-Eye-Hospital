@@ -20,7 +20,7 @@ export default function Footer() {
               <img
                 src="/images/logo.png"
                 alt="Rishabh Eyecare Hospital"
-                className="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                className="h-14 sm:h-16 md:h-20 w-auto max-w-[280px] sm:max-w-[360px] object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </a>
 
