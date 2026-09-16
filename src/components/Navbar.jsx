@@ -75,23 +75,13 @@ export default function Navbar({ onOpenAppointment }) {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, 'home')}
-            className="flex items-center gap-3 group"
+            className="flex items-center group py-1"
           >
-            <div className="relative h-10 sm:h-11 px-3 py-1.5 rounded-2xl bg-white/95 border border-[#35A6B7]/40 shadow-lg shadow-[#35A6B7]/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-              <img
-                src="/images/logo.png"
-                alt="Rishabh Eyecare Hospital & Laser Center"
-                className="h-full w-auto object-contain max-h-7 sm:max-h-8"
-              />
-            </div>
-            <div className="hidden sm:flex flex-col">
-              <span className="text-[11px] font-extrabold tracking-wider text-white uppercase group-hover:text-[#B8ED78] transition-colors">
-                Laser Center
-              </span>
-              <span className="text-[10px] tracking-wider text-slate-400 font-medium -mt-0.5">
-                Surat • Gujarat
-              </span>
-            </div>
+            <img
+              src="/images/logo.png"
+              alt="Rishabh Eyecare Hospital"
+              className="h-9 sm:h-11 md:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            />
           </a>
 
           {/* Desktop Nav Links */}

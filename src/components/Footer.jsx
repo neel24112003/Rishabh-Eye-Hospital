@@ -16,14 +16,12 @@ export default function Footer() {
           
           {/* Col 1: Branding & Overview (4 cols) */}
           <div className="lg:col-span-4 flex flex-col items-start">
-            <a href="#home" className="flex items-center gap-3 mb-4 group">
-              <div className="relative h-11 sm:h-12 px-3.5 py-1.5 rounded-2xl bg-white/95 border border-[#35A6B7]/40 shadow-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <img
-                  src="/images/logo.png"
-                  alt="Rishabh Eyecare Hospital & Laser Center"
-                  className="h-full w-auto object-contain max-h-8 sm:max-h-9"
-                />
-              </div>
+            <a href="#home" className="flex items-center group mb-4">
+              <img
+                src="/images/logo.png"
+                alt="Rishabh Eyecare Hospital"
+                className="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+              />
             </a>
 
             <p className="text-xs text-slate-300 leading-relaxed mb-6">
