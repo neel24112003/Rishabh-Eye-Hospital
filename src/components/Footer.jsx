@@ -154,9 +154,9 @@ export default function Footer() {
                 <span className="text-slate-300 font-mono">Senior Super-Consultants: Dr. Hetalkumar R. Yagnik & Dr. Shefali H. Yagnik</span>
               </div>
 
-              <div className="mt-4 p-3 rounded-xl glass-panel border border-[#35A6B7]/30 text-[11px] text-slate-300 flex items-center justify-between">
-                <span>TIMINGS: MON - SAT (9 AM - 8:30 PM)</span>
-                <span className="text-[#B8ED78] font-bold">SUNDAY OPD READY</span>
+              <div className="mt-4 p-3 rounded-xl glass-panel border border-[#35A6B7]/30 text-[11px] text-slate-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                <span>OPD: MON - SAT (11 AM - 3 PM | 5 PM - 7 PM)</span>
+                <span className="text-[#B8ED78] font-bold">(STRICTLY BY APPOINTMENT)</span>
               </div>
             </div>
           </div>

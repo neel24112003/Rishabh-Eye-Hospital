@@ -112,21 +112,25 @@ export default function ContactSection() {
                 </div>
               </div>
               <h3 className="font-display text-base font-bold text-white mb-2">OPD Working Hours</h3>
-              <div className="text-xs text-slate-300 space-y-1.5 mb-4">
-                <div className="flex justify-between border-b border-slate-800 pb-1">
-                  <span>Mon - Sat:</span>
-                  <strong className="text-[#B8ED78]">9:00 AM - 8:30 PM</strong>
+              <div className="text-xs text-slate-300 space-y-2 mb-4">
+                <div className="flex flex-col gap-0.5 border-b border-slate-800 pb-2">
+                  <div className="flex justify-between font-semibold text-slate-200">
+                    <span>Mon - Sat:</span>
+                    <span className="text-[#B8ED78]">11:00 AM - 3:00 PM</span>
+                  </div>
+                  <div className="flex justify-end font-semibold text-[#B8ED78]">
+                    <span>5:00 PM - 7:00 PM</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Sunday:</span>
-                  <strong className="text-slate-400">10:00 AM - 1:00 PM</strong>
+                <div className="text-[11px] font-bold text-amber-400/90 pt-0.5">
+                  (Strictly by Appointment)
                 </div>
               </div>
             </div>
 
             <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-[#35A6B7]" />
-              <span>Surgeries by Slot Appointment</span>
+              <span>Strictly Prior Appointment Only</span>
             </div>
           </div>
 

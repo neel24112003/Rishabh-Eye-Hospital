@@ -28,7 +28,7 @@ export default function AppointmentModal({ isOpen, onClose }) {
     doctor: 'Dr. Hetalkumar R. Yagnik',
     service: 'Cataract Surgery (Phaco)',
     date: getTodayDate(),
-    time: 'Morning (9:00 AM - 1:00 PM)',
+    time: 'Morning Session (11:00 AM - 3:00 PM)',
     notes: ''
   });
 
@@ -237,16 +237,17 @@ export default function AppointmentModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Preferred Slot</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Preferred Slot <span className="text-[10px] text-amber-400 font-normal">(Strictly By Appointment)</span>
+                  </label>
                   <div className="relative">
                     <select
                       value={formData.time}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                       className="w-full appearance-none px-3 py-2.5 rounded-xl bg-[#070C14] border border-slate-700 text-white text-xs focus:outline-none focus:border-[#B8ED78] cursor-pointer pr-8"
                     >
-                      <option value="Morning (9:00 AM - 1:00 PM)">Morning (9:00 AM - 1:00 PM)</option>
-                      <option value="Afternoon (2:00 PM - 5:00 PM)">Afternoon (2:00 PM - 5:00 PM)</option>
-                      <option value="Evening (5:00 PM - 8:30 PM)">Evening (5:00 PM - 8:30 PM)</option>
+                      <option value="Morning Session (11:00 AM - 3:00 PM)">Morning Session (11:00 AM - 3:00 PM)</option>
+                      <option value="Evening Session (5:00 PM - 7:00 PM)">Evening Session (5:00 PM - 7:00 PM)</option>
                     </select>
                     <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>

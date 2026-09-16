@@ -140,7 +140,7 @@ export default async function handler(req, res) {
                   Time Slot
                 </td>
                 <td style="padding: 12px 14px; background-color: #060B14; color: #FFFFFF; font-size: 14px; font-weight: 700; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
-                  ⏰ ${preferredTime || 'Morning (9:00 AM - 1:00 PM)'}
+                  ⏰ ${preferredTime || 'Morning Session (11:00 AM - 3:00 PM)'}
                 </td>
               </tr>
 
@@ -268,7 +268,7 @@ export default async function handler(req, res) {
                     Time Slot
                   </td>
                   <td style="padding: 10px 12px; background-color: #0B1220; color: #FFFFFF; font-size: 14px; font-weight: 800; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
-                    ⏰ ${preferredTime || 'Morning (9:00 AM - 1:00 PM)'}
+                    ⏰ ${preferredTime || 'Morning Session (11:00 AM - 3:00 PM)'}
                   </td>
                 </tr>
               </table>

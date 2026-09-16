@@ -19,7 +19,7 @@ export default function AppointmentSection() {
     doctor: 'Dr. Hetalkumar R. Yagnik',
     service: 'Cataract Surgery (Phaco)',
     preferredDate: getTodayDate(),
-    preferredTime: 'Morning (9:00 AM - 1:00 PM)',
+    preferredTime: 'Morning Session (11:00 AM - 3:00 PM)',
     notes: ''
   };
 
@@ -224,16 +224,17 @@ export default function AppointmentSection() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Time Slot *</label>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                        Preferred OPD Time Slot * <span className="text-[10px] text-amber-400 font-normal">(Strictly By Appointment)</span>
+                      </label>
                       <div className="relative">
                         <select
                           value={formData.preferredTime}
                           onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
                           className="w-full appearance-none px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer pr-10"
                         >
-                          <option value="Morning (9:00 AM - 1:00 PM)">Morning (9:00 AM - 1:00 PM)</option>
-                          <option value="Afternoon (2:00 PM - 5:00 PM)">Afternoon (2:00 PM - 5:00 PM)</option>
-                          <option value="Evening (5:00 PM - 8:30 PM)">Evening (5:00 PM - 8:30 PM)</option>
+                          <option value="Morning Session (11:00 AM - 3:00 PM)">Morning Session (11:00 AM - 3:00 PM)</option>
+                          <option value="Evening Session (5:00 PM - 7:00 PM)">Evening Session (5:00 PM - 7:00 PM)</option>
                         </select>
                         <ChevronDown className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
                       </div>
