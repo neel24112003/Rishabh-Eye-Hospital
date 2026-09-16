@@ -10,7 +10,7 @@ export default function Equipment() {
       id: "01",
       name: "IntraLase FS Femtosecond Laser",
       category: "Femtosecond LASIK Tech",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/Intra lase.jpeg",
       description: "Ultra-fast femtosecond laser for 100% bladeless corneal flap creation in LASIK surgeries with sub-micron accuracy.",
       features: [
         "100% Bladeless Flap Creation",
@@ -23,7 +23,7 @@ export default function Equipment() {
       id: "02",
       name: "VISX STAR S4 IR with CustomVue Excimer Laser",
       category: "CustomVue Excimer Laser",
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/VISX STAR S4.jpeg",
       description: "Advanced wavefront-guided CustomVue excimer laser system with Iris Registration (IR) for customized spectacle removal.",
       features: [
         "3D Active Eye Tracking",
@@ -36,7 +36,7 @@ export default function Equipment() {
       id: "03",
       name: "Optovue iVue / iVue 80 SD-OCT",
       category: "Spectral-Domain OCT",
-      image: "/images/hospital-interior-3.jpg",
+      image: "/images/equipments/optovue ivue.jpeg",
       description: "High-speed Spectral-Domain Optical Coherence Tomography (SD-OCT) for 3D cross-sectional retinal, macula & optic nerve imaging.",
       features: [
         "80,000 A-scans/sec High Speed",
@@ -49,7 +49,7 @@ export default function Equipment() {
       id: "04",
       name: "MÖLLER-WEDEL Microflex Ophthalmic Microscope",
       category: "German Surgical Optics",
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/moller wedel microflex.jpeg",
       description: "Precision German surgical operating microscope featuring coaxial red reflex and crystal-clear stereo optics for microsurgery.",
       features: [
         "German Optical Precision",
@@ -62,7 +62,7 @@ export default function Equipment() {
       id: "05",
       name: "Alcon LEGION Phaco System",
       category: "American Cataract Tech",
-      image: "/images/hospital-interior-1.jpg",
+      image: "/images/equipments/alcon legieon.jpeg",
       description: "Premium Alcon phacoemulsification console designed for ultra-smooth 1.8mm micro-incision cataract surgery and rapid recovery.",
       features: [
         "1.8mm Micro-Incision Phaco",
@@ -75,7 +75,7 @@ export default function Equipment() {
       id: "06",
       name: "Alcon ARGOS Optical Biometer",
       category: "Optical Biometry & IOL",
-      image: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/alcon argos.jpeg",
       description: "Swept-Source OCT optical biometer providing ultra-accurate IOL power calculations even through dense cataract lenses.",
       features: [
         "Swept-Source OCT Technology",
@@ -88,7 +88,7 @@ export default function Equipment() {
       id: "07",
       name: "HUVITZ HRK-7000A Auto Ref/Keratometer",
       category: "Automated Refraction",
-      image: "/images/hospital-interior-2.jpg",
+      image: "/images/equipments/huvitz hrk.jpeg",
       description: "Wavefront map technology auto ref-keratometer delivering instantaneous, high-precision refractive power measurements.",
       features: [
         "Hartmann-Shack Wavefront Sensor",
@@ -101,7 +101,7 @@ export default function Equipment() {
       id: "08",
       name: "HUVITZ CRK-7000 Auto Ref/Keratometer",
       category: "Corneal Diagnostics",
-      image: "/images/hospital-interior-4.jpg",
+      image: "/images/equipments/Huvitz CRK.jpeg",
       description: "Precision diagnostic auto ref/keratometer for fast corneal curvature analysis, contact lens fitting, and refraction testing.",
       features: [
         "Corneal Curvature Analysis",
@@ -114,7 +114,7 @@ export default function Equipment() {
       id: "09",
       name: "Quantel Medical AXIS II PR A-Scan Biometer",
       category: "Ultrasound Biometry",
-      image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/quantel medical.jpeg",
       description: "High-precision ultrasonic A-scan biometer with pachymetry for accurate axial length measurements and corneal thickness calculation.",
       features: [
         "High-Frequency Ultrasound Probe",
@@ -127,7 +127,7 @@ export default function Equipment() {
       id: "10",
       name: "Aurolab Hawk-I Slit Lamp / Imaging System",
       category: "Digital Slit Lamp Imaging",
-      image: "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/Aurolab Hawk.jpeg",
       description: "High-resolution digital slit lamp biomicroscope for detailed anterior segment and corneal examination with live photo capture.",
       features: [
         "High-Resolution Digital Camera",
@@ -140,7 +140,7 @@ export default function Equipment() {
       id: "11",
       name: "Oscar Vision Digital Vision Chart",
       category: "Digital Acuity System",
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
+      image: "/images/equipments/oscar vision.jpeg",
       description: "Advanced computerized chart display system providing standardized Snellen, LogMAR, and color vision acuity testing.",
       features: [
         "Multi-Distance Snellen & LogMAR",
