@@ -92,13 +92,9 @@ export default function Doctors() {
               {/* Doctor Info */}
               <div className="flex-1 flex flex-col justify-between h-full">
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#35A6B7]/15 border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7]">
-                      <Star className="w-3.5 h-3.5 fill-[#B8ED78] text-[#B8ED78]" />
-                      <span>{doctor.rating} ({doctor.reviewsCount})</span>
-                    </div>
-
-                    <span className="text-[11px] font-mono text-slate-400">Surat, Gujarat</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#35A6B7]/15 border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7] mb-3">
+                    <Star className="w-3.5 h-3.5 fill-[#B8ED78] text-[#B8ED78]" />
+                    <span>5 Star Services</span>
                   </div>
 
                   <h3 className="font-display text-2xl font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-1">
@@ -158,7 +154,6 @@ export default function Doctors() {
                     <Shield className="w-3.5 h-3.5 text-[#B8ED78]" />
                     <span>20+ Years Clinical Mastery</span>
                   </span>
-                  <span className="text-slate-400 font-mono text-[11px]">Surat, Gujarat</span>
                 </div>
               </div>
             </motion.div>
