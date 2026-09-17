@@ -40,7 +40,7 @@ export default function Doctors() {
       ],
       experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
-      objectPosition: "object-center",
+      objectPosition: "object-[50%_20%]",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
       description: "Leading Orthoptist & Contact Lens Specialist with 20+ years of clinical mastery. Specialized in advanced binocular vision evaluation, pediatric refraction diagnostics, non-surgical squint therapy, computer vision syndrome (CVS) treatment, and custom specialty contact lens fitting with compassionate patient care.",
       specialties: [
