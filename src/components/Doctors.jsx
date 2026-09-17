@@ -7,7 +7,7 @@ export default function Doctors() {
     {
       name: "Dr. Hetalkumar R. Yagnik",
       qualifications: "D.O.M.S., D.N.B., M.N.A.M.S. (Ophthal)",
-      title: "Phaco, Cornea & Oculoplastic Surgeon",
+      title: "Senior Super-Consultant • Phaco, Cornea & Oculoplastic Surgeon",
       fellowships: [
         "Fellow of Cornea Foundation (Ahmedabad)",
         "Fellow of Sir Gangaram Hospital (Oculoplasty, New Delhi)"
@@ -16,12 +16,14 @@ export default function Doctors() {
       experience: "20+ Years Experience",
       image: "/images/dr-hetal-yagnik.jpg",
       badgeColor: "from-[#35A6B7] to-[#B8ED78]",
-      description: "Senior Super-Consultant with vast experience of 20+ years and an unblemished track record of successful ophthalmic surgeries. Specialist in American Phaco Cataract Surgeries, Cornea, Oculoplasty, and Bladeless LASIK & ICL implants.",
+      description: "Senior Super-Consultant with 20+ years of vast surgical mastery and an unblemished track record. Renowned pioneer in high-precision American Phaco Cataract Surgeries, German optics microsurgery, Bladeless LASIK spectacle removal, Cornea transplants, Oculoplastic reconstructions, and ICL implants.",
       specialties: [
         "Phaco Cataract Surgery",
         "Cornea & Refractive Care",
-        "Oculoplastic Surgery",
-        "LASIK & ICL Implants"
+        "Oculoplastic Reconstruction",
+        "Bladeless LASIK & ICL",
+        "Glaucoma Management",
+        "German Modular OT Surgery"
       ],
       rating: "5.0",
       reviewsCount: "2,400+ Patients"
@@ -29,21 +31,23 @@ export default function Doctors() {
     {
       name: "Dr. Shefali H. Yagnik",
       qualifications: "B. Optom.",
-      title: "Orthoptist & Contact Lens Specialist",
+      title: "Senior Orthoptist & Contact Lens Specialist",
       fellowships: [],
       clinicalFocus: [
-        "Specialist in Orthoptic Evaluation & Binocular Vision Therapy",
-        "Expert in Specialty Contact Lens Fitting & Pediatric Eye Care"
+        "Specialist in Binocular Vision Therapy & Non-Surgical Squint Alignment",
+        "Expert in Custom Specialty Contact Lenses & Pediatric Diagnostics"
       ],
       experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
-      description: "Specialized Orthoptist & Contact Lens Specialist with 20+ years experience in binocular vision therapy, pediatric eye diagnostics, squint alignment, and custom contact lens therapy.",
+      description: "Leading Orthoptist & Contact Lens Specialist with 20+ years of clinical mastery. Specialized in advanced binocular vision evaluation, pediatric refraction diagnostics, non-surgical squint therapy, computer vision syndrome (CVS) treatment, and custom specialty contact lens fitting with compassionate patient care.",
       specialties: [
         "Orthoptics & Binocular Care",
         "Specialty Contact Lenses",
         "Pediatric Eye Diagnostics",
-        "Squint & Refraction Care"
+        "Squint Alignment Therapy",
+        "Amblyopia (Lazy Eye) Care",
+        "Computer Vision Therapy"
       ],
       rating: "4.9",
       reviewsCount: "1,850+ Patients"
@@ -77,7 +81,7 @@ export default function Doctors() {
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-stretch overflow-hidden"
             >
               {/* Doctor Real Photo Portrait Card */}
-              <div className="relative w-full sm:w-56 h-72 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
+              <div className="relative w-full sm:w-60 h-72 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
                 <img
                   src={doctor.image}
                   alt={doctor.name}
@@ -138,20 +142,21 @@ export default function Doctors() {
                     {doctor.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
                     {doctor.specialties.map((spec, sIdx) => (
-                      <span
+                      <div
                         key={sIdx}
-                        className="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-[11px] font-medium text-slate-200"
+                        className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 text-[11px] font-medium text-slate-200"
                       >
-                        ✓ {spec}
-                      </span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
+                        <span>{spec}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Bottom Experience Bar */}
-                <div className="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                <div className="mt-6 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
                   <span className="flex items-center gap-1.5 font-bold text-[#B8ED78]">
                     <Shield className="w-3.5 h-3.5 text-[#B8ED78]" />
                     <span>20+ Years Clinical Mastery</span>
@@ -166,5 +171,6 @@ export default function Doctors() {
     </section>
   );
 }
+
 
 
