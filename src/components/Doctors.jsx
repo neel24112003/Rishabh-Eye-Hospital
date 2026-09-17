@@ -39,7 +39,7 @@ export default function Doctors() {
         "Expert in Custom Specialty Contact Lenses & Pediatric Diagnostics"
       ],
       experience: "20+ Years Experience",
-      image: "/images/dr-shefali-yagnik-hd.jpg",
+      image: "/images/dr-shefali-yagnik.jpg",
       objectPosition: "object-[50%_20%]",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
       description: "Leading Orthoptist & Contact Lens Specialist with 20+ years of clinical mastery. Specialized in advanced binocular vision evaluation, pediatric refraction diagnostics, non-surgical squint therapy, computer vision syndrome (CVS) treatment, and custom specialty contact lens fitting with compassionate patient care.",
@@ -87,6 +87,10 @@ export default function Doctors() {
                 <img
                   src={doctor.image}
                   alt={doctor.name}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/dr-shefali-yagnik.jpg';
+                  }}
                   className={`w-full h-full object-cover ${doctor.objectPosition || 'object-top'} group-hover:scale-105 transition-transform duration-500`}
                 />
               </div>
