@@ -99,7 +99,7 @@ export default function AboutHospital() {
                 {/* Dr. Shefali */}
                 <div className="flex items-center gap-3.5 bg-[#070C14]/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl border border-[#35A6B7]/30 sm:border-none shadow-md sm:shadow-none">
                   <img
-                    src="/images/dr-shefali-yagnik.jpg"
+                    src="/images/dr-shefali-yagnik-hd.jpg"
                     alt="Dr. Shefali H. Yagnik"
                     className="w-12 h-12 rounded-full object-cover object-top border-2 border-[#35A6B7] shadow-lg shrink-0"
                   />
