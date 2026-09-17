@@ -61,13 +61,6 @@ export default function EventGallery() {
                 Your browser does not support the video tag.
               </video>
 
-              {/* Top Overlay Badge */}
-              <div className="absolute top-4 left-4 z-10 pointer-events-none">
-                <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-slate-950/85 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md shadow-lg flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-[#B8ED78]" />
-                  <span>Rishabh Eyecare Hospital — Full Video Tour</span>
-                </span>
-              </div>
             </div>
           </div>
         </div>
