@@ -177,8 +177,8 @@ export default function AppointmentSection() {
                           onChange={(e) => setFormData({ ...formData, doctor: e.target.value })}
                           className="w-full appearance-none px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer pr-10"
                         >
-                          <option value="Dr. Hetalkumar R. Yagnik">Dr. Hetalkumar R. Yagnik (Senior Super-Consultant)</option>
-                          <option value="Dr. Shefali H. Yagnik">Dr. Shefali H. Yagnik (Consultant Surgeon)</option>
+                          <option value="Dr. Hetalkumar R. Yagnik">Dr. Hetalkumar R. Yagnik (Phaco, Cornea & Oculoplastic Surgeon)</option>
+                          <option value="Dr. Shefali H. Yagnik">Dr. Shefali H. Yagnik (Orthoptist & Contact Lens Specialist)</option>
                           <option value="First Available Senior Specialist">First Available Senior Specialist</option>
                         </select>
                         <ChevronDown className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />

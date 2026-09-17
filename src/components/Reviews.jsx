@@ -449,8 +449,8 @@ const handleSubmitReview = async (e) => {
                         onChange={(e) => setNewReview({ ...newReview, doctor: e.target.value })}
                         className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-slate-600 appearance-none cursor-pointer pr-10"
                       >
-                        <option value="Dr. Hetalkumar R. Yagnik" className="bg-[#0F172A] text-white">Dr. Hetalkumar R. Yagnik (Senior Super-Consultant)</option>
-                        <option value="Dr. Shefali H. Yagnik" className="bg-[#0F172A] text-white">Dr. Shefali H. Yagnik (Consultant Ophthalmic Surgeon)</option>
+                        <option value="Dr. Hetalkumar R. Yagnik" className="bg-[#0F172A] text-white">Dr. Hetalkumar R. Yagnik (Phaco, Cornea & Oculoplastic Surgeon)</option>
+                        <option value="Dr. Shefali H. Yagnik" className="bg-[#0F172A] text-white">Dr. Shefali H. Yagnik (Orthoptist & Contact Lens Specialist)</option>
                       </select>
                       <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>

@@ -6,35 +6,40 @@ export default function Doctors() {
   const doctors = [
     {
       name: "Dr. Hetalkumar R. Yagnik",
-      title: "Senior Super-Consultant Ophthalmic Surgeon",
+      qualifications: "D.O.M.S., D.N.B., M.N.A.M.S. (Ophthal)",
+      title: "Phaco, Cornea & Oculoplastic Surgeon",
+      fellowships: [
+        "Fellow of Cornea Foundation (Ahmedabad)",
+        "Fellow of Sir Gangaram Hospital (Oculoplasty, New Delhi)"
+      ],
       experience: "20+ Years Experience",
       image: "/images/dr-hetal-yagnik.jpg",
       badgeColor: "from-[#35A6B7] to-[#B8ED78]",
-      description: "Vast experience of 20+ years with an unblemished track record of all surgeries executed successfully. Pioneer in American Phaco Cataract Surgeries, Bladeless LASIK spectacle removal, and ICL implants.",
+      description: "Senior Super-Consultant with vast experience of 20+ years and an unblemished track record of successful ophthalmic surgeries. Specialist in American Phaco Cataract Surgeries, Cornea, Oculoplasty, and Bladeless LASIK & ICL implants.",
       specialties: [
         "Phaco Cataract Surgery",
-        "LASIK Spectacle Removal",
-        "ICL Implants",
-        "Glaucoma & Refractive Care"
+        "Cornea & Refractive Care",
+        "Oculoplastic Surgery",
+        "LASIK & ICL Implants"
       ],
-      qualifications: "M.S. (Ophthalmology), Senior Super-Consultant",
       rating: "5.0",
       reviewsCount: "2,400+ Patients"
     },
     {
       name: "Dr. Shefali H. Yagnik",
-      title: "Consultant Ophthalmic Surgeon",
+      qualifications: "B. Optom.",
+      title: "Orthoptist & Contact Lens Specialist",
+      fellowships: [],
       experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
-      description: "Specialized consultant in Medical Retina, Pediatric Eye Diagnostics, Squint Alignment, and Oculoplastic Reconstructive Surgeries with compassionate patient-centric care.",
+      description: "Specialized Orthoptist & Contact Lens Specialist with 20+ years experience in binocular vision therapy, pediatric eye diagnostics, squint alignment, and custom contact lens therapy.",
       specialties: [
-        "Medical Retina Care",
-        "Squint & Pediatric Surgery",
-        "Oculoplastic & DCR",
-        "Comprehensive Eye Diagnostics"
+        "Orthoptics & Binocular Care",
+        "Specialty Contact Lenses",
+        "Pediatric Eye Diagnostics",
+        "Squint & Refraction Care"
       ],
-      qualifications: "M.S. (Ophthalmology), Fellowship in Retina & Cornea",
       rating: "4.9",
       reviewsCount: "1,850+ Patients"
     }
@@ -51,7 +56,7 @@ export default function Doctors() {
           </h2>
 
           <p className="text-slate-300 text-base leading-relaxed">
-            Our expert surgeons bring decades of international clinical mastery, high-precision microsurgery skills, and warm personal dedication to every patient.
+            Our expert surgeons bring decades of clinical mastery, high-precision microsurgery skills, and warm personal dedication to every patient.
           </p>
         </div>
 
@@ -91,13 +96,24 @@ export default function Doctors() {
                     {doctor.name}
                   </h3>
 
-                  <p className="text-xs font-semibold text-[#35A6B7] uppercase tracking-wider mb-2">
+                  <p className="text-sm font-bold text-[#B8ED78] tracking-wide mb-1">
+                    {doctor.qualifications}
+                  </p>
+
+                  <p className="text-xs font-semibold text-[#35A6B7] uppercase tracking-wider mb-3">
                     {doctor.title}
                   </p>
 
-                  <p className="text-xs text-slate-400 font-mono mb-4">
-                    {doctor.qualifications}
-                  </p>
+                  {doctor.fellowships && doctor.fellowships.length > 0 && (
+                    <div className="space-y-1.5 mb-4 bg-[#35A6B7]/10 p-2.5 rounded-xl border border-[#35A6B7]/30">
+                      {doctor.fellowships.map((fellowship, fIdx) => (
+                        <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                          <Award className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
+                          <span>{fellowship}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-5">
                     {doctor.description}
@@ -122,3 +138,4 @@ export default function Doctors() {
     </section>
   );
 }
+

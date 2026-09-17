@@ -90,7 +90,7 @@ export default function AboutHospital() {
                   />
                   <div>
                     <div className="font-bold text-white text-sm sm:text-base">Dr. Hetalkumar R. Yagnik</div>
-                    <div className="text-xs text-[#B8ED78] font-semibold">Senior Super-Consultant • 20+ Years Exp</div>
+                    <div className="text-xs text-[#B8ED78] font-semibold">D.O.M.S., D.N.B., M.N.A.M.S. • Phaco, Cornea & Oculoplastic Surgeon</div>
                   </div>
                 </div>
 
@@ -105,7 +105,7 @@ export default function AboutHospital() {
                   />
                   <div>
                     <div className="font-bold text-white text-sm sm:text-base">Dr. Shefali H. Yagnik</div>
-                    <div className="text-xs text-[#35A6B7] font-semibold">Consultant Ophthalmic Surgeon • 20+ Years Exp</div>
+                    <div className="text-xs text-[#35A6B7] font-semibold">B. Optom. • Orthoptist & Contact Lens Specialist</div>
                   </div>
                 </div>
               </div>
