@@ -15,6 +15,7 @@ export default function Doctors() {
       clinicalFocus: [],
       experience: "20+ Years Experience",
       image: "/images/dr-hetal-yagnik.jpg",
+      objectPosition: "object-top",
       badgeColor: "from-[#35A6B7] to-[#B8ED78]",
       description: "Senior Super-Consultant with 20+ years of vast surgical mastery and an unblemished track record. Renowned pioneer in high-precision American Phaco Cataract Surgeries, German optics microsurgery, Bladeless LASIK spectacle removal, Cornea transplants, Oculoplastic reconstructions, and ICL implants.",
       specialties: [
@@ -39,6 +40,7 @@ export default function Doctors() {
       ],
       experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
+      objectPosition: "object-center",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
       description: "Leading Orthoptist & Contact Lens Specialist with 20+ years of clinical mastery. Specialized in advanced binocular vision evaluation, pediatric refraction diagnostics, non-surgical squint therapy, computer vision syndrome (CVS) treatment, and custom specialty contact lens fitting with compassionate patient care.",
       specialties: [
@@ -81,11 +83,11 @@ export default function Doctors() {
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-stretch overflow-hidden"
             >
               {/* Doctor Real Photo Portrait Card */}
-              <div className="relative w-full sm:w-60 h-72 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
+              <div className="relative w-full sm:w-60 h-80 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
                 <img
                   src={doctor.image}
                   alt={doctor.name}
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  className={`w-full h-full object-cover ${doctor.objectPosition || 'object-top'} group-hover:scale-105 transition-transform duration-500`}
                 />
               </div>
 
