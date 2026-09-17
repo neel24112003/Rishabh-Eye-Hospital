@@ -86,7 +86,7 @@ export default function AboutHospital() {
                   <img
                     src="/images/dr-hetal-yagnik.jpg"
                     alt="Dr. Hetalkumar R. Yagnik"
-                    className="w-12 h-12 rounded-full object-cover object-top border-2 border-[#B8ED78] shadow-lg shrink-0"
+                    className="w-14 h-14 rounded-full object-cover object-[50%_15%] border-2 border-[#B8ED78] shadow-lg shrink-0"
                   />
                   <div>
                     <div className="font-bold text-white text-sm sm:text-base">Dr. Hetalkumar R. Yagnik</div>
@@ -102,7 +102,7 @@ export default function AboutHospital() {
                     src="/images/dr-shefali-yagnik.jpg"
                     onError={(e) => { e.target.onerror = null; e.target.src = '/dr-shefali-yagnik.jpg'; }}
                     alt="Dr. Shefali H. Yagnik"
-                    className="w-12 h-12 rounded-full object-cover object-top border-2 border-[#35A6B7] shadow-lg shrink-0"
+                    className="w-14 h-14 rounded-full object-cover object-[50%_25%] border-2 border-[#35A6B7] shadow-lg shrink-0"
                   />
                   <div>
                     <div className="font-bold text-white text-sm sm:text-base">Dr. Shefali H. Yagnik</div>
