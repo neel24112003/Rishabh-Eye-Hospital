@@ -55,11 +55,8 @@ export default function EventGallery() {
                 muted
                 playsInline
                 controls
+                preload="auto"
                 className="w-full h-full object-cover rounded-2xl"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/videos/hospital-view.mp4';
-                }}
               >
                 Your browser does not support the video tag.
               </video>
