@@ -133,3 +133,15 @@ dist
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Heavy raw media source folders & scratch
+Doctor/
+doctor/
+"Hospital View/"
+"Equipments /"
+Interior/
+Logo/
+scratch/
+public/videos/
+*.mp4
+

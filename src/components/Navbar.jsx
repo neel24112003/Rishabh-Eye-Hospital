@@ -43,7 +43,7 @@ export default function Navbar({ onOpenAppointment }) {
     { name: 'Hospital Interior', href: '#infrastructure', id: 'infrastructure' },
     { name: 'Services', href: '#services', id: 'services' },
     { name: 'Equipment', href: '#equipment', id: 'equipment' },
-    { name: 'Events', href: '#gallery', id: 'gallery' },
+    { name: 'Hospital View', href: '#gallery', id: 'gallery' },
     { name: 'Reviews', href: '#reviews', id: 'reviews' },
     { name: 'Contact Us', href: '#contact', id: 'contact' },
   ];

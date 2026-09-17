@@ -96,7 +96,7 @@ export default function Footer() {
                 { name: "Senior Doctors", href: "#doctors" },
                 { name: "Surgical & LASIK Services", href: "#services" },
                 { name: "German & American Tech", href: "#equipment" },
-                { name: "Hospital Event Gallery", href: "#gallery" },
+                { name: "Hospital View", href: "#gallery" },
                 { name: "Verified Patient Reviews", href: "#reviews" },
                 { name: "Book Appointment", href: "#appointment" },
                 { name: "Contact & Reach Us", href: "#contact" }
