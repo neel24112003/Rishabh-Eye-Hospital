@@ -12,6 +12,7 @@ export default function Doctors() {
         "Fellow of Cornea Foundation (Ahmedabad)",
         "Fellow of Sir Gangaram Hospital (Oculoplasty, New Delhi)"
       ],
+      clinicalFocus: [],
       experience: "20+ Years Experience",
       image: "/images/dr-hetal-yagnik.jpg",
       badgeColor: "from-[#35A6B7] to-[#B8ED78]",
@@ -30,6 +31,10 @@ export default function Doctors() {
       qualifications: "B. Optom.",
       title: "Orthoptist & Contact Lens Specialist",
       fellowships: [],
+      clinicalFocus: [
+        "Specialist in Orthoptic Evaluation & Binocular Vision Therapy",
+        "Expert in Specialty Contact Lens Fitting & Pediatric Eye Care"
+      ],
       experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
@@ -56,7 +61,7 @@ export default function Doctors() {
           </h2>
 
           <p className="text-slate-300 text-base leading-relaxed">
-            Our expert surgeons bring decades of clinical mastery, high-precision microsurgery skills, and warm personal dedication to every patient.
+            Our expert specialists bring decades of clinical mastery, high-precision microsurgery skills, and warm personal dedication to every patient.
           </p>
         </div>
 
@@ -83,13 +88,16 @@ export default function Doctors() {
               {/* Doctor Info */}
               <div className="flex-1 flex flex-col justify-between h-full">
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#35A6B7]/15 border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7]">
                       <Star className="w-3.5 h-3.5 fill-[#B8ED78] text-[#B8ED78]" />
                       <span>{doctor.rating} ({doctor.reviewsCount})</span>
                     </div>
 
-                    <span className="text-[11px] font-mono text-slate-400">Surat, Gujarat</span>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#B8ED78]/15 border border-[#B8ED78]/30 text-xs font-bold text-[#B8ED78]">
+                      <Sparkles className="w-3.5 h-3.5 text-[#B8ED78]" />
+                      <span>20+ Years Exp</span>
+                    </div>
                   </div>
 
                   <h3 className="font-display text-2xl font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-1">
@@ -115,7 +123,18 @@ export default function Doctors() {
                     </div>
                   )}
 
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-5">
+                  {doctor.clinicalFocus && doctor.clinicalFocus.length > 0 && (
+                    <div className="space-y-1.5 mb-4 bg-[#35A6B7]/10 p-2.5 rounded-xl border border-[#35A6B7]/30">
+                      {doctor.clinicalFocus.map((focus, fIdx) => (
+                        <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                          <Award className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
+                          <span>{focus}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
                     {doctor.description}
                   </p>
 
@@ -130,6 +149,15 @@ export default function Doctors() {
                     ))}
                   </div>
                 </div>
+
+                {/* Bottom Experience Bar */}
+                <div className="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 font-bold text-[#B8ED78]">
+                    <Shield className="w-3.5 h-3.5 text-[#B8ED78]" />
+                    <span>20+ Years Clinical Mastery</span>
+                  </span>
+                  <span className="text-slate-400 font-mono text-[11px]">Surat, Gujarat</span>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -138,4 +166,5 @@ export default function Doctors() {
     </section>
   );
 }
+
 
