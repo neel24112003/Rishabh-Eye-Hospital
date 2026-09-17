@@ -142,6 +142,7 @@ doctor/
 Interior/
 Logo/
 scratch/
-public/videos/
-*.mp4
+public/videos/hospital-view.mp4
+!public/videos/hospital-tour.mp4
+
 

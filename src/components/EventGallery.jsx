@@ -35,31 +35,43 @@ export default function EventGallery() {
           </p>
         </div>
 
-        {/* Video Player Showcase Container */}
+        {/* Video Player Showcase Container with Theme Square Frame */}
         <div className="relative max-w-5xl mx-auto">
-          <div className="relative h-[380px] sm:h-[540px] rounded-3xl overflow-hidden glass-panel border border-[#35A6B7]/40 shadow-2xl bg-[#070C14] group">
+          {/* Theme Outer Glowing Frame */}
+          <div className="relative p-2 sm:p-3 rounded-3xl bg-gradient-to-br from-[#35A6B7]/50 via-slate-800/80 to-[#B8ED78]/50 border-2 border-[#35A6B7]/60 shadow-[0_0_40px_rgba(53,166,183,0.35)] group">
             
-            {/* Continuously Looping Hospital View Video */}
-            <video
-              src="/videos/hospital-view.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              controls
-              className="w-full h-full object-cover rounded-3xl"
-            >
-              Your browser does not support the video tag.
-            </video>
+            {/* Corner Decorative Square Accents */}
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-[#B8ED78] rounded-tl-xl pointer-events-none z-20"></div>
+            <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-[#B8ED78] rounded-tr-xl pointer-events-none z-20"></div>
+            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-[#B8ED78] rounded-bl-xl pointer-events-none z-20"></div>
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#B8ED78] rounded-br-xl pointer-events-none z-20"></div>
 
-            {/* Top Overlay Badge */}
-            <div className="absolute top-4 left-4 z-10 pointer-events-none">
-              <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-slate-950/85 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md shadow-lg flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-[#B8ED78]" />
-                <span>Rishabh Eyecare Hospital — Full Video Tour</span>
-              </span>
+            <div className="relative h-[380px] sm:h-[540px] rounded-2xl overflow-hidden bg-[#070C14] border border-[#35A6B7]/30">
+              {/* Continuously Looping Hospital View Video */}
+              <video
+                src="/videos/hospital-tour.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls
+                className="w-full h-full object-cover rounded-2xl"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/videos/hospital-view.mp4';
+                }}
+              >
+                Your browser does not support the video tag.
+              </video>
+
+              {/* Top Overlay Badge */}
+              <div className="absolute top-4 left-4 z-10 pointer-events-none">
+                <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-slate-950/85 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md shadow-lg flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-[#B8ED78]" />
+                  <span>Rishabh Eyecare Hospital — Full Video Tour</span>
+                </span>
+              </div>
             </div>
-
           </div>
         </div>
 
