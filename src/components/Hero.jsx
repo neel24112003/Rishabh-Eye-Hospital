@@ -80,7 +80,7 @@ export default function Hero({ onOpenAppointment }) {
             <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl glass-panel border border-[#B8ED78]/40 bg-[#070C14]/80 shadow-lg shadow-[#B8ED78]/10 hover:border-[#B8ED78]/70 transition-all duration-300">
               <Sparkles className="w-5 h-5 text-[#B8ED78] shrink-0 animate-pulse" />
               <p className="text-white text-sm sm:text-base font-extrabold tracking-wide">
-                <span className="text-gradient-lime">Clear Vision, Better Life</span> — We Care For Your Eyes
+                <span className="text-gradient-lime">Your Vision, Our Mission</span> — Clear Vision, Better Life
               </p>
             </motion.div>
           </motion.div>
