@@ -92,16 +92,13 @@ export default function Doctors() {
               {/* Doctor Info */}
               <div className="flex-1 flex flex-col justify-between h-full">
                 <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#35A6B7]/15 border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7]">
                       <Star className="w-3.5 h-3.5 fill-[#B8ED78] text-[#B8ED78]" />
                       <span>{doctor.rating} ({doctor.reviewsCount})</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#B8ED78]/15 border border-[#B8ED78]/30 text-xs font-bold text-[#B8ED78]">
-                      <Sparkles className="w-3.5 h-3.5 text-[#B8ED78]" />
-                      <span>20+ Years Exp</span>
-                    </div>
+                    <span className="text-[11px] font-mono text-slate-400">Surat, Gujarat</span>
                   </div>
 
                   <h3 className="font-display text-2xl font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-1">
