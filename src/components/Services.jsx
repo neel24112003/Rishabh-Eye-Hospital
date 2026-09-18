@@ -1,137 +1,201 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, Zap, Shield, Sparkles, CheckCircle2, ChevronRight, X, Clock, Award, Activity } from 'lucide-react';
+import { 
+  Stethoscope, FileCheck, Eye, Activity, Layers, Crosshair, 
+  Glasses, ShieldAlert, CreditCard, ShieldCheck, Sparkles, 
+  ChevronRight, X, CheckCircle2, Award, Zap, HeartPulse
+} from 'lucide-react';
 
 export default function Services({ onOpenAppointment }) {
   const [selectedService, setSelectedService] = useState(null);
 
-  const surgicalServices = [
+  const hospitalServices = [
     {
-      id: "cataract",
-      title: "Cataract Surgery (Phaco)",
-      badge: "American Phaco System",
+      id: "hs-1",
+      title: "Ophthalmic Consultation For Any Eye Disease",
+      badge: "OPD Consultation",
+      icon: Stethoscope,
       image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80",
-      shortDesc: "Micro-incision sutureless cataract removal with premium multifocal & toric lens implantation.",
-      details: {
-        duration: "15 - 20 Mins",
-        anesthesia: "No-Injection Topical Drops",
-        recovery: "24 Hours Rapid Vision Recovery",
-        features: [
-          "Micro-incision 1.8mm no-stitch technique",
-          "Foldable Premium Aspheric IOL implantation",
-          "Multifocal & Toric astigmatism correction",
-          "Same-day discharge with post-op care kit"
-        ]
-      }
+      shortDesc: "Comprehensive clinical evaluation and expert diagnosis for all anterior and posterior segment eye conditions."
     },
     {
-      id: "lasik",
-      title: "Bladeless LASIK",
-      badge: "Spectacle Removal",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
-      shortDesc: "Advanced computer-guided refractive laser procedure to eliminate glasses permanently.",
-      details: {
-        duration: "10 Mins per eye",
-        anesthesia: "Numbing Drops",
-        recovery: "Immediate Next-Day Clear Vision",
-        features: [
-          "Customized wavefront topography guided",
-          "Ultra-fast femtosecond laser technology",
-          "Painfree procedure with minimal downtime",
-          "Ideal for myopia, hyperopia & astigmatism"
-        ]
-      }
+      id: "hs-2",
+      title: "Eye Check Up Certification",
+      badge: "Medical Certificate",
+      icon: FileCheck,
+      image: "/images/hospital-interior-1.jpg",
+      shortDesc: "Official medical eye fitness certificates for driving license, employment, school & regulatory compliance."
     },
     {
-      id: "icl",
-      title: "ICL Lens Implantation",
-      badge: "High Power Correction",
-      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80",
-      shortDesc: "Implantable Collamer Lens placement for patients not suited for conventional LASIK.",
-      details: {
-        duration: "20 Mins",
-        anesthesia: "Drop Anesthesia",
-        recovery: "Same Day Vision",
-        features: [
-          "Reversible biocompatible Collamer lens",
-          "Preserves natural corneal curvature",
-          "Built-in UV protection filter",
-          "Ideal for thin corneas & high spectacle numbers"
-        ]
-      }
+      id: "hs-3",
+      title: "Retinal Investigations (Optical Coherence Tomography)",
+      badge: "OCT Diagnostics",
+      icon: Eye,
+      image: "/images/hospital-interior-3.jpg",
+      shortDesc: "High-resolution 3D cross-sectional optical scanning for macular degeneration, diabetic retina & macula."
     },
     {
-      id: "glaucoma",
-      title: "Glaucoma Care & Surgery",
-      badge: "Intraocular Pressure Control",
+      id: "hs-4",
+      title: "Glaucoma Assessment By OCT",
+      badge: "Optic Nerve Analysis",
+      icon: Activity,
       image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80",
-      shortDesc: "Early diagnosis, trabeculectomy & valve implants to prevent irreversible optic nerve damage.",
-      details: {
-        duration: "30 - 45 Mins",
-        anesthesia: "Local Anesthesia",
-        recovery: "Guided Medical Recovery",
-        features: [
-          "Non-contact tonometer pressure tracking",
-          "Computerized visual field perimeter analysis",
-          "Advanced SLT laser trabeculoplasty",
-          "Filtration surgery for pressure management"
-        ]
-      }
+      shortDesc: "Quantitative RNFL nerve fiber layer scanning and optic disc cup-to-disc ratio mapping for early glaucoma."
+    },
+    {
+      id: "hs-5",
+      title: "Pachymetry",
+      badge: "Corneal Thickness",
+      icon: Layers,
+      image: "/images/hospital-interior-4.jpg",
+      shortDesc: "Ultrasonic & optical measurement of corneal thickness crucial for LASIK eligibility & IOP calibration."
+    },
+    {
+      id: "hs-6",
+      title: "IOL Power Calculation By A-Scan Biometer",
+      badge: "Precision Biometry",
+      icon: Crosshair,
+      image: "/images/hospital-interior-5.jpg",
+      shortDesc: "High-precision acoustic biometry to determine exact intraocular lens power for custom cataract surgery."
+    },
+    {
+      id: "hs-7",
+      title: "Refraction For Spectacle Check Up",
+      badge: "Vision Correction",
+      icon: Glasses,
+      image: "/images/hospital-interior-2.jpg",
+      shortDesc: "Computerized refraction and subjective prescription testing for crystal clear spectacle vision."
+    },
+    {
+      id: "hs-8",
+      title: "Anaesthesia Related Services",
+      badge: "Patient Comfort",
+      icon: ShieldAlert,
+      image: "/images/hospital-interior-6.jpg",
+      shortDesc: "Specialized ophthalmic topical, local, and monitored anaesthetic care ensuring painless procedures."
+    },
+    {
+      id: "hs-9",
+      title: "Mediclaim Reimbursement",
+      badge: "Financial Support",
+      icon: CreditCard,
+      image: "/images/hospital-interior-7.jpg",
+      shortDesc: "Hassle-free documentation and claim submission support for all major health insurance policies."
+    },
+    {
+      id: "hs-10",
+      title: "Cashless TPA Facility",
+      badge: "Insurance Approved",
+      icon: ShieldCheck,
+      image: "/images/hospital-interior-8.jpg",
+      shortDesc: "Direct cashless hospitalization facility with leading TPAs and private health insurance providers."
     }
   ];
 
-  const diagnosticServices = [
+  const eyeSurgeries = [
     {
-      id: "retina",
-      title: "Retina Evaluation & Care",
-      badge: "Diabetic Screening",
-      image: "/images/hospital-interior-3.jpg",
-      shortDesc: "Screens and evaluates the back of the eye for diabetic retinopathy, macula & blood vessel health.",
-      time: "30 Mins",
-      specs: [
-        "Digital fundus retinal imaging",
-        "Diabetic & hypertensive retinopathy tracking",
-        "Anti-VEGF intravitreal therapy guidance"
-      ]
+      id: "es-1",
+      title: "Cataract Surgeries With IOL Implantation",
+      badge: "Phaco Sutureless",
+      icon: Zap,
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80",
+      shortDesc: "Micro-incision stitchless Phacoemulsification with premium multifocal, toric & monofocal lens implants."
     },
     {
-      id: "squint",
-      title: "Squint & Pediatric Eye Care",
-      badge: "Ocular Alignment",
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
-      shortDesc: "Surgical and orthoptic correction of eye misalignment and amblyopia (lazy eye) in children & adults.",
-      time: "25 Mins",
-      specs: [
-        "Extraocular muscle alignment surgery",
-        "Amblyopia vision therapy patches",
-        "Pediatric refraction & vision screening"
-      ]
+      id: "es-2",
+      title: "Corneal Disease Surgery",
+      badge: "Cornea Care",
+      icon: ShieldCheck,
+      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
+      shortDesc: "Surgical management of pterygium, corneal ulcers, dystrophies, corneal cross-linking & transplants."
     },
     {
-      id: "oculoplastic",
-      title: "Oculoplastic & DCR",
-      badge: "Eyelid & Lacrimal Surgery",
+      id: "es-3",
+      title: "Oculoplastic Surgery",
+      badge: "Reconstructive Care",
+      icon: Eye,
       image: "/images/hospital-interior-4.jpg",
-      shortDesc: "Reconstructive surgeries for drooping eyelids (ptosis), watery eyes (lacrimal blockage), and eyelid tumors.",
-      time: "40 Mins",
-      specs: [
-        "Dacryocystorhinostomy (DCR) watery eye relief",
-        "Ptosis eyelid elevation surgery",
-        "Entropion & Ectropion lid repair"
-      ]
+      shortDesc: "Specialized aesthetic & functional plastic surgery of eyelids, orbit, tear ducts & facial structures."
     },
     {
-      id: "checkup",
-      title: "Comprehensive Eye Checkup",
-      badge: "Full OPD Diagnostics",
+      id: "es-4",
+      title: "Glaucoma Check Up & Surgery",
+      badge: "IOP Control",
+      icon: Activity,
+      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80",
+      shortDesc: "Trabeculectomy, glaucoma drainage valves, and SLT laser treatments to halt optic nerve damage."
+    },
+    {
+      id: "es-5",
+      title: "Retinal Examination, Vitrectomy & Intravitreal Injections",
+      badge: "Medical Retina",
+      icon: HeartPulse,
+      image: "/images/hospital-interior-3.jpg",
+      shortDesc: "Advanced posterior vitrectomy, Anti-VEGF injections & retinal laser for diabetic retinopathy & macula."
+    },
+    {
+      id: "es-6",
+      title: "Laser Surgeries (YAG Capsulotomy, Iridotomy & LASIK)",
+      badge: "Advanced Laser",
+      icon: Sparkles,
+      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
+      shortDesc: "Bladeless LASIK spectacle removal, YAG laser for secondary cataract & YAG peripheral iridotomy."
+    },
+    {
+      id: "es-7",
+      title: "Squint Assessment & Surgery",
+      badge: "Ocular Alignment",
+      icon: Crosshair,
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
+      shortDesc: "Precision extraocular muscle recession/resection surgery to restore perfect alignment in children & adults."
+    },
+    {
+      id: "es-8",
+      title: "Stem Cell Transplantation",
+      badge: "Ocular Surface",
+      icon: Award,
+      image: "/images/hospital-interior-5.jpg",
+      shortDesc: "Limbal stem cell graft transplantation for severe chemical injuries and ocular surface reconstruction."
+    },
+    {
+      id: "es-9",
+      title: "Lid Surgeries",
+      badge: "Eyelid Repair",
+      icon: ShieldCheck,
+      image: "/images/hospital-interior-6.jpg",
+      shortDesc: "Surgical correction of entropion, ectropion, eyelid tumors, chalazion excision & eyelid lacerations."
+    },
+    {
+      id: "es-10",
+      title: "DCR Surgery (Dacryocystorhinostomy)",
+      badge: "Tear Duct Care",
+      icon: Layers,
       image: "/images/hospital-interior-1.jpg",
-      shortDesc: "Complete 12-point computer diagnostic eye examination including auto-refraction, slit lamp & pressure check.",
-      time: "20 Mins",
-      specs: [
-        "Computerized auto-refraction & prescription",
-        "Slit lamp biomicroscopy of cornea & lens",
-        "Non-contact intraocular pressure check"
-      ]
+      shortDesc: "Bypass surgery for nasolacrimal duct obstruction to eliminate chronic watery eye tearing."
+    },
+    {
+      id: "es-11",
+      title: "Amblyopia Therapy",
+      badge: "Lazy Eye Care",
+      icon: Stethoscope,
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
+      shortDesc: "Structured orthoptic occlusion therapy and binocular visual training to stimulate lazy eye development."
+    },
+    {
+      id: "es-12",
+      title: "Contact Lens Clinic",
+      badge: "Specialty Lenses",
+      icon: Glasses,
+      image: "/images/hospital-interior-2.jpg",
+      shortDesc: "Expert fitting for Scleral, RGP, Toric, Bifocal, and Cosmetic specialty contact lenses."
+    },
+    {
+      id: "es-13",
+      title: "Anaesthesia Related To Eye Surgery Services",
+      badge: "Safe Surgical Care",
+      icon: ShieldAlert,
+      image: "/images/hospital-interior-8.jpg",
+      shortDesc: "Peribulbar, retrobulbar, topical, and intravenous monitored sedation for completely painless surgeries."
     }
   ];
 
@@ -139,207 +203,156 @@ export default function Services({ onOpenAppointment }) {
     <section id="services" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
+        {/* Main Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Super-Specialty <span className="text-gradient-lime">Eye Treatments</span>
+            Super-Specialty <span className="text-gradient-lime">Services & Surgeries</span>
           </h2>
 
           <p className="text-slate-300 text-base leading-relaxed">
-            From sutureless cataract surgery to bladeless LASIK spectacle removal and retinal evaluation — delivered with German OT standards.
+            Comprehensive ophthalmic OPD diagnostics, insurance coverage, and microsurgeries executed under German modular OT standards.
           </p>
         </div>
 
-        {/* Surgical Category Header */}
-        <div className="mb-8 flex items-center gap-3">
-          <div className="w-2.5 h-7 rounded-full bg-gradient-to-b from-[#B8ED78] to-[#35A6B7]" />
-          <h3 className="font-display text-xl font-bold text-white uppercase tracking-wide">
-            1. Surgical & Laser Specialties
-          </h3>
+        {/* SECTION 1: HOSPITAL SERVICES */}
+        <div className="mb-8 flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-2.5 h-7 rounded-full bg-gradient-to-b from-[#B8ED78] to-[#35A6B7]" />
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-white uppercase tracking-wide">
+              1. Hospital Services
+            </h3>
+          </div>
+          <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-[#B8ED78]/15 text-[#B8ED78] border border-[#B8ED78]/30">
+            10 Facilities
+          </span>
         </div>
 
-        {/* Surgical Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {surgicalServices.map((service, index) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
-            >
-              <div>
-                {/* Real Procedure Photo Header */}
-                <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/20" />
-                  
-                  <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-950/80 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
-                    {service.badge}
-                  </span>
+        {/* Hospital Services Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-20">
+          {hospitalServices.map((service, index) => {
+            const IconComp = service.icon;
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
+              >
+                <div>
+                  {/* Photo Header */}
+                  <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/30" />
+                    
+                    <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-950/85 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
+                      {service.badge}
+                    </span>
+
+                    <div className="absolute bottom-2.5 left-2.5 w-8 h-8 rounded-xl bg-[#070C14]/90 border border-[#35A6B7]/40 flex items-center justify-center text-[#B8ED78]">
+                      <IconComp className="w-4 h-4 text-[#B8ED78]" />
+                    </div>
+                  </div>
+
+                  <h4 className="font-display text-base font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2 leading-snug">
+                    {service.title}
+                  </h4>
+
+                  <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                    {service.shortDesc}
+                  </p>
                 </div>
 
-                <h4 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
-                  {service.title}
-                </h4>
-
-                <p className="text-slate-300 text-xs leading-relaxed mb-4">
-                  {service.shortDesc}
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                <button
-                  onClick={() => setSelectedService(service)}
-                  className="text-xs font-semibold text-[#35A6B7] hover:text-[#B8ED78] flex items-center gap-1 transition-colors"
-                >
-                  <span>View Technical Specs</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  onClick={onOpenAppointment}
-                  className="px-3 py-1 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
-                >
-                  Book
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-semibold text-[#35A6B7]">Hospital OPD Facility</span>
+                  <button
+                    onClick={onOpenAppointment}
+                    className="px-3 py-1 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all flex items-center gap-1"
+                  >
+                    <span>Consult</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Diagnostic Category Header */}
-        <div className="mb-8 flex items-center gap-3">
-          <div className="w-2.5 h-7 rounded-full bg-gradient-to-b from-[#B8ED78] to-[#35A6B7]" />
-          <h3 className="font-display text-xl font-bold text-white uppercase tracking-wide">
-            2. Diagnostic & Clinical Services
-          </h3>
+        {/* SECTION 2: EYE SURGERIES */}
+        <div className="mb-8 flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-2.5 h-7 rounded-full bg-gradient-to-b from-[#35A6B7] to-[#B8ED78]" />
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-white uppercase tracking-wide">
+              2. Eye Surgeries
+            </h3>
+          </div>
+          <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40">
+            13 Surgical Procedures
+          </span>
         </div>
 
-        {/* Diagnostic Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {diagnosticServices.map((service, index) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
-            >
-              <div>
-                {/* Real Diagnostic Photo Header */}
-                <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/20" />
-                  
-                  <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-950/80 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
-                    {service.time}
-                  </span>
+        {/* Eye Surgeries Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {eyeSurgeries.map((service, index) => {
+            const IconComp = service.icon;
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.04 }}
+                className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
+              >
+                <div>
+                  {/* Photo Header */}
+                  <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/30" />
+                    
+                    <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-950/85 text-[#B8ED78] border border-[#B8ED78]/40 backdrop-blur-md">
+                      {service.badge}
+                    </span>
+
+                    <div className="absolute bottom-2.5 left-2.5 w-8 h-8 rounded-xl bg-[#070C14]/90 border border-[#35A6B7]/40 flex items-center justify-center text-[#B8ED78]">
+                      <IconComp className="w-4 h-4 text-[#B8ED78]" />
+                    </div>
+                  </div>
+
+                  <h4 className="font-display text-base font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2 leading-snug">
+                    {service.title}
+                  </h4>
+
+                  <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                    {service.shortDesc}
+                  </p>
                 </div>
 
-                <h4 className="font-display text-lg font-bold text-white group-hover:text-[#B8ED78] transition-colors mb-2">
-                  {service.title}
-                </h4>
-
-                <p className="text-slate-300 text-xs leading-relaxed mb-4">
-                  {service.shortDesc}
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                <span className="text-[11px] font-semibold text-[#B8ED78]">OPD Daily Available</span>
-                <button
-                  onClick={onOpenAppointment}
-                  className="px-3 py-1 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all"
-                >
-                  Consult
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-semibold text-[#B8ED78]">German Modular OT</span>
+                  <button
+                    onClick={onOpenAppointment}
+                    className="px-3 py-1 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs border border-[#35A6B7]/40 transition-all flex items-center gap-1"
+                  >
+                    <span>Book OT</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
       </div>
-
-      {/* Detail Modal */}
-      <AnimatePresence>
-        {selectedService && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="glass-panel border border-[#35A6B7]/50 rounded-3xl p-6 sm:p-8 max-w-lg w-full relative shadow-2xl bg-[#0E1726]/95"
-            >
-              <button
-                onClick={() => setSelectedService(null)}
-                className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center gap-2 mb-3">
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40">
-                  {selectedService.badge}
-                </span>
-              </div>
-
-              <h3 className="font-display text-2xl font-bold text-white mb-2">
-                {selectedService.title}
-              </h3>
-
-              <p className="text-slate-300 text-xs leading-relaxed mb-6">
-                {selectedService.shortDesc}
-              </p>
-
-              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-[#070C14] border border-slate-800 text-center mb-6">
-                <div>
-                  <div className="text-[10px] text-slate-400 font-mono">Duration</div>
-                  <div className="text-xs font-bold text-white">{selectedService.details.duration}</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 font-mono">Anesthesia</div>
-                  <div className="text-xs font-bold text-[#B8ED78]">{selectedService.details.anesthesia}</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 font-mono">Recovery</div>
-                  <div className="text-xs font-bold text-[#35A6B7]">{selectedService.details.recovery}</div>
-                </div>
-              </div>
-
-              <div className="space-y-2 mb-6">
-                <div className="text-xs font-bold text-white uppercase tracking-wider mb-2">Key Clinical Advantages:</div>
-                {selectedService.details.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-200">
-                    <CheckCircle2 className="w-4 h-4 text-[#B8ED78] shrink-0" />
-                    <span>{feat}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => {
-                  setSelectedService(null);
-                  onOpenAppointment();
-                }}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-[#B8ED78]/30 transition-all"
-              >
-                Book Consultation for {selectedService.title}
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
