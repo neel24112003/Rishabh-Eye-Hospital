@@ -50,10 +50,11 @@ export default function Hero({ onOpenAppointment }) {
 
             {/* Sub-headline */}
             <motion.p variants={itemVariants} className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl">
-              Welcome to <strong className="text-white font-semibold">Rishabh Eye Hospital & Laser Center</strong>, Surat. 
+              Welcome to <strong className="text-white font-semibold">Rishabh Eye Hospital & Laser Center</strong>. 
               Equipped with fully modular international standard <span className="text-[#B8ED78] font-medium">German Operation Theatre</span>, 
               world-class <span className="text-[#35A6B7] font-medium">American Phaco Technology</span>, and 
-              bladeless laser spectacle removal by senior super-consultant <strong className="text-white">Dr. Hetalkumar Yagnik</strong>.
+              bladeless laser spectacle removal by Senior Super-Consultant <strong className="text-white">Dr. Hetalkumar Yagnik</strong>, 
+              alongside advanced orthoptics, binocular vision therapy & specialty contact lens care by Senior Specialist <strong className="text-white">Dr. Shefali Yagnik</strong>.
             </motion.p>
 
             {/* CTA Buttons */}
