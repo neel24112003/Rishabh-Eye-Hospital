@@ -15,7 +15,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Ophthalmic Consultation For Any Eye Disease",
       badge: "OPD Consultation",
       icon: Stethoscope,
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/ophthalmic-consultation.jpg",
       shortDesc: "Comprehensive clinical evaluation and expert diagnosis for all anterior and posterior segment eye conditions."
     },
     {
@@ -23,7 +23,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Eye Check Up Certification",
       badge: "Medical Certificate",
       icon: FileCheck,
-      image: "/images/hospital-interior-1.jpg",
+      image: "/images/services/eye-checkup-cert.jpg",
       shortDesc: "Official medical eye fitness certificates for driving license, employment, school & regulatory compliance."
     },
     {
@@ -31,7 +31,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Retinal Investigations (Optical Coherence Tomography)",
       badge: "OCT Diagnostics",
       icon: Eye,
-      image: "/images/hospital-interior-3.jpg",
+      image: "/images/services/retinal-investigation-oct.jpg",
       shortDesc: "High-resolution 3D cross-sectional optical scanning for macular degeneration, diabetic retina & macula."
     },
     {
@@ -39,7 +39,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Glaucoma Assessment By OCT",
       badge: "Optic Nerve Analysis",
       icon: Activity,
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/glaucoma-assessment-oct.jpg",
       shortDesc: "Quantitative RNFL nerve fiber layer scanning and optic disc cup-to-disc ratio mapping for early glaucoma."
     },
     {
@@ -47,7 +47,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Pachymetry",
       badge: "Corneal Thickness",
       icon: Layers,
-      image: "/images/hospital-interior-4.jpg",
+      image: "/images/services/pachymetry.jpg",
       shortDesc: "Ultrasonic & optical measurement of corneal thickness crucial for LASIK eligibility & IOP calibration."
     },
     {
@@ -55,7 +55,7 @@ export default function Services({ onOpenAppointment }) {
       title: "IOL Power Calculation By A-Scan Biometer",
       badge: "Precision Biometry",
       icon: Crosshair,
-      image: "/images/hospital-interior-5.jpg",
+      image: "/images/services/iol-power-calculation.jpg",
       shortDesc: "High-precision acoustic biometry to determine exact intraocular lens power for custom cataract surgery."
     },
     {
@@ -63,7 +63,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Refraction For Spectacle Check Up",
       badge: "Vision Correction",
       icon: Glasses,
-      image: "/images/hospital-interior-2.jpg",
+      image: "/images/services/refraction-spectacle.jpg",
       shortDesc: "Computerized refraction and subjective prescription testing for crystal clear spectacle vision."
     },
     {
@@ -71,7 +71,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Anaesthesia Related Services",
       badge: "Patient Comfort",
       icon: ShieldAlert,
-      image: "/images/hospital-interior-6.jpg",
+      image: "/images/services/anaesthesia-services.jpg",
       shortDesc: "Specialized ophthalmic topical, local, and monitored anaesthetic care ensuring painless procedures."
     },
     {
@@ -79,7 +79,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Mediclaim Reimbursement",
       badge: "Financial Support",
       icon: CreditCard,
-      image: "/images/hospital-interior-7.jpg",
+      image: "/images/services/mediclaim-reimbursement.jpg",
       shortDesc: "Hassle-free documentation and claim submission support for all major health insurance policies."
     },
     {
@@ -87,7 +87,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Cashless TPA Facility",
       badge: "Insurance Approved",
       icon: ShieldCheck,
-      image: "/images/hospital-interior-8.jpg",
+      image: "/images/services/cashless-tpa-facility.jpg",
       shortDesc: "Direct cashless hospitalization facility with leading TPAs and private health insurance providers."
     }
   ];
@@ -98,7 +98,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Cataract Surgeries With IOL Implantation",
       badge: "Phaco Sutureless",
       icon: Zap,
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/cataract-surgery-iol.jpg",
       shortDesc: "Micro-incision stitchless Phacoemulsification with premium multifocal, toric & monofocal lens implants."
     },
     {
@@ -106,7 +106,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Corneal Disease Surgery",
       badge: "Cornea Care",
       icon: ShieldCheck,
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/corneal-disease-surgery.jpg",
       shortDesc: "Surgical management of pterygium, corneal ulcers, dystrophies, corneal cross-linking & transplants."
     },
     {
@@ -114,7 +114,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Oculoplastic Surgery",
       badge: "Reconstructive Care",
       icon: Eye,
-      image: "/images/hospital-interior-4.jpg",
+      image: "/images/services/oculoplastic-surgery.jpg",
       shortDesc: "Specialized aesthetic & functional plastic surgery of eyelids, orbit, tear ducts & facial structures."
     },
     {
@@ -122,7 +122,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Glaucoma Check Up & Surgery",
       badge: "IOP Control",
       icon: Activity,
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/glaucoma-surgery.jpg",
       shortDesc: "Trabeculectomy, glaucoma drainage valves, and SLT laser treatments to halt optic nerve damage."
     },
     {
@@ -130,7 +130,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Retinal Examination, Vitrectomy & Intravitreal Injections",
       badge: "Medical Retina",
       icon: HeartPulse,
-      image: "/images/hospital-interior-3.jpg",
+      image: "/images/services/retinal-exam-vitrectomy.jpg",
       shortDesc: "Advanced posterior vitrectomy, Anti-VEGF injections & retinal laser for diabetic retinopathy & macula."
     },
     {
@@ -138,7 +138,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Laser Surgeries (YAG Capsulotomy, Iridotomy & LASIK)",
       badge: "Advanced Laser",
       icon: Sparkles,
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/laser-surgery-yag-lasik.jpg",
       shortDesc: "Bladeless LASIK spectacle removal, YAG laser for secondary cataract & YAG peripheral iridotomy."
     },
     {
@@ -146,7 +146,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Squint Assessment & Surgery",
       badge: "Ocular Alignment",
       icon: Crosshair,
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/squint-assessment-surgery.jpg",
       shortDesc: "Precision extraocular muscle recession/resection surgery to restore perfect alignment in children & adults."
     },
     {
@@ -154,7 +154,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Stem Cell Transplantation",
       badge: "Ocular Surface",
       icon: Award,
-      image: "/images/hospital-interior-5.jpg",
+      image: "/images/services/stem-cell-transplantation.jpg",
       shortDesc: "Limbal stem cell graft transplantation for severe chemical injuries and ocular surface reconstruction."
     },
     {
@@ -162,7 +162,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Lid Surgeries",
       badge: "Eyelid Repair",
       icon: ShieldCheck,
-      image: "/images/hospital-interior-6.jpg",
+      image: "/images/services/lid-surgeries.jpg",
       shortDesc: "Surgical correction of entropion, ectropion, eyelid tumors, chalazion excision & eyelid lacerations."
     },
     {
@@ -170,7 +170,7 @@ export default function Services({ onOpenAppointment }) {
       title: "DCR Surgery (Dacryocystorhinostomy)",
       badge: "Tear Duct Care",
       icon: Layers,
-      image: "/images/hospital-interior-1.jpg",
+      image: "/images/services/dcr-surgery.jpg",
       shortDesc: "Bypass surgery for nasolacrimal duct obstruction to eliminate chronic watery eye tearing."
     },
     {
@@ -178,7 +178,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Amblyopia Therapy",
       badge: "Lazy Eye Care",
       icon: Stethoscope,
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
+      image: "/images/services/amblyopia-therapy.jpg",
       shortDesc: "Structured orthoptic occlusion therapy and binocular visual training to stimulate lazy eye development."
     },
     {
@@ -186,7 +186,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Contact Lens Clinic",
       badge: "Specialty Lenses",
       icon: Glasses,
-      image: "/images/hospital-interior-2.jpg",
+      image: "/images/services/contact-lens-clinic.jpg",
       shortDesc: "Expert fitting for Scleral, RGP, Toric, Bifocal, and Cosmetic specialty contact lenses."
     },
     {
@@ -194,7 +194,7 @@ export default function Services({ onOpenAppointment }) {
       title: "Anaesthesia Related To Eye Surgery Services",
       badge: "Safe Surgical Care",
       icon: ShieldAlert,
-      image: "/images/hospital-interior-8.jpg",
+      image: "/images/services/anaesthesia-eye-surgery.jpg",
       shortDesc: "Peribulbar, retrobulbar, topical, and intravenous monitored sedation for completely painless surgeries."
     }
   ];
@@ -241,8 +241,8 @@ export default function Services({ onOpenAppointment }) {
                 className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
               >
                 <div>
-                  {/* Photo Header */}
-                  <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
+                  {/* Real Procedure Photo Header */}
+                  <div className="relative h-44 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
                     <img
                       src={service.image}
                       alt={service.title}
@@ -310,8 +310,8 @@ export default function Services({ onOpenAppointment }) {
                 className="glass-panel rounded-3xl p-5 border border-[#35A6B7]/30 hover:border-[#B8ED78]/60 shadow-xl glass-card-hover flex flex-col justify-between group overflow-hidden"
               >
                 <div>
-                  {/* Photo Header */}
-                  <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
+                  {/* Real Surgical Photo Header */}
+                  <div className="relative h-44 w-full rounded-2xl overflow-hidden border border-[#35A6B7]/40 mb-4 bg-[#070C14]">
                     <img
                       src={service.image}
                       alt={service.title}

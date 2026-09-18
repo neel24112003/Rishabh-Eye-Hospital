@@ -135,14 +135,18 @@ dist
 Thumbs.db
 
 # Heavy raw media source folders & scratch
-Doctor/
-doctor/
-"Hospital View/"
-"Equipments /"
-Interior/
-Logo/
-scratch/
+/Doctor/
+/doctor/
+/Services/
+"/Hospital View/"
+"/Equipments /"
+/Interior/
+/Logo/
+/scratch/
 public/videos/hospital-view.mp4
 !public/videos/hospital-tour.mp4
+!public/images/services/
+
+
 
 
