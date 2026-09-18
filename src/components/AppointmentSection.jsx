@@ -284,14 +284,6 @@ export default function AppointmentSection() {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#35A6B7]/10 rounded-full blur-3xl pointer-events-none" />
 
             <div>
-              {/* Header Badge */}
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-[#B8ED78]" />
-                <span className="text-xs font-mono font-bold text-[#B8ED78] uppercase tracking-wider">
-                  World-Class Eye Care • Surat
-                </span>
-              </div>
-
               <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-snug">
                 Why Book Consultation at Rishabh Eye Hospital?
               </h3>
