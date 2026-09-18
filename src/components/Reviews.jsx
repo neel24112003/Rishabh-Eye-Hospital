@@ -307,19 +307,6 @@ const handleSubmitReview = async (e) => {
           <p className="text-slate-300 text-base leading-relaxed">
             Read authentic feedback from patients who restored their vision at Rishabh Eye Hospital & Laser Center.
           </p>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="flex text-[#B8ED78]">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-[#B8ED78]" />
-                ))}
-              </div>
-              <span className="text-white font-bold text-lg">5.0 / 5.0</span>
-            </div>
-            <span className="text-slate-500">•</span>
-            <span className="text-slate-300 text-xs font-medium">Over 2,500+ 5-Star Reviews in Surat</span>
-          </div>
         </div>
 
         {/* Reviews Grid */}
