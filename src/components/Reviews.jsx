@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { serviceCategories } from '../data/servicesList';
 
 const DEFAULT_REVIEWS = [
   {
@@ -166,7 +167,7 @@ export default function Reviews() {
     name: '',
     location: 'Surat, Gujarat',
     doctor: 'Dr. Hetalkumar Yagnik',
-    treatment: 'Cataract Surgery',
+    treatment: 'Cataract Surgeries With IOL Implantation',
     rating: 5,
     text: ''
   });
@@ -431,11 +432,15 @@ const handleSubmitReview = async (e) => {
                         onChange={(e) => setNewReview({ ...newReview, treatment: e.target.value })}
                         className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-slate-600 appearance-none cursor-pointer pr-10"
                       >
-                        <option value="Cataract Surgery" className="bg-[#0F172A] text-white">Cataract Surgery</option>
-                        <option value="Bladeless LASIK" className="bg-[#0F172A] text-white">Bladeless LASIK</option>
-                        <option value="ICL Lens Placement" className="bg-[#0F172A] text-white">ICL Lens Placement</option>
-                        <option value="Retina Care" className="bg-[#0F172A] text-white">Retina Care</option>
-                        <option value="Comprehensive Eye Checkup" className="bg-[#0F172A] text-white">Comprehensive Eye Checkup</option>
+                        {serviceCategories.map((group, groupIdx) => (
+                          <optgroup key={groupIdx} label={`--- ${group.category.toUpperCase()} ---`} className="bg-[#0F172A] text-[#B8ED78] font-bold">
+                            {group.services.map((item, itemIdx) => (
+                              <option key={itemIdx} value={item} className="bg-[#0F172A] text-white font-normal">
+                                {item}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
                       </select>
                       <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>

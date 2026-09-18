@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Phone, Clock, User, ShieldCheck, CheckCircle2, Send, Sparkles, Award, HeartHandshake, Loader2, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { serviceCategories } from '../data/servicesList';
 
 export default function AppointmentSection() {
   const getTodayDate = () => {
@@ -17,7 +18,7 @@ export default function AppointmentSection() {
     phone: '',
     email: '',
     doctor: 'Dr. Hetalkumar R. Yagnik',
-    service: 'Cataract Surgery (Phaco)',
+    service: 'Cataract Surgeries With IOL Implantation',
     preferredDate: getTodayDate(),
     preferredTime: 'Morning Session (11:00 AM - 3:00 PM)',
     notes: ''
@@ -193,13 +194,15 @@ export default function AppointmentSection() {
                           onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                           className="w-full appearance-none px-4 py-3 rounded-xl bg-[#070C14] border border-slate-700 text-white text-sm focus:outline-none focus:border-[#B8ED78] transition-colors cursor-pointer pr-10"
                         >
-                          <option value="Cataract Surgery (Phaco)">Cataract Surgery (American Phaco)</option>
-                          <option value="LASIK Spectacle Removal">Bladeless LASIK Surgery</option>
-                          <option value="ICL Lens Implant">ICL Lens Implant</option>
-                          <option value="Glaucoma Surgery">Glaucoma Care & Surgery</option>
-                          <option value="Squint & Oculoplastic">Squint & Oculoplastic</option>
-                          <option value="Retina Evaluation">Retina Care & Evaluation</option>
-                          <option value="Comprehensive Checkup">Comprehensive Eye Checkup</option>
+                          {serviceCategories.map((group, groupIdx) => (
+                            <optgroup key={groupIdx} label={`--- ${group.category.toUpperCase()} ---`} className="bg-[#0F172A] text-[#B8ED78] font-bold">
+                              {group.services.map((item, itemIdx) => (
+                                <option key={itemIdx} value={item} className="bg-[#0F172A] text-white font-normal">
+                                  {item}
+                                </option>
+                              ))}
+                            </optgroup>
+                          ))}
                         </select>
                         <ChevronDown className="w-5 h-5 text-white absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
                       </div>
