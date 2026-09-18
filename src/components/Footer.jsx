@@ -90,17 +90,17 @@ export default function Footer() {
               Quick Navigation
             </h4>
 
-            <ul className="space-y-2.5 text-xs font-medium">
-              {[
-                { name: "About Hospital", href: "#about" },
-                { name: "Senior Doctors", href: "#doctors" },
-                { name: "Surgical & LASIK Services", href: "#services" },
-                { name: "German & American Tech", href: "#equipment" },
-                { name: "Hospital View", href: "#gallery" },
-                { name: "Verified Patient Reviews", href: "#reviews" },
-                { name: "Book Appointment", href: "#appointment" },
-                { name: "Contact & Reach Us", href: "#contact" }
-              ].map((link, idx) => (
+              <ul className="space-y-2.5 text-xs font-medium">
+                {[
+                  { name: "About Us", href: "#about" },
+                  { name: "Senior Doctors", href: "#doctors" },
+                  { name: "Surgical & LASIK Services", href: "#services" },
+                  { name: "German & American Tech", href: "#equipment" },
+                  { name: "Hospital Tour", href: "#gallery" },
+                  { name: "Verified Patient Reviews", href: "#reviews" },
+                  { name: "Book Appointment", href: "#appointment" },
+                  { name: "Contact & Reach Us", href: "#contact" }
+                ].map((link, idx) => (
                 <li key={idx}>
                   <a
                     href={link.href}

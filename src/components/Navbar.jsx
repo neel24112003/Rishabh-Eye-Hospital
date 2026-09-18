@@ -39,11 +39,11 @@ export default function Navbar({ onOpenAppointment }) {
   const navLinks = [
     { name: 'Home', href: '#home', id: 'home' },
     { name: 'Doctors', href: '#doctors', id: 'doctors' },
-    { name: 'About', href: '#about', id: 'about' },
+    { name: 'About Us', href: '#about', id: 'about' },
     { name: 'Hospital Interior', href: '#infrastructure', id: 'infrastructure' },
     { name: 'Services', href: '#services', id: 'services' },
     { name: 'Equipment', href: '#equipment', id: 'equipment' },
-    { name: 'Hospital View', href: '#gallery', id: 'gallery' },
+    { name: 'Hospital Tour', href: '#gallery', id: 'gallery' },
     { name: 'Reviews', href: '#reviews', id: 'reviews' },
     { name: 'Contact Us', href: '#contact', id: 'contact' },
   ];

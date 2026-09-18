@@ -28,7 +28,7 @@ export default function EventGallery() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Hospital <span className="text-gradient-lime">View</span>
+            Hospital <span className="text-gradient-lime">Tour</span>
           </h2>
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
             Take a continuous video tour of Rishabh Eyecare Hospital & Laser Center featuring our modern infrastructure, AC waiting lounges, and international surgical suites.
@@ -47,7 +47,7 @@ export default function EventGallery() {
             <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#B8ED78] rounded-br-xl pointer-events-none z-20"></div>
 
             <div className="relative h-[380px] sm:h-[540px] rounded-2xl overflow-hidden bg-[#070C14] border border-[#35A6B7]/30">
-              {/* Continuously Looping Hospital View Video */}
+              {/* Continuously Looping Hospital Tour Video */}
               <video
                 src="/videos/hospital-tour.mp4"
                 autoPlay
