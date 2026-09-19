@@ -34,6 +34,9 @@ export default function App() {
         {/* Hero Section with 3D Cyber Eye Visualizer */}
         <Hero onOpenAppointment={handleScrollToAppointment} />
 
+        {/* Event Gallery / Hospital Tour Section */}
+        <EventGallery />
+
         {/* Doctors Section */}
         <Doctors onOpenAppointment={handleScrollToAppointment} />
 
@@ -48,9 +51,6 @@ export default function App() {
 
         {/* Equipment Section */}
         <Equipment />
-
-        {/* Event Gallery Section */}
-        <EventGallery />
 
         {/* Reviews Section */}
         <Reviews />
