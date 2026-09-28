@@ -1,25 +1,20 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Building2, Play, ShieldCheck, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Building2, Play, ShieldCheck, Sparkles } from 'lucide-react';
 
 export default function EventGallery() {
-  /*
-  // Commented out previous image slider items as requested:
-  const slides = [
-    {
-      id: 1,
-      title: "German Modular OT Surgical Suite",
-      category: "Surgical OT Infrastructure",
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: 2,
-      title: "Bladeless LASIK Refractive Laser Suite",
-      category: "Spectacle Removal Laser",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80"
+  const videoRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+      if (!videoRef.current.muted) {
+        videoRef.current.play().catch(() => {});
+      }
     }
-  ];
-  */
+  };
 
   return (
     <section id="gallery" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
@@ -47,12 +42,32 @@ export default function EventGallery() {
             <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#B8ED78] rounded-br-xl pointer-events-none z-20"></div>
 
             <div className="relative h-[380px] sm:h-[540px] rounded-2xl overflow-hidden bg-[#070C14] border border-[#35A6B7]/30">
-              {/* Continuously Looping Hospital Tour Video */}
+              
+              {/* Floating Sound Toggle Button */}
+              <button
+                onClick={toggleMute}
+                className="absolute top-4 right-4 z-30 px-3.5 py-2 rounded-xl bg-slate-950/80 hover:bg-slate-900 border border-[#35A6B7]/50 text-white text-xs font-bold flex items-center gap-2 shadow-2xl backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                title={isMuted ? "Click to turn on sound" : "Click to mute sound"}
+              >
+                {isMuted ? (
+                  <>
+                    <VolumeX className="w-4 h-4 text-rose-400" />
+                    <span>Unmute Sound</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-4 h-4 text-[#B8ED78] animate-pulse" />
+                    <span>Sound On</span>
+                  </>
+                )}
+              </button>
+
+              {/* Continuously Looping Hospital Tour Video with Audio Enabled */}
               <video
+                ref={videoRef}
                 src="/videos/hospital-tour.mp4"
                 autoPlay
                 loop
-                muted
                 playsInline
                 controls
                 preload="auto"
@@ -69,4 +84,3 @@ export default function EventGallery() {
     </section>
   );
 }
-
