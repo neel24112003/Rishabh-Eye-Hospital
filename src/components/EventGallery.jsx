@@ -4,15 +4,23 @@ import { Volume2, VolumeX, Building2, Play, ShieldCheck, Sparkles } from 'lucide
 
 export default function EventGallery() {
   const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-      if (!videoRef.current.muted) {
+      const nextMuted = !videoRef.current.muted;
+      videoRef.current.muted = nextMuted;
+      videoRef.current.volume = 1.0;
+      setIsMuted(nextMuted);
+      if (!nextMuted) {
         videoRef.current.play().catch(() => {});
       }
+    }
+  };
+
+  const handleVolumeChange = () => {
+    if (videoRef.current) {
+      setIsMuted(videoRef.current.muted || videoRef.current.volume === 0);
     }
   };
 
@@ -46,18 +54,18 @@ export default function EventGallery() {
               {/* Floating Sound Toggle Button */}
               <button
                 onClick={toggleMute}
-                className="absolute top-4 right-4 z-30 px-3.5 py-2 rounded-xl bg-slate-950/80 hover:bg-slate-900 border border-[#35A6B7]/50 text-white text-xs font-bold flex items-center gap-2 shadow-2xl backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                className="absolute top-4 right-4 z-30 px-4 py-2.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-[#35A6B7]/60 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-2xl backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 title={isMuted ? "Click to turn on sound" : "Click to mute sound"}
               >
                 {isMuted ? (
                   <>
                     <VolumeX className="w-4 h-4 text-rose-400" />
-                    <span>Unmute Sound</span>
+                    <span className="text-rose-200">Unmute Sound (Enable Audio)</span>
                   </>
                 ) : (
                   <>
                     <Volume2 className="w-4 h-4 text-[#B8ED78] animate-pulse" />
-                    <span>Sound On</span>
+                    <span className="text-[#B8ED78]">Sound On</span>
                   </>
                 )}
               </button>
@@ -68,9 +76,11 @@ export default function EventGallery() {
                 src="/videos/hospital-tour.mp4"
                 autoPlay
                 loop
+                muted={isMuted}
                 playsInline
                 controls
                 preload="auto"
+                onVolumeChange={handleVolumeChange}
                 className="w-full h-full object-cover rounded-2xl"
               >
                 Your browser does not support the video tag.
