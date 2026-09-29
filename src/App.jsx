@@ -44,8 +44,8 @@ export default function App() {
         {/* About Hospital Section */}
         <AboutHospital />
 
-        {/* Hospital Interior & Infrastructure Gallery Section */}
-        <HospitalGallery />
+        {/* Hospital Interior & Infrastructure Gallery Section (Temporarily Commented Out) */}
+        {/* <HospitalGallery /> */}
 
         {/* Services Section */}
         <Services onOpenAppointment={handleScrollToAppointment} />

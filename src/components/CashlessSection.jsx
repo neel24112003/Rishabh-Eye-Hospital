@@ -336,42 +336,6 @@ export default function CashlessSection({ onOpenAppointment }) {
           ))}
         </div>
 
-        {/* Bottom Insurance Help Banner */}
-        <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/40 bg-gradient-to-r from-[#35A6B7]/15 via-slate-900 to-[#B8ED78]/15 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#B8ED78]/20 border border-[#B8ED78]/40 flex items-center justify-center text-[#B8ED78] shrink-0">
-              <HelpCircle className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="font-display text-lg font-bold text-white mb-1">
-                Need Help With Your Insurance Claim?
-              </h4>
-              <p className="text-slate-300 text-xs sm:text-sm">
-                Our insurance helpdesk is available 24x7 to verify your TPA policy coverage and guide pre-authorization.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <a
-              href="tel:07405563636"
-              className="px-4 py-2.5 rounded-xl bg-slate-950 text-white font-bold text-xs sm:text-sm border border-slate-700 hover:bg-slate-900 transition-all flex items-center gap-2"
-            >
-              <PhoneCall className="w-4 h-4 text-[#B8ED78]" />
-              <span>Call Insurance Desk</span>
-            </a>
-            
-            <button
-              type="button"
-              onClick={onOpenAppointment}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-[#B8ED78]/20 hover:scale-105 transition-all flex items-center gap-1.5"
-            >
-              <span>Verify Policy</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
       </div>
     </section>
   );
