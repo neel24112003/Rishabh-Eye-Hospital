@@ -1,10 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, VolumeX, Building2, Play, ShieldCheck, Sparkles } from 'lucide-react';
 
 export default function EventGallery() {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
+
+  // Guarantee instant autoplay on mobile & desktop browsers
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log("Autoplay retry:", error);
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            videoRef.current.play().catch(() => {});
+          }
+        });
+      }
+    }
+  }, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -76,7 +94,7 @@ export default function EventGallery() {
                 src="/videos/hospital-tour.mp4"
                 autoPlay
                 loop
-                muted={isMuted}
+                muted
                 playsInline
                 controls
                 preload="auto"
