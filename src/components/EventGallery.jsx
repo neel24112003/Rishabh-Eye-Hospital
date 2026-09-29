@@ -1,10 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Volume2, VolumeX, Building2, Play, ShieldCheck, Sparkles } from 'lucide-react';
 
 export default function EventGallery() {
   const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true);
 
   // Guarantee instant autoplay on mobile & desktop browsers
   useEffect(() => {
@@ -23,24 +21,6 @@ export default function EventGallery() {
       }
     }
   }, []);
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      const nextMuted = !videoRef.current.muted;
-      videoRef.current.muted = nextMuted;
-      videoRef.current.volume = 1.0;
-      setIsMuted(nextMuted);
-      if (!nextMuted) {
-        videoRef.current.play().catch(() => {});
-      }
-    }
-  };
-
-  const handleVolumeChange = () => {
-    if (videoRef.current) {
-      setIsMuted(videoRef.current.muted || videoRef.current.volume === 0);
-    }
-  };
 
   return (
     <section id="gallery" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
@@ -69,25 +49,6 @@ export default function EventGallery() {
 
             <div className="relative h-[380px] sm:h-[540px] rounded-2xl overflow-hidden bg-[#070C14] border border-[#35A6B7]/30">
               
-              {/* Floating Sound Toggle Button */}
-              <button
-                onClick={toggleMute}
-                className="absolute top-4 right-4 z-30 px-4 py-2.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-[#35A6B7]/60 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-2xl backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                title={isMuted ? "Click to turn on sound" : "Click to mute sound"}
-              >
-                {isMuted ? (
-                  <>
-                    <VolumeX className="w-4 h-4 text-rose-400" />
-                    <span className="text-rose-200">Unmute Sound (Enable Audio)</span>
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className="w-4 h-4 text-[#B8ED78] animate-pulse" />
-                    <span className="text-[#B8ED78]">Sound On</span>
-                  </>
-                )}
-              </button>
-
               {/* Continuously Looping Hospital Tour Video with Audio Enabled */}
               <video
                 ref={videoRef}
@@ -98,7 +59,6 @@ export default function EventGallery() {
                 playsInline
                 controls
                 preload="auto"
-                onVolumeChange={handleVolumeChange}
                 className="w-full h-full object-cover rounded-2xl"
               >
                 Your browser does not support the video tag.
