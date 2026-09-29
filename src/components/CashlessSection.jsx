@@ -100,24 +100,6 @@ export default function CashlessSection({ onOpenAppointment }) {
     }
   ];
 
-  const steps = [
-    {
-      step: "01",
-      title: "Submit Policy & ID",
-      desc: "Present your health insurance card / TPA card along with a valid Govt Photo ID at our Cashless Helpdesk during admission."
-    },
-    {
-      step: "02",
-      title: "Pre-Authorization",
-      desc: "Our insurance team coordinates directly with your TPA or insurance provider to process the pre-authorization approval."
-    },
-    {
-      step: "03",
-      title: "Cashless Surgery",
-      desc: "Once approved, undergo painless eye surgery with zero upfront treatment cost for covered medical expenses."
-    }
-  ];
-
   return (
     <section id="cashless" className="py-24 relative bg-[#070C14] border-t border-slate-800/60 overflow-hidden">
       {/* Background Decorative Glow Elements */}
@@ -259,34 +241,6 @@ export default function CashlessSection({ onOpenAppointment }) {
             </div>
           </motion.div>
 
-        </div>
-
-        {/* How Cashless Works: 3-Step Process Breakdown */}
-        <div className="mb-20 glass-panel rounded-3xl p-6 sm:p-10 border border-[#35A6B7]/30 bg-[#070C14]/90 relative overflow-hidden">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h3 className="font-display text-2xl sm:text-3xl font-bold text-white mb-2">
-              How Cashless Admission Works
-            </h3>
-            <p className="text-slate-300 text-xs sm:text-sm">
-              Simple 3-step hassle-free approval process managed by our hospital insurance desk
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {steps.map((item, idx) => (
-              <div key={item.step} className="relative flex flex-col items-center text-center p-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] text-slate-950 font-black text-xl flex items-center justify-center mb-4 shadow-lg shadow-[#B8ED78]/20">
-                  {item.step}
-                </div>
-                <h4 className="font-display text-lg font-bold text-white mb-2">
-                  {item.title}
-                </h4>
-                <p className="text-slate-300 text-xs leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Responsive Grid of 18 Partner Companies */}
