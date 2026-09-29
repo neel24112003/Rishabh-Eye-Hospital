@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  ShieldCheck, FileText, CreditCard, CheckCircle2, 
+  ShieldCheck, FileText, CheckCircle2, 
   Building2, ChevronRight, PhoneCall, Sparkles, HelpCircle 
 } from 'lucide-react';
 
@@ -140,14 +140,6 @@ export default function CashlessSection({ onOpenAppointment }) {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#B8ED78]/15 to-transparent rounded-bl-full pointer-events-none" />
 
             <div>
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#35A6B7]/30 to-[#B8ED78]/20 border border-[#B8ED78]/50 flex items-center justify-center text-[#B8ED78] shadow-inner">
-                  <ShieldCheck className="w-7 h-7 text-[#B8ED78]" />
-                </div>
-                <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-[#B8ED78]/15 text-[#B8ED78] border border-[#B8ED78]/30">
-                  Zero Out-Of-Pocket
-                </span>
-              </div>
 
               <h3 className="font-display text-2xl font-bold text-white mb-3 group-hover:text-[#B8ED78] transition-colors">
                 1. Cashless TPA Facility
@@ -196,14 +188,6 @@ export default function CashlessSection({ onOpenAppointment }) {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#35A6B7]/15 to-transparent rounded-bl-full pointer-events-none" />
 
             <div>
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#35A6B7]/30 to-[#B8ED78]/20 border border-[#35A6B7]/50 flex items-center justify-center text-[#35A6B7] shadow-inner">
-                  <CreditCard className="w-7 h-7 text-[#35A6B7]" />
-                </div>
-                <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40">
-                  Complete Documentation
-                </span>
-              </div>
 
               <h3 className="font-display text-2xl font-bold text-white mb-3 group-hover:text-[#B8ED78] transition-colors">
                 2. Mediclaim Reimbursement
