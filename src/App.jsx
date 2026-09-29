@@ -5,6 +5,7 @@ import AboutHospital from './components/AboutHospital';
 import HospitalGallery from './components/HospitalGallery';
 import Doctors from './components/Doctors';
 import Services from './components/Services';
+import CashlessSection from './components/CashlessSection';
 import Equipment from './components/Equipment';
 import EventGallery from './components/EventGallery';
 import Reviews from './components/Reviews';
@@ -48,6 +49,9 @@ export default function App() {
 
         {/* Services Section */}
         <Services onOpenAppointment={handleScrollToAppointment} />
+
+        {/* Dedicated Cashless & Insurance Facilities Section */}
+        <CashlessSection onOpenAppointment={handleScrollToAppointment} />
 
         {/* Equipment Section */}
         <Equipment />
