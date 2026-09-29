@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  ShieldCheck, FileText, CheckCircle2, 
+  FileText, CheckCircle2, 
   Building2, ChevronRight, PhoneCall, Sparkles, HelpCircle 
 } from 'lucide-react';
 
@@ -110,12 +110,6 @@ export default function CashlessSection({ onOpenAppointment }) {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#35A6B7]/20 to-[#B8ED78]/20 border border-[#B8ED78]/40 mb-4 shadow-lg backdrop-blur-md">
-            <ShieldCheck className="w-4 h-4 text-[#B8ED78]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#B8ED78]">
-              Insurance & TPA Coverage
-            </span>
-          </div>
 
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
             Cashless <span className="text-gradient-lime">Facilities & Reimbursement</span>
