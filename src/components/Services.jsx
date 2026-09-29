@@ -73,22 +73,6 @@ export default function Services({ onOpenAppointment }) {
       icon: ShieldAlert,
       image: "/images/services/anaesthesia-services.jpg",
       shortDesc: "Specialized ophthalmic topical, local, and monitored anaesthetic care ensuring painless procedures."
-    },
-    {
-      id: "hs-9",
-      title: "Mediclaim Reimbursement",
-      badge: "Financial Support",
-      icon: CreditCard,
-      image: "/images/services/mediclaim-reimbursement.jpg",
-      shortDesc: "Hassle-free documentation and claim submission support for all major health insurance policies."
-    },
-    {
-      id: "hs-10",
-      title: "Cashless TPA Facility",
-      badge: "Insurance Approved",
-      icon: ShieldCheck,
-      image: "/images/services/cashless-tpa-facility.jpg",
-      shortDesc: "Direct cashless hospitalization facility with leading TPAs and private health insurance providers."
     }
   ];
 
@@ -223,7 +207,7 @@ export default function Services({ onOpenAppointment }) {
             </h3>
           </div>
           <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-[#B8ED78]/15 text-[#B8ED78] border border-[#B8ED78]/30">
-            10 Facilities
+            8 Facilities
           </span>
         </div>
 

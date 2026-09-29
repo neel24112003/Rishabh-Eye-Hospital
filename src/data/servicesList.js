@@ -27,9 +27,7 @@ export const serviceCategories = [
       "Pachymetry (Corneal Thickness)",
       "IOL Power Calculation By A-Scan Biometer",
       "Refraction For Spectacle Check Up",
-      "Anaesthesia Related Services",
-      "Mediclaim Reimbursement",
-      "Cashless TPA Facility"
+      "Anaesthesia Related Services"
     ]
   }
 ];
