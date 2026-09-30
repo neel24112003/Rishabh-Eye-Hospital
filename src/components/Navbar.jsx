@@ -71,57 +71,59 @@ export default function Navbar({ onOpenAppointment }) {
             : 'py-4 bg-[#070C14]/60 backdrop-blur-md border-b border-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 xl:gap-6">
           {/* Logo Branding */}
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, 'home')}
-            className="flex items-center group py-1"
+            className="flex items-center group py-1 shrink-0"
           >
             <img
               src="/images/logo.png"
               alt="Rishabh Eyecare Hospital"
-              className="h-11 sm:h-14 md:h-16 w-auto max-w-[220px] sm:max-w-[280px] md:max-w-[340px] object-contain group-hover:scale-105 transition-transform duration-300"
+              className="h-9 sm:h-11 lg:h-10 xl:h-12 w-auto max-w-[180px] sm:max-w-[220px] lg:max-w-[240px] xl:max-w-[280px] object-contain group-hover:scale-105 transition-transform duration-300"
             />
           </a>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-1 px-4 py-1.5 rounded-full glass-panel border border-[#35A6B7]/20">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
-              return (
-                <a
-                  key={link.id}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.id)}
-                  className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all duration-300 ${
-                    isActive
-                      ? 'text-[#070C14] font-bold'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
-                  }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="navTabActive"
-                      className="absolute inset-0 bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] rounded-full -z-10 shadow-md shadow-[#B8ED78]/30"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  {link.name}
-                </a>
-              );
-            })}
-          </nav>
+          {/* Desktop Nav Links - Centered & Balanced */}
+          <div className="hidden lg:flex items-center justify-center flex-1 mx-2 xl:mx-4">
+            <nav className="flex items-center gap-0.5 xl:gap-1 px-3 py-1 rounded-full glass-panel border border-[#35A6B7]/30 shadow-lg backdrop-blur-xl">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <a
+                    key={link.id}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.id)}
+                    className={`relative px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-xs font-semibold rounded-full whitespace-nowrap transition-all duration-300 ${
+                      isActive
+                        ? 'text-slate-950 font-bold'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="navTabActive"
+                        className="absolute inset-0 bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] rounded-full -z-10 shadow-md shadow-[#B8ED78]/30"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    {link.name}
+                  </a>
+                );
+              })}
+            </nav>
+          </div>
 
           {/* Right Action Buttons */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center shrink-0">
             <button
               type="button"
               onClick={(e) => {
                 handleNavClick(e, 'appointment');
                 if (onOpenAppointment) onOpenAppointment();
               }}
-              className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] hover:opacity-95 shadow-lg shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:-translate-y-0.5 transition-all duration-300 active:translate-y-0 group"
+              className="relative inline-flex items-center gap-2 px-4 xl:px-5 py-2.5 rounded-xl font-semibold text-xs text-slate-950 bg-gradient-to-r from-[#B8ED78] via-[#35A6B7] to-[#51AABC] hover:opacity-95 shadow-lg shadow-[#B8ED78]/25 hover:shadow-[#B8ED78]/40 hover:-translate-y-0.5 transition-all duration-300 active:translate-y-0 group whitespace-nowrap"
             >
               <Calendar className="w-4 h-4 text-slate-950 group-hover:scale-110 transition-transform" />
               <span>Book Appointment</span>
