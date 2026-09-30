@@ -159,15 +159,11 @@ export default function CashlessSection({ onOpenAppointment }) {
               </ul>
             </div>
 
-            <div className="pt-4 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={onOpenAppointment}
-                className="w-full py-3 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs sm:text-sm border border-[#35A6B7]/40 transition-all flex items-center justify-center gap-2 group/btn"
-              >
-                <span>Check Cashless Eligibility</span>
-                <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
+            <div className="pt-4 border-t border-slate-800/80">
+              <div className="p-3.5 rounded-xl bg-[#35A6B7]/10 border border-[#35A6B7]/30 flex items-start gap-2.5 text-xs text-slate-300">
+                <Building2 className="w-4 h-4 text-[#B8ED78] shrink-0 mt-0.5" />
+                <span><strong className="text-white">Hospital Visit Required:</strong> Please visit our hospital insurance desk to check your policy eligibility and complete the cashless pre-authorization criteria.</span>
+              </div>
             </div>
           </motion.div>
 
@@ -207,15 +203,11 @@ export default function CashlessSection({ onOpenAppointment }) {
               </ul>
             </div>
 
-            <div className="pt-4 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={onOpenAppointment}
-                className="w-full py-3 rounded-xl bg-[#35A6B7]/20 hover:bg-[#B8ED78] text-[#35A6B7] hover:text-slate-950 font-bold text-xs sm:text-sm border border-[#35A6B7]/40 transition-all flex items-center justify-center gap-2 group/btn"
-              >
-                <span>Request Mediclaim Help</span>
-                <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
+            <div className="pt-4 border-t border-slate-800/80">
+              <div className="p-3.5 rounded-xl bg-[#35A6B7]/10 border border-[#35A6B7]/30 flex items-start gap-2.5 text-xs text-slate-300">
+                <Building2 className="w-4 h-4 text-[#35A6B7] shrink-0 mt-0.5" />
+                <span><strong className="text-white">Hospital Visit Required:</strong> Please visit our hospital reception desk to collect your complete itemized bills and mediclaim reimbursement case papers.</span>
+              </div>
             </div>
           </motion.div>
 
