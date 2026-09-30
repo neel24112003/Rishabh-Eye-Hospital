@@ -32,12 +32,14 @@ export default function ContactSection() {
           {/* Card 1: Address */}
           <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                  <MapPin className="w-6 h-6" />
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
+                  <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                    <MapPin className="w-6 h-6" />
+                  </div>
                 </div>
+                <h3 className="font-display text-base font-bold text-white leading-tight">Hospital Address</h3>
               </div>
-              <h3 className="font-display text-base font-bold text-white mb-2">Hospital Address</h3>
               <p className="text-xs font-semibold text-[#B8ED78] leading-relaxed mb-4">
                 The Lenora, 201-202, New City Light Rd, beside Naveli Hospital, opposite St. Thomas School, New Tirumala, Althan, Surat - 395007.
               </p>
@@ -57,12 +59,14 @@ export default function ContactSection() {
           {/* Card 2: Helpline */}
           <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                  <Phone className="w-6 h-6 animate-pulse" />
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
+                  <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                    <Phone className="w-6 h-6 animate-pulse" />
+                  </div>
                 </div>
+                <h3 className="font-display text-base font-bold text-white leading-tight">Helpline Numbers</h3>
               </div>
-              <h3 className="font-display text-base font-bold text-white mb-2">Helpline Numbers</h3>
               <p className="text-xs text-slate-400 mb-2">Available for OPD Booking & Emergency Care</p>
               <div className="text-sm font-bold text-[#B8ED78] space-y-1 mb-4">
                 <div><a href="tel:07405563636" className="hover:underline">074055 63636</a></div>
@@ -82,12 +86,14 @@ export default function ContactSection() {
           {/* Card 3: Email */}
           <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                  <Mail className="w-6 h-6" />
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
+                  <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                    <Mail className="w-6 h-6" />
+                  </div>
                 </div>
+                <h3 className="font-display text-base font-bold text-white leading-tight">Email Support</h3>
               </div>
-              <h3 className="font-display text-base font-bold text-white mb-2">Email Support</h3>
               <p className="text-xs text-slate-400 mb-2">Send Reports & Medical Inquiries</p>
               <div className="text-xs font-semibold text-[#B8ED78] break-all mb-4">
                 <a href="mailto:rishabheyecare36@gmail.com" className="hover:underline">
@@ -108,12 +114,14 @@ export default function ContactSection() {
           {/* Card 4: OPD Hours */}
           <div className="glass-panel p-6 rounded-3xl border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 glass-card-hover flex flex-col justify-between group">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg mb-4">
-                <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
-                  <Clock className="w-6 h-6" />
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#35A6B7] to-[#B8ED78] p-0.5 shadow-lg shrink-0">
+                  <div className="w-full h-full bg-[#070C14] rounded-[14px] flex items-center justify-center text-[#B8ED78] group-hover:scale-110 transition-transform">
+                    <Clock className="w-6 h-6" />
+                  </div>
                 </div>
+                <h3 className="font-display text-base font-bold text-white leading-tight">OPD Working Hours</h3>
               </div>
-              <h3 className="font-display text-base font-bold text-white mb-2">OPD Working Hours</h3>
               <div className="text-xs text-slate-300 space-y-2 mb-4">
                 <div className="flex flex-col gap-0.5 border-b border-slate-800 pb-2">
                   <div className="flex justify-between font-semibold text-slate-200">
