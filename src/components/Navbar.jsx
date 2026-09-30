@@ -81,7 +81,7 @@ export default function Navbar({ onOpenAppointment }) {
             <img
               src="/images/logo.png"
               alt="Rishabh Eyecare Hospital"
-              className="h-9 sm:h-11 lg:h-10 xl:h-12 w-auto max-w-[180px] sm:max-w-[220px] lg:max-w-[240px] xl:max-w-[280px] object-contain group-hover:scale-105 transition-transform duration-300"
+              className="h-11 sm:h-13 lg:h-14 xl:h-16 w-auto max-w-[220px] sm:max-w-[280px] lg:max-w-[330px] xl:max-w-[380px] object-contain group-hover:scale-105 transition-transform duration-300"
             />
           </a>
 
