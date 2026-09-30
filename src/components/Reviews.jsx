@@ -3,123 +3,67 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { serviceCategories } from '../data/servicesList';
+import initialReviewsDb from '../data/patient_reviews_db.json';
 
-const DEFAULT_REVIEWS = [
-  {
-    id: 1,
-    name: "Rajesh V. Patel",
-    location: "New City Light, Surat",
-    treatment: "Cataract Surgery",
-    doctor: "Dr. Hetalkumar Yagnik",
-    rating: 5,
-    date: "2 weeks ago",
-    text: "Dr. Hetalkumar Yagnik performed Phaco cataract surgery on both my eyes. The German modular OT and American machine are truly impressive. My vision was restored to 6/6 within 24 hours without any pain. Highly recommended!",
-    verified: true
-  },
-  {
-    id: 2,
-    name: "Pooja M. Shah",
-    location: "Vesu, Surat",
-    treatment: "Bladeless LASIK",
-    doctor: "Dr. Hetalkumar Yagnik",
-    rating: 5,
-    date: "1 month ago",
-    text: "I had -5.5 D glasses power for 12 years. After LASIK at Rishabh Eye Hospital, I have 100% clear vision without spectacles. The hospital is super clean, fully AC, and the entire team is extremely supportive.",
-    verified: true
-  },
-  {
-    id: 3,
-    name: "Anilbhai K. Desai",
-    location: "Adajan, Surat",
-    treatment: "Retina Care",
-    doctor: "Dr. Shefali Yagnik",
-    rating: 5,
-    date: "3 weeks ago",
-    text: "Dr. Shefali Yagnik is extremely patient and thorough. She mapped my diabetic retina scan digitally and explained every detail clearly. Excellent diagnostic equipment and friendly staff.",
-    verified: true
-  },
-  {
-    id: 4,
-    name: "Meenaben H. Mehta",
-    location: "Althan, Surat",
-    treatment: "ICL Implant",
-    doctor: "Dr. Hetalkumar Yagnik",
-    rating: 5,
-    date: "2 months ago",
-    text: "Because of thin cornea I was rejected for LASIK elsewhere, but Dr. Yagnik suggested ICL surgery. The procedure took just 15 minutes and the result is miraculous! Very thankful to Rishabh Hospital.",
-    verified: true
-  }
-];
-
-const DEFAULT_CLOUD_IDS = [
-  "ff8081819ff5b11001a03c548474228d",
-  "ff8081819ff5b11001a03c5485b3228e",
-  "ff8081819ff5b11001a03c5486ec228f",
-  "ff8081819ff5b11001a03c5488282290"
-];
-
-const CLOUD_IDS_KEY = 'rishabh_cloud_review_ids_v1';
-const STORAGE_KEYS = [
+const PERMANENT_STORAGE_KEY = 'RISHABH_PERMANENT_PATIENT_REVIEWS_DB';
+const LEGACY_KEYS = [
   'RISHABH_PERMANENT_USER_REVIEWS_VAULT',
   'rishabh_user_submitted_reviews_v5',
-  'rishabh_user_submitted_reviews_v4',
-  'rishabh_user_submitted_reviews_v3',
-  'rishabh_patient_reviews_v3',
-  'rishabh_patient_reviews_v2',
-  'rishabh_patient_reviews_v1'
+  'rishabh_patient_reviews_v3'
 ];
 
-// Utility helper to safely load locally submitted user reviews across ALL legacy & active storage keys
+// Load locally submitted user reviews permanently from browser storage
 const getLocalUserReviews = () => {
   const allSaved = [];
-  STORAGE_KEYS.forEach((key) => {
+  try {
+    const primary = localStorage.getItem(PERMANENT_STORAGE_KEY);
+    if (primary) {
+      const parsed = JSON.parse(primary);
+      if (Array.isArray(parsed)) allSaved.push(...parsed);
+    }
+  } catch (e) {}
+
+  // Scan legacy keys for backward compatibility
+  LEGACY_KEYS.forEach((key) => {
     try {
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          // Exclude test review entries
-          const filtered = parsed.filter(item => item && item.text && !item.text.includes("Extremely grateful to Dr. Hetalkumar Yagnik for a seamless surgery"));
-          allSaved.push(...filtered);
-        }
+        if (Array.isArray(parsed)) allSaved.push(...parsed);
       }
     } catch (e) {}
   });
+
   return allSaved;
 };
 
-// Bulletproof merger to combine user-submitted, fetched server/github, and default reviews without data loss
+// Bulletproof merger combining local user reviews, fetched API/JSON reviews, and static database file
 const mergeAllReviews = (fetchedList = []) => {
   const localUser = getLocalUserReviews();
   const map = new Map();
 
   const getUniqueKey = (item) => {
-    if (!item || !item.text) return '';
+    if (!item) return '';
+    if (item.id) return String(item.id);
     return `${(item.name || '').trim().toLowerCase()}_${(item.text || '').trim().toLowerCase()}`;
   };
 
-  // 1. Highest priority: User submitted reviews on this device (scanned from all storage vaults)
+  // 1. Highest priority: User submitted reviews on this browser
   localUser.forEach((item) => {
     const key = getUniqueKey(item);
-    if (key && !map.has(key)) {
-      map.set(key, item);
-    }
+    if (key && !map.has(key)) map.set(key, item);
   });
 
-  // 2. Next: Fetched reviews from API / GitHub
+  // 2. Next: Fetched reviews from API / JSON database
   fetchedList.forEach((item) => {
     const key = getUniqueKey(item);
-    if (key && !map.has(key)) {
-      map.set(key, item);
-    }
+    if (key && !map.has(key)) map.set(key, item);
   });
 
-  // 3. Fallback: Default verified hospital reviews
-  DEFAULT_REVIEWS.forEach((item) => {
+  // 3. Fallback: Base database file (patient_reviews_db.json)
+  initialReviewsDb.forEach((item) => {
     const key = getUniqueKey(item);
-    if (key && !map.has(key)) {
-      map.set(key, item);
-    }
+    if (key && !map.has(key)) map.set(key, item);
   });
 
   return Array.from(map.values());
@@ -128,14 +72,15 @@ const mergeAllReviews = (fetchedList = []) => {
 export default function Reviews() {
   const [reviewsList, setReviewsList] = useState(() => mergeAllReviews([]));
 
-  // Fetch reviews from APIs + GitHub Raw on mount, and seamlessly merge with local state
+  // Fetch reviews from APIs + JSON database on mount
   useEffect(() => {
     const fetchReviews = async () => {
       const endpoints = [
         '/api/reviews',
-        'http://192.168.1.5:5001/api/reviews',
+        '/patient_reviews_db.json',
+        '/reviews_data.json',
         'http://localhost:5001/api/reviews',
-        `https://raw.githubusercontent.com/neel24112003/Rishabh-Eye-Hospital/main/public/reviews_data.json?t=${Date.now()}`
+        `https://raw.githubusercontent.com/neel24112003/Rishabh-Eye-Hospital/main/public/patient_reviews_db.json?t=${Date.now()}`
       ];
 
       for (const url of endpoints) {
@@ -147,15 +92,13 @@ export default function Reviews() {
             if (list.length > 0) {
               const merged = mergeAllReviews(list);
               setReviewsList(merged);
-              STORAGE_KEYS.forEach((key) => {
-                try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {}
-              });
+              try {
+                localStorage.setItem(PERMANENT_STORAGE_KEY, JSON.stringify(merged));
+              } catch (e) {}
               break;
             }
           }
-        } catch (e) {
-          // Try next endpoint
-        }
+        } catch (e) {}
       }
     };
 
@@ -223,41 +166,40 @@ const getFormattedDate = (item) => {
   }
 };
 
-const handleSubmitReview = async (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!newReview.name || !newReview.text) return;
 
     const nowTime = Date.now();
+    const currentDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
     const item = {
       id: nowTime,
       createdAt: nowTime,
       name: newReview.name,
-      location: newReview.location || "Surat Patient",
-      treatment: newReview.treatment,
+      location: newReview.location || "Surat, Gujarat",
+      treatment: newReview.treatment || "Cataract Surgery",
       doctor: newReview.doctor || "Dr. Hetalkumar R. Yagnik",
       rating: Number(newReview.rating),
-      date: "Just now",
+      date: currentDateStr,
       text: newReview.text,
       verified: true
     };
 
-    // 1. Save directly into ALL persistent local user review storage vaults
+    // 1. Save directly into permanent local user review storage
     const currentLocal = getLocalUserReviews();
-    const updatedLocal = [item, ...currentLocal];
-    STORAGE_KEYS.forEach((key) => {
-      try {
-        localStorage.setItem(key, JSON.stringify(updatedLocal));
-      } catch (err) {}
-    });
+    const updatedLocal = [item, ...currentLocal.filter(r => r.id !== item.id)];
+    try {
+      localStorage.setItem(PERMANENT_STORAGE_KEY, JSON.stringify(updatedLocal));
+    } catch (err) {}
 
     // 2. Immediately update state with merged reviews list
-    const updatedList = mergeAllReviews([]);
+    const updatedList = mergeAllReviews([item]);
     setReviewsList(updatedList);
 
-    // 3. Post to all active backend endpoints simultaneously for cross-device sync
+    // 3. Post to backend endpoints for database file persistence
     const submitEndpoints = [
       '/api/reviews',
-      'http://192.168.1.5:5001/api/reviews',
       'http://localhost:5001/api/reviews'
     ];
 

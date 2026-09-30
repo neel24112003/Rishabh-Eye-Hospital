@@ -333,16 +333,19 @@ app.post('/api/book-appointment', async (req, res) => {
 });
 
 // Reviews API Endpoints for Cross-Device Persistence
-const REVIEWS_FILE = path.join(process.cwd(), 'public', 'reviews_data.json');
+const REVIEWS_FILE_PUBLIC = path.join(process.cwd(), 'public', 'patient_reviews_db.json');
+const REVIEWS_FILE_SRC = path.join(process.cwd(), 'src', 'data', 'patient_reviews_db.json');
+const REVIEWS_FILE_LEGACY = path.join(process.cwd(), 'public', 'reviews_data.json');
 
 app.get('/api/reviews', (req, res) => {
   try {
-    if (fs.existsSync(REVIEWS_FILE)) {
-      const data = fs.readFileSync(REVIEWS_FILE, 'utf8');
+    const targetFile = fs.existsSync(REVIEWS_FILE_PUBLIC) ? REVIEWS_FILE_PUBLIC : REVIEWS_FILE_LEGACY;
+    if (fs.existsSync(targetFile)) {
+      const data = fs.readFileSync(targetFile, 'utf8');
       return res.status(200).json(JSON.parse(data));
     }
   } catch (err) {
-    console.error('❌ Error reading reviews_data.json:', err);
+    console.error('❌ Error reading patient_reviews_db.json:', err);
   }
   return res.status(200).json([]);
 });
@@ -354,35 +357,56 @@ app.post('/api/reviews', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Name and text are required.' });
   }
 
+  const currentDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
   const newReview = {
     id: Date.now(),
     name,
-    location: location || "Surat Patient",
-    treatment: treatment || "Cataract Surgery",
-    doctor: doctor || "Dr. Hetalkumar Yagnik",
+    location: location || "Surat, Gujarat",
+    treatment: treatment || "Cataract Surgery (Phaco)",
+    doctor: doctor || "Dr. Hetalkumar R. Yagnik",
     rating: Number(rating) || 5,
-    date: date || "Just now",
+    date: date && date !== "Just now" ? date : currentDateStr,
     text,
     verified: true
   };
 
   try {
     let list = [];
-    if (fs.existsSync(REVIEWS_FILE)) {
-      const existing = fs.readFileSync(REVIEWS_FILE, 'utf8');
+    if (fs.existsSync(REVIEWS_FILE_PUBLIC)) {
+      const existing = fs.readFileSync(REVIEWS_FILE_PUBLIC, 'utf8');
+      list = JSON.parse(existing);
+    } else if (fs.existsSync(REVIEWS_FILE_LEGACY)) {
+      const existing = fs.readFileSync(REVIEWS_FILE_LEGACY, 'utf8');
       list = JSON.parse(existing);
     }
-    list.unshift(newReview);
-    fs.writeFileSync(REVIEWS_FILE, JSON.stringify(list, null, 2), 'utf8');
+    
+    // Prevent duplicate entries
+    const isDuplicate = list.some(item => 
+      item.name?.trim().toLowerCase() === name.trim().toLowerCase() && 
+      item.text?.trim().toLowerCase() === text.trim().toLowerCase()
+    );
 
-    console.log(`✅ New patient review saved from ${name} across all devices!`);
+    if (!isDuplicate) {
+      list.unshift(newReview);
+    }
 
-    // Auto Git Sync to GitHub for Global Permanent Persistence across all devices
-    exec('git add public/reviews_data.json && git commit -m "Auto-save patient review" && git push origin main', (err, stdout, stderr) => {
+    // Save to all database files for bulletproof persistence
+    const jsonString = JSON.stringify(list, null, 2);
+    fs.writeFileSync(REVIEWS_FILE_PUBLIC, jsonString, 'utf8');
+    if (fs.existsSync(path.dirname(REVIEWS_FILE_SRC))) {
+      fs.writeFileSync(REVIEWS_FILE_SRC, jsonString, 'utf8');
+    }
+    fs.writeFileSync(REVIEWS_FILE_LEGACY, jsonString, 'utf8');
+
+    console.log(`✅ New patient review saved permanently from ${name} across all database files!`);
+
+    // Auto Git Sync to GitHub repo
+    exec('git add public/patient_reviews_db.json src/data/patient_reviews_db.json public/reviews_data.json && git commit -m "Permanent patient review auto-save" && git push origin main', (err, stdout, stderr) => {
       if (err) {
         console.warn("Git sync notice:", err.message);
       } else {
-        console.log("✅ Review synced permanently to GitHub repo!");
+        console.log("✅ Review database committed and synced permanently to GitHub repo!");
       }
     });
 
