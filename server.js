@@ -360,7 +360,7 @@ app.post('/api/reviews', async (req, res) => {
   const currentDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
   const newReview = {
-    id: Date.now(),
+    id: req.body.id || Date.now(),
     name,
     location: location || "Surat, Gujarat",
     treatment: treatment || "Cataract Surgery (Phaco)",

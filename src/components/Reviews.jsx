@@ -43,9 +43,11 @@ const mergeAllReviews = (fetchedList = []) => {
   const map = new Map();
 
   const getUniqueKey = (item) => {
-    if (!item) return '';
-    if (item.id) return String(item.id);
-    return `${(item.name || '').trim().toLowerCase()}_${(item.text || '').trim().toLowerCase()}`;
+    if (!item || !item.name || !item.text) return '';
+    // Normalize spaces and lowercase for strict content deduplication
+    const normName = String(item.name).trim().toLowerCase();
+    const normText = String(item.text).trim().toLowerCase();
+    return `${normName}___${normText}`;
   };
 
   // 1. Highest priority: User submitted reviews on this browser
