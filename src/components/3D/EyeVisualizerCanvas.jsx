@@ -1,210 +1,272 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Eye, Zap, Activity, Scan, Layers, CheckCircle2, Search, Sparkles, Target, Crosshair } from 'lucide-react';
+import { 
+  Eye, Zap, Activity, Layers, CheckCircle2, Sparkles, Target, 
+  RotateCcw, ZoomIn, ZoomOut, Move, Info, Shield, Stethoscope, ChevronRight 
+} from 'lucide-react';
 
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
-  // Modes: 'full' | 'cutaway' | 'lasik' | 'cataract'
+  
+  // Active Modes: 'full' | 'dissect' | 'lasik' | 'cataract' | 'retina'
   const [activeMode, setActiveMode] = useState('full');
   const activeModeRef = useRef('full');
 
-  // Keep ref synchronized instantly without re-mounting Three.js canvas
+  // Selected anatomical part for detailed info popup
+  const [selectedPart, setSelectedPart] = useState(null);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const autoRotateRef = useRef(true);
+
+  // Sync state to refs for high-performance animation frame access
   useEffect(() => {
     activeModeRef.current = activeMode;
   }, [activeMode]);
 
   useEffect(() => {
+    autoRotateRef.current = autoRotate;
+  }, [autoRotate]);
+
+  useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 500;
+    const width = container.clientWidth || 600;
     const height = container.clientHeight || 500;
 
-    // 1. Scene & Camera Setup
+    // ==========================================
+    // 1. THREE.JS SCENE, CAMERA & RENDERER SETUP
+    // ==========================================
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 6.5);
+    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+    camera.position.set(0, 0, 7.2);
 
-    // 2. High-Performance WebGL Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
     container.appendChild(renderer.domElement);
 
-    const eyeGroup = new THREE.Group();
-    scene.add(eyeGroup);
+    // Root Group containing entire Eye Assembly
+    const eyeAssemblyGroup = new THREE.Group();
+    scene.add(eyeAssemblyGroup);
 
     // ==========================================
-    // PROCEDURAL TEXTURE GENERATION
+    // 2. PROCEDURAL HIGH-RESOLUTION TEXTURE GEN
     // ==========================================
 
-    // A. Sclera Texture with Micro Blood Vessels
+    // A. Sclera Texture with Realistic Capillaries & Vascular Networks
     const canvasSclera = document.createElement('canvas');
     canvasSclera.width = 1024;
     canvasSclera.height = 512;
     const ctxSclera = canvasSclera.getContext('2d');
 
-    ctxSclera.fillStyle = '#f7fafc';
+    // Soft off-white sclera base with radial tint
+    ctxSclera.fillStyle = '#f8fafc';
     ctxSclera.fillRect(0, 0, 1024, 512);
 
-    // Subtle capillary blood vessels on sclera
-    ctxSclera.lineWidth = 1.2;
-    for (let i = 0; i < 45; i++) {
+    // Capillary vessels
+    ctxSclera.lineWidth = 1.4;
+    for (let i = 0; i < 60; i++) {
       const startX = Math.random() * 1024;
       const startY = Math.random() * 512;
-      ctxSclera.strokeStyle = Math.random() > 0.4 ? 'rgba(215, 60, 60, 0.22)' : 'rgba(180, 40, 40, 0.15)';
+      ctxSclera.strokeStyle = Math.random() > 0.35 ? 'rgba(225, 29, 72, 0.35)' : 'rgba(180, 20, 50, 0.25)';
       ctxSclera.beginPath();
       ctxSclera.moveTo(startX, startY);
       let currX = startX;
       let currY = startY;
-      for (let j = 0; j < 6; j++) {
-        currX += (Math.random() - 0.5) * 60;
-        currY += (Math.random() - 0.5) * 40;
+      for (let j = 0; j < 7; j++) {
+        currX += (Math.random() - 0.5) * 70;
+        currY += (Math.random() - 0.5) * 50;
         ctxSclera.lineTo(currX, currY);
       }
       ctxSclera.stroke();
     }
     const scleraTexture = new THREE.CanvasTexture(canvasSclera);
 
-    // B. High-Detail Iris Texture
+    // B. Photorealistic Multi-Layer Iris Texture
     const canvasIris = document.createElement('canvas');
-    canvasIris.width = 512;
-    canvasIris.height = 512;
+    canvasIris.width = 1024;
+    canvasIris.height = 1024;
     const ctxIris = canvasIris.getContext('2d');
-    const cX = 256;
-    const cY = 256;
+    const cX = 512;
+    const cY = 512;
 
-    ctxIris.fillStyle = '#030712';
-    ctxIris.fillRect(0, 0, 512, 512);
+    ctxIris.fillStyle = '#020617';
+    ctxIris.fillRect(0, 0, 1024, 1024);
 
-    // Radial Iris Gradient
-    const irisGrad = ctxIris.createRadialGradient(cX, cY, 50, cX, cY, 250);
-    irisGrad.addColorStop(0, '#040d1a');
-    irisGrad.addColorStop(0.25, '#165868');
-    irisGrad.addColorStop(0.55, '#35A6B7');
-    irisGrad.addColorStop(0.82, '#B8ED78');
-    irisGrad.addColorStop(1.0, '#0a2336');
+    // Rich Iris Color Gradient
+    const irisGrad = ctxIris.createRadialGradient(cX, cY, 90, cX, cY, 490);
+    irisGrad.addColorStop(0, '#030712');
+    irisGrad.addColorStop(0.18, '#0e3a47');
+    irisGrad.addColorStop(0.45, '#1e7587');
+    irisGrad.addColorStop(0.72, '#35a6b7');
+    irisGrad.addColorStop(0.92, '#b8ed78');
+    irisGrad.addColorStop(1.0, '#0b2636');
     ctxIris.fillStyle = irisGrad;
     ctxIris.beginPath();
-    ctxIris.arc(cX, cY, 250, 0, Math.PI * 2);
+    ctxIris.arc(cX, cY, 490, 0, Math.PI * 2);
     ctxIris.fill();
 
-    // Iris Fibers (Radial Striations)
-    ctxIris.lineWidth = 1.5;
-    for (let i = 0; i < 240; i++) {
-      const angle = (i * Math.PI * 2) / 240;
-      const len = 70 + Math.random() * 175;
-      const alpha = 0.2 + Math.random() * 0.45;
+    // Radial Striations (Crypts & Fibers)
+    ctxIris.lineWidth = 2.0;
+    for (let i = 0; i < 360; i++) {
+      const angle = (i * Math.PI * 2) / 360;
+      const len = 120 + Math.random() * 350;
+      const alpha = 0.25 + Math.random() * 0.5;
       ctxIris.strokeStyle = i % 2 === 0 ? `rgba(184, 237, 120, ${alpha})` : `rgba(53, 166, 183, ${alpha})`;
       ctxIris.beginPath();
-      ctxIris.moveTo(cX + Math.cos(angle) * 50, cY + Math.sin(angle) * 50);
+      ctxIris.moveTo(cX + Math.cos(angle) * 90, cY + Math.sin(angle) * 90);
       ctxIris.lineTo(cX + Math.cos(angle) * len, cY + Math.sin(angle) * len);
       ctxIris.stroke();
     }
 
-    // Pupil Collar
-    const collar = ctxIris.createRadialGradient(cX, cY, 40, cX, cY, 70);
-    collar.addColorStop(0, '#020408');
-    collar.addColorStop(0.6, '#35A6B7');
-    collar.addColorStop(1, '#B8ED78');
-    ctxIris.fillStyle = collar;
+    // Pupil Sphincter Ring
+    const sphincter = ctxIris.createRadialGradient(cX, cY, 80, cX, cY, 130);
+    sphincter.addColorStop(0, '#020408');
+    sphincter.addColorStop(0.5, '#35a6b7');
+    sphincter.addColorStop(1, '#b8ed78');
+    ctxIris.fillStyle = sphincter;
     ctxIris.beginPath();
-    ctxIris.arc(cX, cY, 70, 0, Math.PI * 2);
+    ctxIris.arc(cX, cY, 130, 0, Math.PI * 2);
     ctxIris.fill();
 
-    // Deep Pupil Center
+    // Deep Pitch-Black Pupil Center
     ctxIris.fillStyle = '#010204';
     ctxIris.beginPath();
-    ctxIris.arc(cX, cY, 48, 0, Math.PI * 2);
+    ctxIris.arc(cX, cY, 90, 0, Math.PI * 2);
     ctxIris.fill();
 
     const irisTexture = new THREE.CanvasTexture(canvasIris);
 
-    // C. Retina Vascular Texture (Inner Eye Wall)
+    // C. Retina Vascular Map (Macula + Optic Disc + Branching Blood Vessels)
     const canvasRetina = document.createElement('canvas');
-    canvasRetina.width = 512;
-    canvasRetina.height = 512;
+    canvasRetina.width = 1024;
+    canvasRetina.height = 1024;
     const ctxRetina = canvasRetina.getContext('2d');
 
-    const retGrad = ctxRetina.createRadialGradient(256, 256, 10, 256, 256, 250);
-    retGrad.addColorStop(0, '#fca5a5');
-    retGrad.addColorStop(0.3, '#b91c1c');
-    retGrad.addColorStop(0.8, '#7f1d1d');
+    const retGrad = ctxRetina.createRadialGradient(512, 512, 20, 512, 512, 500);
+    retGrad.addColorStop(0, '#fecaca');
+    retGrad.addColorStop(0.25, '#dc2626');
+    retGrad.addColorStop(0.7, '#991b1b');
     retGrad.addColorStop(1.0, '#450a0a');
     ctxRetina.fillStyle = retGrad;
-    ctxRetina.fillRect(0, 0, 512, 512);
+    ctxRetina.fillRect(0, 0, 1024, 1024);
 
-    // Optic Disc Spot
+    // Optic Disc (Bright yellow spot where optic nerve exits)
     ctxRetina.fillStyle = '#fef08a';
     ctxRetina.beginPath();
-    ctxRetina.arc(320, 256, 22, 0, Math.PI * 2);
+    ctxRetina.arc(650, 512, 45, 0, Math.PI * 2);
     ctxRetina.fill();
 
-    // Retinal Artery & Vein Branches
-    ctxRetina.lineWidth = 2.5;
-    for (let i = 0; i < 16; i++) {
-      const angle = (i * Math.PI * 2) / 16;
-      ctxRetina.strokeStyle = i % 2 === 0 ? 'rgba(239, 68, 68, 0.7)' : 'rgba(185, 28, 28, 0.8)';
+    // Macula & Fovea Centralis
+    ctxRetina.fillStyle = 'rgba(120, 20, 20, 0.85)';
+    ctxRetina.beginPath();
+    ctxRetina.arc(420, 512, 55, 0, Math.PI * 2);
+    ctxRetina.fill();
+
+    ctxRetina.fillStyle = '#fef08a';
+    ctxRetina.beginPath();
+    ctxRetina.arc(420, 512, 8, 0, Math.PI * 2);
+    ctxRetina.fill();
+
+    // Major Retinal Artery & Vein Tree
+    ctxRetina.lineWidth = 4;
+    for (let i = 0; i < 20; i++) {
+      const angle = (i * Math.PI * 2) / 20;
+      ctxRetina.strokeStyle = i % 2 === 0 ? 'rgba(239, 68, 68, 0.85)' : 'rgba(185, 28, 28, 0.9)';
       ctxRetina.beginPath();
-      ctxRetina.moveTo(320, 256);
-      let cX = 320;
-      let cY = 256;
-      for (let j = 0; j < 5; j++) {
-        cX += Math.cos(angle + (Math.random() - 0.5) * 0.5) * 45;
-        cY += Math.sin(angle + (Math.random() - 0.5) * 0.5) * 45;
-        ctxRetina.lineTo(cX, cY);
+      ctxRetina.moveTo(650, 512);
+      let currX = 650;
+      let currY = 512;
+      for (let j = 0; j < 6; j++) {
+        currX += Math.cos(angle + (Math.random() - 0.5) * 0.4) * 80;
+        currY += Math.sin(angle + (Math.random() - 0.5) * 0.4) * 80;
+        ctxRetina.lineTo(currX, currY);
       }
       ctxRetina.stroke();
     }
     const retinaTexture = new THREE.CanvasTexture(canvasRetina);
 
+    // D. Cataract Cloudy Lens Texture
+    const canvasCataract = document.createElement('canvas');
+    canvasCataract.width = 512;
+    canvasCataract.height = 512;
+    const ctxCat = canvasCataract.getContext('2d');
+    const catGrad = ctxCat.createRadialGradient(256, 256, 10, 256, 256, 240);
+    catGrad.addColorStop(0, 'rgba(254, 240, 138, 0.9)');
+    catGrad.addColorStop(0.5, 'rgba(203, 213, 225, 0.85)');
+    catGrad.addColorStop(1, 'rgba(100, 116, 139, 0.4)');
+    ctxCat.fillStyle = catGrad;
+    ctxCat.fillRect(0, 0, 512, 512);
+    const cataractTexture = new THREE.CanvasTexture(canvasCataract);
+
     // ==========================================
-    // 3D ANATOMICAL STRUCTURES
+    // 3. 3D ANATOMICAL STRUCTURES BUILDING
     // ==========================================
 
-    // 1. FULL EYE SCLERA (Outer Spherical Shell)
-    const scleraGeo = new THREE.SphereGeometry(2.0, 64, 64);
+    // A. SCLERA (Outer White Eyeball Shell)
+    const scleraGroup = new THREE.Group();
+    const scleraGeo = new THREE.SphereGeometry(2.1, 64, 64);
     const scleraMat = new THREE.MeshPhysicalMaterial({
       map: scleraTexture,
-      roughness: 0.18,
+      roughness: 0.2,
       metalness: 0.05,
       clearcoat: 0.95,
-      clearcoatRoughness: 0.08,
+      clearcoatRoughness: 0.1,
     });
     const scleraMesh = new THREE.Mesh(scleraGeo, scleraMat);
-    eyeGroup.add(scleraMesh);
+    scleraGroup.add(scleraMesh);
 
-    // 2. ANATOMICAL CUTAWAY HEMISPHERE (Reveals interior in Cutaway mode)
-    // Quarter-Cutaway Geometry
-    const cutawayGeo = new THREE.SphereGeometry(1.99, 64, 64, 0, Math.PI * 1.5, 0, Math.PI);
+    // B. CUTAWAY SCLERA (Exploded / Dissected Hemisphere)
+    const cutawayGeo = new THREE.SphereGeometry(2.09, 64, 64, 0, Math.PI * 1.45, 0, Math.PI);
     const cutawayMat = new THREE.MeshPhysicalMaterial({
       map: scleraTexture,
-      roughness: 0.2,
+      roughness: 0.22,
       side: THREE.DoubleSide,
     });
     const cutawayMesh = new THREE.Mesh(cutawayGeo, cutawayMat);
-    cutawayMesh.rotation.y = Math.PI * 0.25;
+    cutawayMesh.rotation.y = Math.PI * 0.3;
     cutawayMesh.visible = false;
-    eyeGroup.add(cutawayMesh);
+    scleraGroup.add(cutawayMesh);
 
-    // 3. RETINA INNER LINING (Posterior Hemisphere)
-    const retinaGeo = new THREE.SphereGeometry(1.92, 48, 48, 0, Math.PI * 2, Math.PI * 0.35, Math.PI * 0.65);
-    const retinaMat = new THREE.MeshStandardMaterial({
-      map: retinaTexture,
-      side: THREE.BackSide,
-      roughness: 0.4,
+    eyeAssemblyGroup.add(scleraGroup);
+
+    // C. EXTRAOCULAR MUSCLES (4 Rectus Muscles attached to Sclera)
+    const muscleGroup = new THREE.Group();
+    const muscleMat = new THREE.MeshStandardMaterial({
+      color: 0x991b1b,
+      roughness: 0.45,
       metalness: 0.1,
     });
-    const retinaMesh = new THREE.Mesh(retinaGeo, retinaMat);
-    eyeGroup.add(retinaMesh);
 
-    // 4. CORNEA DOME (Transparent Anterior Envelope)
-    const corneaGeo = new THREE.SphereGeometry(2.04, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.26);
+    const createMuscle = (rotZ, rotY) => {
+      const mGeo = new THREE.CylinderGeometry(0.18, 0.28, 2.2, 16);
+      const mMesh = new THREE.Mesh(mGeo, muscleMat);
+      mMesh.position.set(0, 1.8, -1.0);
+      mMesh.rotation.x = Math.PI / 4;
+      const pivot = new THREE.Group();
+      pivot.rotation.z = rotZ;
+      pivot.rotation.y = rotY;
+      pivot.add(mMesh);
+      return pivot;
+    };
+
+    muscleGroup.add(createMuscle(0, 0)); // Superior Rectus
+    muscleGroup.add(createMuscle(Math.PI, 0)); // Inferior Rectus
+    muscleGroup.add(createMuscle(Math.PI / 2, 0)); // Lateral Rectus
+    muscleGroup.add(createMuscle(-Math.PI / 2, 0)); // Medial Rectus
+    eyeAssemblyGroup.add(muscleGroup);
+
+    // D. CORNEA DOME & LASIK FLAP
+    const corneaGroup = new THREE.Group();
+    corneaGroup.position.set(0, 0, 0);
+
+    const corneaGeo = new THREE.SphereGeometry(2.14, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.27);
     const corneaMat = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.32,
+      opacity: 0.38,
       roughness: 0.02,
       transmission: 0.96,
       clearcoat: 1.0,
@@ -212,197 +274,326 @@ export default function EyeVisualizerCanvas() {
     });
     const corneaMesh = new THREE.Mesh(corneaGeo, corneaMat);
     corneaMesh.rotation.x = Math.PI / 2;
-    eyeGroup.add(corneaMesh);
+    corneaGroup.add(corneaMesh);
 
-    // 5. IRIS DISC (Colored Aperture)
-    const irisGeo = new THREE.RingGeometry(0.32, 1.35, 64);
+    // LASIK Hinged Flap Mesh (Lifts physically in LASIK Mode)
+    const flapGeo = new THREE.SphereGeometry(2.145, 32, 32, 0, Math.PI * 1.2, 0, Math.PI * 0.22);
+    const flapMat = new THREE.MeshPhysicalMaterial({
+      color: 0x93c5fd,
+      transparent: true,
+      opacity: 0.55,
+      roughness: 0.05,
+      side: THREE.DoubleSide,
+    });
+    const flapMesh = new THREE.Mesh(flapGeo, flapMat);
+    flapMesh.rotation.x = Math.PI / 2;
+    flapMesh.position.set(0, 0, 0.05);
+    flapMesh.visible = false;
+    corneaGroup.add(flapMesh);
+
+    eyeAssemblyGroup.add(corneaGroup);
+
+    // E. IRIS DISC & PUPIL APERTURE
+    const irisGroup = new THREE.Group();
+    irisGroup.position.set(0, 0, 1.62);
+
+    const irisGeo = new THREE.RingGeometry(0.35, 1.42, 64);
     const irisMat = new THREE.MeshStandardMaterial({
       map: irisTexture,
       side: THREE.DoubleSide,
-      roughness: 0.15,
-      emissive: new THREE.Color(0x165868),
-      emissiveIntensity: 0.35,
+      roughness: 0.2,
+      emissive: new THREE.Color(0x0e3a47),
+      emissiveIntensity: 0.4,
     });
     const irisMesh = new THREE.Mesh(irisGeo, irisMat);
-    irisMesh.position.z = 1.58;
-    eyeGroup.add(irisMesh);
+    irisGroup.add(irisMesh);
 
-    // 6. PUPIL APERTURE DISC
-    const pupilGeo = new THREE.CircleGeometry(0.33, 32);
+    // Pupil Black Void Hole
+    const pupilGeo = new THREE.CircleGeometry(0.36, 32);
     const pupilMat = new THREE.MeshBasicMaterial({ color: 0x010204 });
     const pupilMesh = new THREE.Mesh(pupilGeo, pupilMat);
-    pupilMesh.position.z = 1.59;
-    eyeGroup.add(pupilMesh);
+    pupilMesh.position.z = 0.01;
+    irisGroup.add(pupilMesh);
 
-    // 7. CRYSTALLINE LENS (3D Biconvex Optical Lens positioned behind Iris at Z=0.85)
+    eyeAssemblyGroup.add(irisGroup);
+
+    // F. CRYSTALLINE LENS & CATARACT IOL IMPLANT
     const lensGroup = new THREE.Group();
-    lensGroup.position.set(0, 0, 0.85);
+    lensGroup.position.set(0, 0, 0.9);
 
-    const lensGeo = new THREE.SphereGeometry(0.72, 48, 32);
-    lensGeo.scale(1.1, 1.1, 0.45); // Flattened biconvex lens shape
+    const lensGeo = new THREE.SphereGeometry(0.76, 48, 32);
+    lensGeo.scale(1.15, 1.15, 0.48); // Biconvex lens shape
 
-    const lensMat = new THREE.MeshPhysicalMaterial({
-      color: 0x99f6e4,
+    // Clear Lens Material
+    const lensMatClear = new THREE.MeshPhysicalMaterial({
+      color: 0xa5f3fc,
       transparent: true,
-      opacity: 0.72,
-      roughness: 0.05,
-      transmission: 0.9,
+      opacity: 0.78,
+      roughness: 0.04,
+      transmission: 0.92,
       clearcoat: 1.0,
       ior: 1.42,
       emissive: new THREE.Color(0x35a6b7),
       emissiveIntensity: 0.25,
     });
-    const lensMesh = new THREE.Mesh(lensGeo, lensMat);
+
+    // Cataract Lens Material (Cloudy Yellowish)
+    const lensMatCataract = new THREE.MeshStandardMaterial({
+      map: cataractTexture,
+      roughness: 0.6,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.88,
+    });
+
+    const lensMesh = new THREE.Mesh(lensGeo, lensMatClear);
     lensGroup.add(lensMesh);
 
-    // Glowing Lens Border Ring
-    const lensRingGeo = new THREE.TorusGeometry(0.75, 0.025, 16, 64);
-    const lensRingMat = new THREE.MeshBasicMaterial({ color: 0xb8ed78, transparent: true, opacity: 0.7 });
-    const lensRing = new THREE.Mesh(lensRingGeo, lensRingMat);
-    lensGroup.add(lensRing);
+    // Ciliary Zonules Ligament Ring
+    const zonuleGeo = new THREE.TorusGeometry(0.82, 0.025, 16, 64);
+    const zonuleMat = new THREE.MeshBasicMaterial({ color: 0xb8ed78, transparent: true, opacity: 0.75 });
+    const zonuleRing = new THREE.Mesh(zonuleGeo, zonuleMat);
+    lensGroup.add(zonuleRing);
 
-    eyeGroup.add(lensGroup);
+    // Artificial Foldable Intraocular Lens (IOL) Implant for Cataract Surgery
+    const iolGroup = new THREE.Group();
+    const iolOpticGeo = new THREE.CylinderGeometry(0.65, 0.65, 0.08, 32);
+    const iolOpticMat = new THREE.MeshPhysicalMaterial({
+      color: 0x67e8f9,
+      transmission: 0.98,
+      opacity: 0.95,
+      transparent: true,
+      roughness: 0.01,
+      clearcoat: 1.0,
+    });
+    const iolOptic = new THREE.Mesh(iolOpticGeo, iolOpticMat);
+    iolOptic.rotation.x = Math.PI / 2;
+    iolGroup.add(iolOptic);
 
-    // 8. OPTIC NERVE STEM (Posterior Cylinder protruding back at Z=-2.2)
-    const opticNerveGeo = new THREE.CylinderGeometry(0.28, 0.34, 1.2, 32);
+    // IOL Haptic Arms (Flex loops holding lens in eye)
+    for (let a = 0; a < 2; a++) {
+      const hapticGeo = new THREE.TorusGeometry(0.9, 0.025, 8, 32, Math.PI * 0.5);
+      const hapticMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+      const haptic = new THREE.Mesh(hapticGeo, hapticMat);
+      haptic.rotation.z = a * Math.PI + Math.PI / 4;
+      iolGroup.add(haptic);
+    }
+    iolGroup.visible = false;
+    lensGroup.add(iolGroup);
+
+    eyeAssemblyGroup.add(lensGroup);
+
+    // G. RETINA & MACULA POSTERIOR LINING
+    const retinaGroup = new THREE.Group();
+    const retinaGeo = new THREE.SphereGeometry(2.0, 48, 48, 0, Math.PI * 2, Math.PI * 0.35, Math.PI * 0.65);
+    const retinaMat = new THREE.MeshStandardMaterial({
+      map: retinaTexture,
+      side: THREE.BackSide,
+      roughness: 0.35,
+      metalness: 0.05,
+    });
+    const retinaMesh = new THREE.Mesh(retinaGeo, retinaMat);
+    retinaGroup.add(retinaMesh);
+    eyeAssemblyGroup.add(retinaGroup);
+
+    // H. OPTIC NERVE STEM (Extending from Posterior Pole at Z=-2.3)
+    const opticNerveGeo = new THREE.CylinderGeometry(0.32, 0.42, 1.5, 32);
     const opticNerveMat = new THREE.MeshStandardMaterial({
-      color: 0xe2e8f0,
+      color: 0xf1f5f9,
       roughness: 0.3,
     });
     const opticNerveMesh = new THREE.Mesh(opticNerveGeo, opticNerveMat);
     opticNerveMesh.rotation.x = Math.PI / 2;
-    opticNerveMesh.position.set(0, 0, -2.3);
-    eyeGroup.add(opticNerveMesh);
+    opticNerveMesh.position.set(0, 0, -2.45);
+    eyeAssemblyGroup.add(opticNerveMesh);
 
     // ==========================================
-    // SURGICAL ANIMATION ELEMENTS
+    // 4. SURGICAL TOOLS & ANIMATION FX GROUPS
     // ==========================================
 
-    // A. LASIK Laser Beam System
-    const lasikGroup = new THREE.Group();
-    scene.add(lasikGroup);
-
-    const laserCylinderGeo = new THREE.CylinderGeometry(0.015, 0.015, 6, 8);
+    // A. LASIK Excimer Laser System
+    const lasikLaserGroup = new THREE.Group();
+    const laserCylinderGeo = new THREE.CylinderGeometry(0.018, 0.018, 6, 8);
     const laserCylinderMat = new THREE.MeshBasicMaterial({
-      color: 0x35a6b7,
+      color: 0xb8ed78,
       transparent: true,
       opacity: 0,
       blending: THREE.AdditiveBlending,
     });
-    const laserMesh = new THREE.Mesh(laserCylinderGeo, laserCylinderMat);
-    laserMesh.rotation.z = Math.PI / 2;
-    laserMesh.position.z = 2.15;
-    lasikGroup.add(laserMesh);
+    const laserBeam = new THREE.Mesh(laserCylinderGeo, laserCylinderMat);
+    laserBeam.rotation.z = Math.PI / 2;
+    laserBeam.position.z = 2.2;
+    lasikLaserGroup.add(laserBeam);
 
-    const laserTargetRingGeo = new THREE.RingGeometry(0.1, 0.75, 32);
-    const laserTargetRingMat = new THREE.MeshBasicMaterial({
-      color: 0xb8ed78,
+    const laserCrossGeo = new THREE.RingGeometry(0.12, 0.85, 32);
+    const laserCrossMat = new THREE.MeshBasicMaterial({
+      color: 0x35a6b7,
       transparent: true,
       opacity: 0,
       side: THREE.DoubleSide,
     });
-    const laserTargetRing = new THREE.Mesh(laserTargetRingGeo, laserTargetRingMat);
-    laserTargetRing.position.z = 2.05;
-    lasikGroup.add(laserTargetRing);
+    const laserCross = new THREE.Mesh(laserCrossGeo, laserCrossMat);
+    laserCross.position.z = 2.12;
+    lasikLaserGroup.add(laserCross);
+    scene.add(lasikLaserGroup);
 
-    // B. Phaco Cataract Surgical Probe Beam
-    const phacoGroup = new THREE.Group();
-    scene.add(phacoGroup);
-
-    const phacoNeedleGeo = new THREE.CylinderGeometry(0.02, 0.04, 3.5, 16);
-    const phacoNeedleMat = new THREE.MeshStandardMaterial({
+    // B. Phaco Cataract Ultrasonic Probe
+    const phacoProbeGroup = new THREE.Group();
+    const probeNeedleGeo = new THREE.CylinderGeometry(0.025, 0.05, 3.8, 16);
+    const probeNeedleMat = new THREE.MeshStandardMaterial({
       color: 0xe2e8f0,
-      metalness: 0.9,
+      metalness: 0.95,
       roughness: 0.1,
     });
-    const phacoNeedle = new THREE.Mesh(phacoNeedleGeo, phacoNeedleMat);
-    phacoNeedle.rotation.z = -Math.PI / 4;
-    phacoNeedle.position.set(-1.2, 1.2, 0.9);
-    phacoGroup.add(phacoNeedle);
+    const probeNeedle = new THREE.Mesh(probeNeedleGeo, probeNeedleMat);
+    probeNeedle.rotation.z = -Math.PI / 4;
+    probeNeedle.position.set(-1.4, 1.4, 0.95);
+    phacoProbeGroup.add(probeNeedle);
 
-    // Ultrasonic Tip Energy Cone
-    const energyConeGeo = new THREE.ConeGeometry(0.35, 0.8, 16);
+    const energyConeGeo = new THREE.ConeGeometry(0.4, 0.9, 16);
     const energyConeMat = new THREE.MeshBasicMaterial({
-      color: 0xb8ed78,
+      color: 0x38bdf8,
       transparent: true,
       opacity: 0,
       blending: THREE.AdditiveBlending,
     });
     const energyCone = new THREE.Mesh(energyConeGeo, energyConeMat);
     energyCone.rotation.z = -Math.PI / 4;
-    energyCone.position.set(-0.25, 0.25, 0.85);
-    phacoGroup.add(energyCone);
+    energyCone.position.set(-0.3, 0.3, 0.9);
+    phacoProbeGroup.add(energyCone);
+    scene.add(phacoProbeGroup);
 
-    // C. Orbiting Floating Particles
-    const particleCount = 160;
-    const particleGeo = new THREE.BufferGeometry();
-    const particlePos = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
+    // C. Retina Laser Scanner Grid
+    const retinaScanGroup = new THREE.Group();
+    const scanGridGeo = new THREE.RingGeometry(0.2, 1.8, 32, 8);
+    const scanGridMat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8,
+      wireframe: true,
+      transparent: true,
+      opacity: 0,
+    });
+    const scanGrid = new THREE.Mesh(scanGridGeo, scanGridMat);
+    scanGrid.position.z = -1.2;
+    retinaScanGroup.add(scanGrid);
+    scene.add(retinaScanGroup);
+
+    // D. Orbiting Particles
+    const pCount = 180;
+    const pGeo = new THREE.BufferGeometry();
+    const pPos = new Float32Array(pCount * 3);
+    const pCols = new Float32Array(pCount * 3);
 
     const cLime = new THREE.Color(0xb8ed78);
     const cTeal = new THREE.Color(0x35a6b7);
 
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 2.4 + Math.random() * 0.7;
+    for (let i = 0; i < pCount; i++) {
+      const radius = 2.6 + Math.random() * 0.8;
       const theta = Math.random() * Math.PI * 2;
       const phi = (Math.random() - 0.5) * Math.PI * 0.7;
 
-      particlePos[i * 3] = radius * Math.sin(theta) * Math.cos(phi);
-      particlePos[i * 3 + 1] = radius * Math.cos(theta) * Math.cos(phi);
-      particlePos[i * 3 + 2] = radius * Math.sin(phi);
+      pPos[i * 3] = radius * Math.sin(theta) * Math.cos(phi);
+      pPos[i * 3 + 1] = radius * Math.cos(theta) * Math.cos(phi);
+      pPos[i * 3 + 2] = radius * Math.sin(phi);
 
       const col = Math.random() > 0.5 ? cLime : cTeal;
-      particleColors[i * 3] = col.r;
-      particleColors[i * 3 + 1] = col.g;
-      particleColors[i * 3 + 2] = col.b;
+      pCols[i * 3] = col.r;
+      pCols[i * 3 + 1] = col.g;
+      pCols[i * 3 + 2] = col.b;
     }
 
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    pGeo.setAttribute('color', new THREE.BufferAttribute(pCols, 3));
 
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.04,
+    const pMat = new THREE.PointsMaterial({
+      size: 0.045,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.65,
       blending: THREE.AdditiveBlending,
     });
-    const particleSystem = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleSystem);
+    const particles = new THREE.Points(pGeo, pMat);
+    scene.add(particles);
 
     // ==========================================
-    // LIGHTING SETUP
+    // 5. LIGHTING SETUP
     // ==========================================
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xb8ed78, 2.2);
-    keyLight.position.set(6, 6, 6);
+    const keyLight = new THREE.DirectionalLight(0xb8ed78, 2.4);
+    keyLight.position.set(6, 6, 7);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x35a6b7, 2.8);
-    fillLight.position.set(-6, -6, 6);
+    const fillLight = new THREE.DirectionalLight(0x35a6b7, 3.0);
+    fillLight.position.set(-6, -6, 7);
     scene.add(fillLight);
 
-    const backLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    const backLight = new THREE.DirectionalLight(0xffffff, 1.4);
     backLight.position.set(0, 0, -8);
     scene.add(backLight);
 
     // ==========================================
-    // INTERACTION & ANIMATION LOOP
+    // 6. FULL 3D INTERACTION & DRAG CONTROLS
     // ==========================================
-    let targetRotationX = 0;
-    let targetRotationY = 0;
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let currentRotation = { x: 0, y: 0 };
 
-    const handleMouseMove = (e) => {
-      const rect = container.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      targetRotationY = x * 0.45;
-      targetRotationX = -y * 0.35;
+    const onMouseDown = (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - previousMousePosition.x;
+      const deltaY = e.clientY - previousMousePosition.y;
+
+      currentRotation.y += deltaX * 0.008;
+      currentRotation.x += deltaY * 0.008;
+
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    };
+
+    const onMouseUp = () => {
+      isDragging = false;
+    };
+
+    const onWheel = (e) => {
+      e.preventDefault();
+      camera.position.z = THREE.MathUtils.clamp(camera.position.z + e.deltaY * 0.005, 2.2, 10.0);
+    };
+
+    const domElem = renderer.domElement;
+    domElem.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    domElem.addEventListener('wheel', onWheel, { passive: false });
+
+    // Touch support for mobile devices
+    const onTouchStart = (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    };
+    const onTouchMove = (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      const deltaX = e.touches[0].clientX - previousMousePosition.x;
+      const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+      currentRotation.y += deltaX * 0.008;
+      currentRotation.x += deltaY * 0.008;
+
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    };
+    const onTouchEnd = () => {
+      isDragging = false;
+    };
+
+    domElem.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd);
 
     const handleResize = () => {
       if (!container) return;
@@ -412,79 +603,138 @@ export default function EyeVisualizerCanvas() {
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
-
     window.addEventListener('resize', handleResize);
 
+    // ==========================================
+    // 7. MAIN ANIMATION LOOP & MODE CONTROLLER
+    // ==========================================
     const clock = new THREE.Clock();
     let animId;
 
-    // Smooth Camera Targets for Deep Surgical Zoom ("Aankh ke andar ghuse")
-    const targetCamPos = new THREE.Vector3(0, 0, 6.5);
-    const targetEyeRotY = 0;
-    const targetEyeRotX = 0;
+    const targetCamPos = new THREE.Vector3(0, 0, 7.2);
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
-
       const mode = activeModeRef.current;
 
-      // Mode-Specific Camera Position & Model Rotations
+      // Auto-rotation in full mode if drag idle
+      if (autoRotateRef.current && !isDragging && mode === 'full') {
+        currentRotation.y += 0.004;
+      }
+
+      // Smooth Model Rotation LERP
+      eyeAssemblyGroup.rotation.y += (currentRotation.y - eyeAssemblyGroup.rotation.y) * 0.08;
+      eyeAssemblyGroup.rotation.x += (currentRotation.x - eyeAssemblyGroup.rotation.x) * 0.08;
+
+      // MODE SWITCHING & ANIMATED DEEP SURGICAL ZOOMS ("Aankh ke andar ghuse")
       if (mode === 'full') {
-        targetCamPos.set(0, 0, 6.5);
+        targetCamPos.set(0, 0, 7.2);
         scleraMesh.visible = true;
         cutawayMesh.visible = false;
+        muscleGroup.visible = true;
+        flapMesh.visible = false;
+        lensMesh.material = lensMatClear;
+        iolGroup.visible = false;
+
+        // Dissection Offsets Reset
+        scleraGroup.position.lerp(new THREE.Vector3(0, 0, 0), 0.08);
+        corneaGroup.position.lerp(new THREE.Vector3(0, 0, 0), 0.08);
+        irisGroup.position.lerp(new THREE.Vector3(0, 0, 1.62), 0.08);
+        lensGroup.position.lerp(new THREE.Vector3(0, 0, 0.9), 0.08);
+        retinaGroup.position.lerp(new THREE.Vector3(0, 0, 0), 0.08);
+
         laserCylinderMat.opacity = 0;
-        laserTargetRingMat.opacity = 0;
+        laserCrossMat.opacity = 0;
         energyConeMat.opacity = 0;
-        phacoNeedle.position.set(-2.5, 2.5, 0.9);
-      } else if (mode === 'cutaway') {
-        // Anatomical Interior Cutaway View
-        targetCamPos.set(0.6, 0.4, 5.0);
+        scanGridMat.opacity = 0;
+      } 
+      else if (mode === 'dissect') {
+        // Exploded Dissection View
+        targetCamPos.set(1.2, 0.6, 6.8);
         scleraMesh.visible = false;
         cutawayMesh.visible = true;
+        muscleGroup.visible = false;
+
+        // Animate layers sliding out in 3D space!
+        scleraGroup.position.lerp(new THREE.Vector3(-0.9, 0, -0.4), 0.08);
+        corneaGroup.position.lerp(new THREE.Vector3(0, 0, 1.2), 0.08);
+        irisGroup.position.lerp(new THREE.Vector3(0, 0, 2.2), 0.08);
+        lensGroup.position.lerp(new THREE.Vector3(0, 0, 1.4), 0.08);
+        retinaGroup.position.lerp(new THREE.Vector3(0, 0, -0.8), 0.08);
+
         laserCylinderMat.opacity = 0;
-        laserTargetRingMat.opacity = 0;
+        laserCrossMat.opacity = 0;
         energyConeMat.opacity = 0;
-        phacoNeedle.position.set(-2.5, 2.5, 0.9);
-      } else if (mode === 'lasik') {
-        // Deep Zoom into Cornea Layer
-        targetCamPos.set(0, 0, 3.8);
+        scanGridMat.opacity = 0;
+      } 
+      else if (mode === 'lasik') {
+        // Deep Zoom Into Cornea & LASIK Laser Surgery
+        targetCamPos.set(0, 0, 3.9);
         scleraMesh.visible = true;
         cutawayMesh.visible = false;
+        muscleGroup.visible = false;
+        flapMesh.visible = true;
+
+        // Lift LASIK Corneal Flap
+        flapMesh.rotation.y = Math.sin(elapsedTime * 2) * 0.45 + 0.5;
 
         // Laser Beam Pulsing Animation
-        laserCylinderMat.opacity = 0.95 + Math.sin(elapsedTime * 14) * 0.05;
-        laserMesh.position.y = Math.sin(elapsedTime * 3.5) * 0.65;
-        laserTargetRingMat.opacity = 0.9;
-        laserTargetRing.scale.setScalar(1 + Math.sin(elapsedTime * 6) * 0.12);
-        laserTargetRing.rotation.z = elapsedTime * 1.8;
+        laserCylinderMat.opacity = 0.95 + Math.sin(elapsedTime * 16) * 0.05;
+        laserBeam.position.y = Math.sin(elapsedTime * 4) * 0.6;
+        laserCrossMat.opacity = 0.9;
+        laserCross.rotation.z = elapsedTime * 2.2;
+        laserCross.scale.setScalar(1 + Math.sin(elapsedTime * 8) * 0.15);
+
         energyConeMat.opacity = 0;
-      } else if (mode === 'cataract') {
-        // Deep Surgical Zoom INTO Crystalline Lens Chamber ("Surgery ke andar ghuse")
+        scanGridMat.opacity = 0;
+      } 
+      else if (mode === 'cataract') {
+        // Deep Surgical Zoom INTO Crystalline Lens Chamber
         targetCamPos.set(-0.2, 0.2, 3.1);
         scleraMesh.visible = false;
         cutawayMesh.visible = true;
+        muscleGroup.visible = false;
+        flapMesh.visible = false;
+
+        // Switch to cloudy cataract lens or glowing IOL implant
+        const cycle = Math.sin(elapsedTime * 1.5);
+        if (cycle > 0) {
+          lensMesh.material = lensMatCataract;
+          iolGroup.visible = false;
+          energyConeMat.opacity = 0.85 + Math.sin(elapsedTime * 12) * 0.15;
+          probeNeedle.position.set(-0.7 + Math.sin(elapsedTime * 3) * 0.03, 0.7 - Math.sin(elapsedTime * 3) * 0.03, 0.9);
+        } else {
+          lensMesh.material = lensMatClear;
+          iolGroup.visible = true;
+          energyConeMat.opacity = 0;
+        }
 
         laserCylinderMat.opacity = 0;
-        laserTargetRingMat.opacity = 0;
+        laserCrossMat.opacity = 0;
+        scanGridMat.opacity = 0;
+      } 
+      else if (mode === 'retina') {
+        // Deep Vitreous Chamber Traversal to Macula & Retina
+        targetCamPos.set(0, 0, 2.4);
+        scleraMesh.visible = false;
+        cutawayMesh.visible = true;
+        muscleGroup.visible = false;
 
-        // Phaco Probe Ultrasonic Animation
-        phacoNeedle.position.set(-0.75 + Math.sin(elapsedTime * 2) * 0.04, 0.75 - Math.sin(elapsedTime * 2) * 0.04, 0.88);
-        energyConeMat.opacity = 0.75 + Math.sin(elapsedTime * 12) * 0.25;
-        energyCone.scale.setScalar(1 + Math.sin(elapsedTime * 10) * 0.2);
+        scanGridMat.opacity = 0.85 + Math.sin(elapsedTime * 6) * 0.15;
+        scanGrid.rotation.z = elapsedTime * 0.8;
+
+        laserCylinderMat.opacity = 0;
+        laserCrossMat.opacity = 0;
+        energyConeMat.opacity = 0;
       }
 
       // Smooth Camera LERP
-      camera.position.lerp(targetCamPos, 0.06);
+      camera.position.lerp(targetCamPos, 0.07);
 
-      // Model Rotation LERP with mouse tilt
-      eyeGroup.rotation.y += (targetRotationY + (mode === 'cutaway' ? 0.65 : 0) - eyeGroup.rotation.y) * 0.06;
-      eyeGroup.rotation.x += (targetRotationX + (mode === 'cutaway' ? 0.2 : 0) - eyeGroup.rotation.x) * 0.06;
-
-      // Pulse Lens Glow
-      lensMat.emissiveIntensity = 0.25 + Math.sin(elapsedTime * 3) * 0.15;
-      particleSystem.rotation.y = elapsedTime * 0.05;
+      // Pulse Lens Glow & Rotate Particles
+      lensMatClear.emissiveIntensity = 0.25 + Math.sin(elapsedTime * 3.5) * 0.15;
+      particles.rotation.y = elapsedTime * 0.04;
 
       renderer.render(scene, camera);
     };
@@ -493,7 +743,13 @@ export default function EyeVisualizerCanvas() {
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener('mousemove', handleMouseMove);
+      domElem.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      domElem.removeEventListener('wheel', onWheel);
+      domElem.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('resize', handleResize);
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
@@ -502,164 +758,232 @@ export default function EyeVisualizerCanvas() {
     };
   }, []);
 
+  // Anatomical Parts Info Data for Interactive Clicking
+  const ANATOMY_PARTS = [
+    {
+      id: 'cornea',
+      name: 'Cornea (कॉर्निया / कांचा)',
+      icon: Shield,
+      color: 'text-[#35A6B7]',
+      desc: 'Anterior clear dome structure that provides 70% of the eye optical focusing power.',
+      treatment: 'Contoura Vision & LASIK Laser Treatment available at Rishabh Eye Hospital.',
+      modeToTrigger: 'lasik',
+    },
+    {
+      id: 'iris',
+      name: 'Iris & Pupil (आइरिस और पुतली)',
+      icon: Eye,
+      color: 'text-[#B8ED78]',
+      desc: 'Colored sphincter muscle controlling light entry into the retina via pupil dilation.',
+      treatment: 'Glaucoma Iridotomy & Custom Pupil Reconstructive Surgeries.',
+      modeToTrigger: 'dissect',
+    },
+    {
+      id: 'lens',
+      name: 'Crystalline Lens (प्राकृतिक लेंस)',
+      icon: Sparkles,
+      color: 'text-cyan-400',
+      desc: 'Transparent biconvex optical lens that flexes to focus near and far distance light rays.',
+      treatment: 'Micro-Incision Phacoemulsification & Premium Multifocal IOL Implants.',
+      modeToTrigger: 'cataract',
+    },
+    {
+      id: 'retina',
+      name: 'Retina & Macula (रेटीना और पर्दा)',
+      icon: Target,
+      color: 'text-rose-400',
+      desc: 'Light-sensitive neural tissue screen containing photoreceptor rod and cone cells.',
+      treatment: 'Advanced Vitreo-Retinal Laser & Diabetic Retinopathy Care.',
+      modeToTrigger: 'retina',
+    },
+  ];
+
   return (
-    <div className="relative w-full h-full min-h-[420px] lg:min-h-[520px] flex flex-col items-center justify-center">
-      {/* Background Radial Glow Orb */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/20 via-[#B8ED78]/15 to-transparent rounded-full blur-3xl pointer-events-none transform scale-95" />
+    <div className="relative w-full h-full min-h-[460px] lg:min-h-[580px] flex flex-col items-center justify-between rounded-3xl bg-gradient-to-b from-[#030712] via-[#07131f] to-[#040914] border border-[#35A6B7]/30 shadow-2xl overflow-hidden">
+      
+      {/* Dynamic Background Glow Effect */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/15 via-[#B8ED78]/10 to-transparent blur-3xl pointer-events-none" />
 
-      {/* Top Left Active Mode Status Badge */}
-      <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-[#070C14]/90 border border-[#35A6B7]/50 backdrop-blur-md shadow-xl">
-        {activeMode === 'full' && (
-          <>
-            <Eye className="w-3.5 h-3.5 text-[#B8ED78] animate-pulse shrink-0" />
-            <span className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider">3D Eyeball Model</span>
-          </>
-        )}
-        {activeMode === 'cutaway' && (
-          <>
-            <Layers className="w-3.5 h-3.5 text-[#35A6B7] animate-bounce shrink-0" />
-            <span className="text-[10px] sm:text-xs font-bold text-[#35A6B7] uppercase tracking-wider">Anatomy Cutaway View</span>
-          </>
-        )}
-        {activeMode === 'lasik' && (
-          <>
-            <Crosshair className="w-3.5 h-3.5 text-[#B8ED78] animate-spin shrink-0" />
-            <span className="text-[10px] sm:text-xs font-bold text-[#B8ED78] uppercase tracking-wider">LASIK Cornea Zoom</span>
-          </>
-        )}
-        {activeMode === 'cataract' && (
-          <>
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse shrink-0" />
-            <span className="text-[10px] sm:text-xs font-bold text-cyan-300 uppercase tracking-wider">Phaco Lens Chamber</span>
-          </>
-        )}
-      </div>
-
-      {/* Floating Anatomical Labels Callout Box */}
-      <div className="absolute top-2 right-2 z-20 flex flex-col gap-1 p-2 sm:p-2.5 rounded-xl bg-[#070C14]/92 border border-[#35A6B7]/40 backdrop-blur-md text-[9px] sm:text-[10.5px] text-slate-200 shadow-2xl max-w-[170px]">
-        <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
-          <span className="font-extrabold text-[#B8ED78] uppercase tracking-wider text-[9px]">Anatomy Callout</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#B8ED78] animate-ping" />
+      {/* TOP BAR: Header & Mode Badge */}
+      <div className="relative z-20 w-full flex items-center justify-between p-3 sm:p-4 border-b border-[#35A6B7]/20 bg-[#030712]/80 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-xl bg-gradient-to-r from-[#35A6B7] to-[#B8ED78] text-slate-950 shadow-lg shadow-[#35A6B7]/30">
+            <Eye className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <h3 className="text-xs sm:text-sm font-extrabold text-white tracking-wide flex items-center gap-1.5">
+              3D Interactive Eye Anatomy Explorer
+              <span className="px-1.5 py-0.5 rounded text-[9px] bg-[#B8ED78]/20 text-[#B8ED78] border border-[#B8ED78]/40">360° Realtime</span>
+            </h3>
+            <p className="text-[10px] text-slate-400">Click & Drag to rotate 360° | Scroll to Zoom Inside</p>
+          </div>
         </div>
 
-        {activeMode === 'full' && (
-          <>
-            <div className="flex items-center gap-1.5 text-slate-200">
-              <CheckCircle2 className="w-3 h-3 text-[#B8ED78] shrink-0" />
-              <span>Sclera: Protective Shell</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-slate-200">
-              <CheckCircle2 className="w-3 h-3 text-[#35A6B7] shrink-0" />
-              <span>Cornea: Dome Refraction</span>
-            </div>
-          </>
-        )}
+        {/* Controls: Auto Rotate & Reset */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setAutoRotate(!autoRotate)}
+            className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all ${
+              autoRotate 
+                ? 'bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40' 
+                : 'bg-slate-800 text-slate-400 border border-slate-700'
+            }`}
+            title="Toggle 360 Auto-Rotation"
+          >
+            <RotateCcw className={`w-3 h-3 ${autoRotate ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline">{autoRotate ? 'Auto-Rotate ON' : 'Auto-Rotate OFF'}</span>
+          </button>
+        </div>
+      </div>
 
-        {activeMode === 'cutaway' && (
-          <>
-            <div className="flex items-center gap-1.5 text-emerald-300 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#B8ED78] shrink-0" />
-              <span>Cornea & Iris Ring</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-cyan-300 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#35A6B7] shrink-0" />
-              <span>3D Crystalline Lens</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-rose-300 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0" />
-              <span>Retina & Optic Nerve</span>
-            </div>
-          </>
-        )}
+      {/* CENTER: 3D THREE.JS CANVAS CONTAINER */}
+      <div className="relative z-10 w-full h-[360px] sm:h-[420px] lg:h-[460px] cursor-grab active:cursor-grabbing">
+        <div ref={mountRef} className="w-full h-full" />
 
-        {activeMode === 'lasik' && (
-          <>
-            <div className="flex items-center gap-1.5 text-[#B8ED78] font-bold">
-              <Target className="w-3 h-3 text-[#B8ED78] shrink-0" />
-              <span>Cornea: 540 µm</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-cyan-300">
-              <Zap className="w-3 h-3 text-cyan-400 shrink-0" />
-              <span>Laser Flap: 110 µm</span>
-            </div>
-          </>
-        )}
+        {/* Drag Hint Toast */}
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#030712]/90 border border-[#35A6B7]/40 text-slate-300 text-[10px] shadow-xl backdrop-blur-md">
+          <Move className="w-3 h-3 text-[#B8ED78] animate-bounce" />
+          <span>Hold Left Click & Drag to Rotate Eye</span>
+        </div>
 
-        {activeMode === 'cataract' && (
-          <>
-            <div className="flex items-center gap-1.5 text-cyan-300 font-bold">
-              <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
-              <span>Phaco Probe: Active</span>
+        {/* Selected Part Hotspot Card Overlay */}
+        {selectedPart && (
+          <div className="absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 sm:max-w-xs z-30 p-3.5 rounded-2xl bg-[#030712]/95 border border-[#35A6B7]/60 backdrop-blur-xl text-slate-200 shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <selectedPart.icon className={`w-4 h-4 ${selectedPart.color}`} />
+                <span className="font-bold text-xs text-white">{selectedPart.name}</span>
+              </div>
+              <button 
+                onClick={() => setSelectedPart(null)}
+                className="text-slate-400 hover:text-white text-xs px-1.5 py-0.5 rounded bg-slate-800"
+              >
+                ✕
+              </button>
             </div>
-            <div className="flex items-center gap-1.5 text-[#B8ED78]">
-              <CheckCircle2 className="w-3 h-3 text-[#B8ED78] shrink-0" />
-              <span>IOL Implant Ready</span>
+            <p className="text-[11px] text-slate-300 mt-2 leading-relaxed">{selectedPart.desc}</p>
+            <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between">
+              <span className="text-[10px] text-[#B8ED78] font-semibold flex items-center gap-1">
+                <Stethoscope className="w-3 h-3" />
+                {selectedPart.treatment}
+              </span>
+              <button
+                onClick={() => {
+                  setActiveMode(selectedPart.modeToTrigger);
+                  setSelectedPart(null);
+                }}
+                className="px-2 py-1 rounded bg-[#35A6B7] hover:bg-[#51AABC] text-slate-950 text-[10px] font-bold flex items-center gap-1 shrink-0"
+              >
+                Simulate View <ChevronRight className="w-3 h-3" />
+              </button>
             </div>
-          </>
+          </div>
         )}
       </div>
 
-      {/* 3D WebGL Canvas Container */}
-      <div 
-        ref={mountRef} 
-        className="w-full h-[380px] sm:h-[460px] lg:h-[520px] cursor-grab active:cursor-grabbing z-10"
-      />
+      {/* ANATOMICAL PARTS QUICK EXPLORER CHIPS */}
+      <div className="relative z-20 w-full px-3 py-2 bg-[#07131f]/90 border-t border-b border-slate-800/80 flex items-center gap-2 overflow-x-auto scrollbar-none">
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 pl-1">
+          Select Part:
+        </span>
+        {ANATOMY_PARTS.map((part) => (
+          <button
+            key={part.id}
+            onClick={() => {
+              setSelectedPart(part);
+              setActiveMode(part.modeToTrigger);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#030712] hover:bg-[#35A6B7]/20 border border-[#35A6B7]/30 text-slate-200 text-[11px] font-medium transition-all shrink-0 active:scale-95 shadow-md"
+          >
+            <part.icon className={`w-3.5 h-3.5 ${part.color}`} />
+            <span>{part.name}</span>
+          </button>
+        ))}
+      </div>
 
-      {/* Interactive Surgical & Anatomy Mode Selection Bar */}
-      <div className="absolute bottom-2 inset-x-2 sm:bottom-4 sm:inset-x-4 z-20 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
-        {/* Mode 1: 3D Full Eye */}
+      {/* BOTTOM BAR: SURGERY & DEEP ZOOMS NAVIGATION MODES */}
+      <div className="relative z-20 w-full p-2.5 sm:p-3.5 bg-[#030712] grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-2">
+        {/* Mode 1: Full 3D Anatomy */}
         <button
-          onClick={() => setActiveMode('full')}
-          className={`flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+          onClick={() => {
+            setActiveMode('full');
+            setSelectedPart(null);
+          }}
+          className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
             activeMode === 'full'
               ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
-              : 'bg-[#070C14]/90 text-slate-300 border border-[#35A6B7]/30 hover:bg-[#35A6B7]/20 hover:text-white'
+              : 'bg-slate-900/90 text-slate-300 border border-slate-800 hover:bg-[#35A6B7]/20 hover:text-white'
           }`}
         >
           <Eye className={`w-3.5 h-3.5 shrink-0 ${activeMode === 'full' ? 'text-slate-950' : 'text-[#35A6B7]'}`} />
-          <span className="truncate">3D Full Eye</span>
+          <span className="truncate">1. Full 3D Eye</span>
         </button>
 
-        {/* Mode 2: Anatomy Cutaway */}
+        {/* Mode 2: Dissection Exploded View */}
         <button
-          onClick={() => setActiveMode('cutaway')}
-          className={`flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
-            activeMode === 'cutaway'
+          onClick={() => {
+            setActiveMode('dissect');
+            setSelectedPart(null);
+          }}
+          className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+            activeMode === 'dissect'
               ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
-              : 'bg-[#070C14]/90 text-slate-300 border border-[#B8ED78]/30 hover:bg-[#B8ED78]/20 hover:text-white'
+              : 'bg-slate-900/90 text-slate-300 border border-slate-800 hover:bg-[#B8ED78]/20 hover:text-white'
           }`}
         >
-          <Layers className={`w-3.5 h-3.5 shrink-0 ${activeMode === 'cutaway' ? 'text-slate-950' : 'text-[#B8ED78]'}`} />
-          <span className="truncate">Anatomy Cutaway</span>
+          <Layers className={`w-3.5 h-3.5 shrink-0 ${activeMode === 'dissect' ? 'text-slate-950' : 'text-[#B8ED78]'}`} />
+          <span className="truncate">2. Dissect Layers</span>
         </button>
 
         {/* Mode 3: LASIK Cornea Laser */}
         <button
-          onClick={() => setActiveMode('lasik')}
-          className={`flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+          onClick={() => {
+            setActiveMode('lasik');
+            setSelectedPart(null);
+          }}
+          className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
             activeMode === 'lasik'
               ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
-              : 'bg-[#070C14]/90 text-[#B8ED78] border border-[#B8ED78]/30 hover:bg-[#B8ED78]/20'
+              : 'bg-slate-900/90 text-[#B8ED78] border border-[#B8ED78]/30 hover:bg-[#B8ED78]/20'
           }`}
         >
           <Zap className={`w-3.5 h-3.5 shrink-0 ${activeMode === 'lasik' ? 'fill-slate-950 text-slate-950' : 'fill-[#B8ED78] text-[#B8ED78]'}`} />
-          <span className="truncate">LASIK Laser Zoom</span>
+          <span className="truncate">3. LASIK Laser</span>
         </button>
 
-        {/* Mode 4: Phaco Cataract Zoom */}
+        {/* Mode 4: Cataract & IOL Lens */}
         <button
-          onClick={() => setActiveMode('cataract')}
-          className={`flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+          onClick={() => {
+            setActiveMode('cataract');
+            setSelectedPart(null);
+          }}
+          className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
             activeMode === 'cataract'
               ? 'bg-gradient-to-r from-[#35A6B7] via-[#51AABC] to-[#B8ED78] text-slate-950 shadow-cyan-500/40 border border-cyan-400'
-              : 'bg-[#070C14]/90 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/20'
+              : 'bg-slate-900/90 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/20'
           }`}
         >
           <Sparkles className={`w-3.5 h-3.5 shrink-0 ${activeMode === 'cataract' ? 'text-slate-950' : 'text-cyan-300'}`} />
-          <span className="truncate">Phaco Cataract Zoom</span>
+          <span className="truncate">4. Phaco Cataract</span>
+        </button>
+
+        {/* Mode 5: Retina & Macula Deep Scan */}
+        <button
+          onClick={() => {
+            setActiveMode('retina');
+            setSelectedPart(null);
+          }}
+          className={`col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-bold text-[10px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
+            activeMode === 'retina'
+              ? 'bg-gradient-to-r from-rose-500 to-[#35A6B7] text-white shadow-rose-500/40 border border-rose-400'
+              : 'bg-slate-900/90 text-rose-300 border border-rose-500/30 hover:bg-rose-500/20'
+          }`}
+        >
+          <Target className={`w-3.5 h-3.5 shrink-0 ${activeMode === 'retina' ? 'text-white' : 'text-rose-400'}`} />
+          <span className="truncate">5. Retina Deep Scan</span>
         </button>
       </div>
+
     </div>
   );
 }
-
