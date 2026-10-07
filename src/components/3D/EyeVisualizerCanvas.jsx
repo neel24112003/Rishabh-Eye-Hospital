@@ -4,13 +4,13 @@ import * as THREE from 'three';
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
   
-  // View States: false = Realistic Blinking Eye | true = Inside Surgical Anatomy View
-  const [isInsideView, setIsInsideView] = useState(false);
-  const isInsideViewRef = useRef(false);
+  // View State: false = External Photorealistic Blinking Human Eye | true = Inside Surgical Anatomy View
+  const [isInside, setIsInside] = useState(false);
+  const isInsideRef = useRef(false);
 
   useEffect(() => {
-    isInsideViewRef.current = isInsideView;
-  }, [isInsideView]);
+    isInsideRef.current = isInside;
+  }, [isInside]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -20,67 +20,62 @@ export default function EyeVisualizerCanvas() {
     const height = container.clientHeight || 500;
 
     // ==========================================
-    // 1. SCENE, CAMERA & RENDERER SETUP
+    // 1. THREE.JS SCENE, CAMERA & RENDERER SETUP
     // ==========================================
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 0, 6.0);
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    camera.position.set(0, 0, 5.5);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // Root Group for Eye & Socket Assembly
-    const eyeAssembly = new THREE.Group();
-    scene.add(eyeAssembly);
+    const mainGroup = new THREE.Group();
+    scene.add(mainGroup);
 
     // ==========================================
-    // 2. PROCEDURAL HIGH-FIDELITY TEXTURE GENERATION
+    // 2. ULTRA-DETAILED PROCEDURAL TEXTURES
     // ==========================================
 
-    // A. Skin / Eyelid Texture
-    const canvasSkin = document.createElement('canvas');
-    canvasSkin.width = 512;
-    canvasSkin.height = 512;
-    const ctxSkin = canvasSkin.getContext('2d');
-    const skinGrad = ctxSkin.createLinearGradient(0, 0, 512, 512);
-    skinGrad.addColorStop(0, '#1e293b');
-    skinGrad.addColorStop(0.5, '#0f172a');
-    skinGrad.addColorStop(1, '#070d18');
-    ctxSkin.fillStyle = skinGrad;
-    ctxSkin.fillRect(0, 0, 512, 512);
-    const skinTexture = new THREE.CanvasTexture(canvasSkin);
-
-    // B. Sclera Texture with Fine Capillaries
+    // A. Sclera Texture with Realistic Capillaries
     const canvasSclera = document.createElement('canvas');
     canvasSclera.width = 1024;
     canvasSclera.height = 512;
     const ctxSclera = canvasSclera.getContext('2d');
-    ctxSclera.fillStyle = '#f8fafc';
+    
+    // Natural sclera gradient (off-white center with subtle warm pinkish edges near canthus)
+    const scleraGrad = ctxSclera.createLinearGradient(0, 0, 1024, 0);
+    scleraGrad.addColorStop(0, '#f1f5f9');
+    scleraGrad.addColorStop(0.1, '#fff1f2');
+    scleraGrad.addColorStop(0.5, '#ffffff');
+    scleraGrad.addColorStop(0.9, '#fff1f2');
+    scleraGrad.addColorStop(1.0, '#f1f5f9');
+    ctxSclera.fillStyle = scleraGrad;
     ctxSclera.fillRect(0, 0, 1024, 512);
 
+    // Realistic fine branching red capillary blood vessels
     ctxSclera.lineWidth = 1.2;
-    for (let i = 0; i < 50; i++) {
-      const startX = Math.random() * 1024;
+    for (let i = 0; i < 65; i++) {
+      const startX = (i < 32 ? Math.random() * 300 : 724 + Math.random() * 300);
       const startY = Math.random() * 512;
-      ctxSclera.strokeStyle = Math.random() > 0.4 ? 'rgba(225, 29, 72, 0.32)' : 'rgba(180, 20, 50, 0.2)';
+      ctxSclera.strokeStyle = Math.random() > 0.3 ? 'rgba(225, 29, 72, 0.4)' : 'rgba(190, 18, 60, 0.25)';
       ctxSclera.beginPath();
       ctxSclera.moveTo(startX, startY);
       let cX = startX;
       let cY = startY;
-      for (let j = 0; j < 6; j++) {
-        cX += (Math.random() - 0.5) * 60;
-        cY += (Math.random() - 0.5) * 45;
+      for (let j = 0; j < 7; j++) {
+        cX += (i < 32 ? 1 : -1) * (15 + Math.random() * 35);
+        cY += (Math.random() - 0.5) * 30;
         ctxSclera.lineTo(cX, cY);
       }
       ctxSclera.stroke();
     }
     const scleraTexture = new THREE.CanvasTexture(canvasSclera);
 
-    // C. Photorealistic Iris Texture (Hazel Gold + Cyan Teal Radial Striations)
+    // B. Ultra-Realistic Iris Texture (Rich Multi-Tone Hazel/Blue Radial Fibers)
     const canvasIris = document.createElement('canvas');
     canvasIris.width = 1024;
     canvasIris.height = 1024;
@@ -93,37 +88,38 @@ export default function EyeVisualizerCanvas() {
 
     const irisGrad = ctxIris.createRadialGradient(icX, icY, 80, icX, icY, 490);
     irisGrad.addColorStop(0, '#020617');
-    irisGrad.addColorStop(0.15, '#0e3a47');
-    irisGrad.addColorStop(0.4, '#155e75');
+    irisGrad.addColorStop(0.12, '#0c2a38');
+    irisGrad.addColorStop(0.35, '#0e7490');
     irisGrad.addColorStop(0.65, '#0284c7');
     irisGrad.addColorStop(0.85, '#38bdf8');
-    irisGrad.addColorStop(0.95, '#b8ed78');
-    irisGrad.addColorStop(1.0, '#091e2e');
+    irisGrad.addColorStop(0.95, '#a3e635');
+    irisGrad.addColorStop(1.0, '#082f49');
     ctxIris.fillStyle = irisGrad;
     ctxIris.beginPath();
     ctxIris.arc(icX, icY, 490, 0, Math.PI * 2);
     ctxIris.fill();
 
+    // Iris Fibers & Crypts
     ctxIris.lineWidth = 1.8;
-    for (let i = 0; i < 360; i++) {
-      const angle = (i * Math.PI * 2) / 360;
+    for (let i = 0; i < 400; i++) {
+      const angle = (i * Math.PI * 2) / 400;
       const len = 110 + Math.random() * 370;
-      const alpha = 0.3 + Math.random() * 0.5;
-      ctxIris.strokeStyle = i % 2 === 0 ? `rgba(184, 237, 120, ${alpha})` : `rgba(56, 189, 248, ${alpha})`;
+      const alpha = 0.35 + Math.random() * 0.5;
+      ctxIris.strokeStyle = i % 2 === 0 ? `rgba(163, 230, 53, ${alpha})` : `rgba(56, 189, 248, ${alpha})`;
       ctxIris.beginPath();
       ctxIris.moveTo(icX + Math.cos(angle) * 85, icY + Math.sin(angle) * 85);
       ctxIris.lineTo(icX + Math.cos(angle) * len, icY + Math.sin(angle) * len);
       ctxIris.stroke();
     }
 
-    // Pupil Collar
-    const collar = ctxIris.createRadialGradient(icX, icY, 70, icX, icY, 120);
+    // Pupil Collar Ring
+    const collar = ctxIris.createRadialGradient(icX, icY, 70, icX, icY, 130);
     collar.addColorStop(0, '#000000');
     collar.addColorStop(0.6, '#0284c7');
-    collar.addColorStop(1, '#b8ed78');
+    collar.addColorStop(1, '#a3e635');
     ctxIris.fillStyle = collar;
     ctxIris.beginPath();
-    ctxIris.arc(icX, icY, 120, 0, Math.PI * 2);
+    ctxIris.arc(icX, icY, 130, 0, Math.PI * 2);
     ctxIris.fill();
 
     // Deep Black Pupil Center
@@ -134,7 +130,7 @@ export default function EyeVisualizerCanvas() {
 
     const irisTexture = new THREE.CanvasTexture(canvasIris);
 
-    // D. Retina Map
+    // C. Retina Texture for Internal Surgery View
     const canvasRetina = document.createElement('canvas');
     canvasRetina.width = 512;
     canvasRetina.height = 512;
@@ -149,13 +145,13 @@ export default function EyeVisualizerCanvas() {
 
     ctxRet.fillStyle = '#fef08a';
     ctxRet.beginPath();
-    ctxRet.arc(320, 256, 22, 0, Math.PI * 2);
+    ctxRet.arc(320, 256, 24, 0, Math.PI * 2);
     ctxRet.fill();
 
     ctxRet.lineWidth = 2.5;
     for (let i = 0; i < 16; i++) {
       const angle = (i * Math.PI * 2) / 16;
-      ctxRet.strokeStyle = i % 2 === 0 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(185, 28, 28, 0.85)';
+      ctxRet.strokeStyle = i % 2 === 0 ? 'rgba(239, 68, 68, 0.85)' : 'rgba(185, 28, 28, 0.9)';
       ctxRet.beginPath();
       ctxRet.moveTo(320, 256);
       let rX = 320;
@@ -170,27 +166,25 @@ export default function EyeVisualizerCanvas() {
     const retinaTexture = new THREE.CanvasTexture(canvasRetina);
 
     // ==========================================
-    // 3. REALISTIC HUMAN EYE & ORBITAL SOCKET MESHES
+    // 3. ANATOMICAL EYEBALL MESH ASSEMBLY
     // ==========================================
-
-    // Eyeball Container Group (Moves & Looks around naturally)
     const eyeballGroup = new THREE.Group();
-    eyeAssembly.add(eyeballGroup);
+    mainGroup.add(eyeballGroup);
 
-    // A. Outer Sclera Sphere Shell
+    // A. Spherical Sclera Shell
     const scleraGeo = new THREE.SphereGeometry(1.9, 64, 64);
     const scleraMat = new THREE.MeshPhysicalMaterial({
       map: scleraTexture,
-      roughness: 0.15,
+      roughness: 0.12,
       metalness: 0.05,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.05,
+      clearcoatRoughness: 0.04,
     });
     const scleraMesh = new THREE.Mesh(scleraGeo, scleraMat);
     eyeballGroup.add(scleraMesh);
 
-    // B. Internal Cutaway Hemisphere (Reveals inside during surgery zoom)
-    const cutawayGeo = new THREE.SphereGeometry(1.89, 64, 64, 0, Math.PI * 1.4, 0, Math.PI);
+    // B. Internal Cutaway Hemisphere (Used in Internal Surgery View)
+    const cutawayGeo = new THREE.SphereGeometry(1.89, 64, 64, 0, Math.PI * 1.45, 0, Math.PI);
     const cutawayMat = new THREE.MeshPhysicalMaterial({
       map: scleraTexture,
       roughness: 0.2,
@@ -201,12 +195,12 @@ export default function EyeVisualizerCanvas() {
     cutawayMesh.visible = false;
     eyeballGroup.add(cutawayMesh);
 
-    // C. Glossy Cornea Convex Dome
+    // C. Glossy Cornea Dome
     const corneaGeo = new THREE.SphereGeometry(1.94, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.28);
     const corneaMat = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.32,
       roughness: 0.01,
       transmission: 0.98,
       clearcoat: 1.0,
@@ -216,20 +210,20 @@ export default function EyeVisualizerCanvas() {
     corneaMesh.rotation.x = Math.PI / 2;
     eyeballGroup.add(corneaMesh);
 
-    // D. Multi-Layer Iris Disc
+    // D. Multi-layer Iris & Pupil
     const irisGeo = new THREE.RingGeometry(0.3, 1.28, 64);
     const irisMat = new THREE.MeshStandardMaterial({
       map: irisTexture,
       side: THREE.DoubleSide,
       roughness: 0.15,
-      emissive: new THREE.Color(0x0e3a47),
+      emissive: new THREE.Color(0x0c2a38),
       emissiveIntensity: 0.35,
     });
     const irisMesh = new THREE.Mesh(irisGeo, irisMat);
     irisMesh.position.z = 1.48;
     eyeballGroup.add(irisMesh);
 
-    // Pupil Aperture Disc
+    // Dynamic Pupil Black Hole
     const pupilGeo = new THREE.CircleGeometry(0.31, 32);
     const pupilMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
     const pupilMesh = new THREE.Mesh(pupilGeo, pupilMat);
@@ -239,36 +233,32 @@ export default function EyeVisualizerCanvas() {
     // E. 3D Biconvex Crystalline Lens
     const lensGroup = new THREE.Group();
     lensGroup.position.set(0, 0, 0.8);
-    const lensGeo = new THREE.SphereGeometry(0.7, 48, 32);
+    const lensGeo = new THREE.SphereGeometry(0.72, 48, 32);
     lensGeo.scale(1.1, 1.1, 0.45);
     const lensMat = new THREE.MeshPhysicalMaterial({
       color: 0xa5f3fc,
       transparent: true,
-      opacity: 0.75,
+      opacity: 0.78,
       roughness: 0.03,
       transmission: 0.94,
       clearcoat: 1.0,
       ior: 1.42,
       emissive: new THREE.Color(0x38bdf8),
-      emissiveIntensity: 0.2,
+      emissiveIntensity: 0.25,
     });
     const lensMesh = new THREE.Mesh(lensGeo, lensMat);
     lensGroup.add(lensMesh);
 
-    const zonuleGeo = new THREE.TorusGeometry(0.74, 0.02, 16, 64);
-    const zonuleMat = new THREE.MeshBasicMaterial({ color: 0xb8ed78, transparent: true, opacity: 0.7 });
+    const zonuleGeo = new THREE.TorusGeometry(0.75, 0.02, 16, 64);
+    const zonuleMat = new THREE.MeshBasicMaterial({ color: 0xa3e635, transparent: true, opacity: 0.7 });
     const zonuleRing = new THREE.Mesh(zonuleGeo, zonuleMat);
     lensGroup.add(zonuleRing);
 
     eyeballGroup.add(lensGroup);
 
-    // F. Retina & Optic Nerve Stem
+    // F. Retina & Optic Nerve
     const retinaGeo = new THREE.SphereGeometry(1.82, 48, 48, 0, Math.PI * 2, Math.PI * 0.35, Math.PI * 0.65);
-    const retinaMat = new THREE.MeshStandardMaterial({
-      map: retinaTexture,
-      side: THREE.BackSide,
-      roughness: 0.35,
-    });
+    const retinaMat = new THREE.MeshStandardMaterial({ map: retinaTexture, side: THREE.BackSide, roughness: 0.35 });
     const retinaMesh = new THREE.Mesh(retinaGeo, retinaMat);
     eyeballGroup.add(retinaMesh);
 
@@ -280,49 +270,85 @@ export default function EyeVisualizerCanvas() {
     eyeballGroup.add(opticNerveMesh);
 
     // ==========================================
-    // 4. REALISTIC EYELIDS & FACIAL SOCKET MESHES ("Jhapak-Jhapak" Blinking)
+    // 4. ALMOND-SHAPED FACIAL EYE MASK & EYELIDS ("Jhapak-Jhapak" Blinking)
     // ==========================================
-    const socketGroup = new THREE.Group();
+    const faceMaskGroup = new THREE.Group();
 
-    // Upper Eyelid Mesh
-    const upperLidGeo = new THREE.SphereGeometry(2.02, 48, 32, 0, Math.PI * 2, 0, Math.PI * 0.48);
+    // Create Almond-Shaped Cutout Facial Skin Frame
+    const maskShape = new THREE.Shape();
+    maskShape.moveTo(-3.5, -2.5);
+    maskShape.lineTo(3.5, -2.5);
+    maskShape.lineTo(3.5, 2.5);
+    maskShape.lineTo(-3.5, 2.5);
+    maskShape.closePath();
+
+    // Almond Palpebral Aperture Hole
+    const eyeHole = new THREE.Path();
+    eyeHole.moveTo(-1.6, 0);
+    eyeHole.bezierCurveTo(-1.0, 1.15, 1.0, 1.15, 1.6, 0);
+    eyeHole.bezierCurveTo(1.0, -1.15, -1.0, -1.15, -1.6, 0);
+    maskShape.holes.push(eyeHole);
+
+    const maskGeo = new THREE.ShapeGeometry(maskShape);
+    const maskMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.8,
+      metalness: 0.1,
+      side: THREE.DoubleSide,
+    });
+    const maskMesh = new THREE.Mesh(maskGeo, maskMat);
+    maskMesh.position.z = 1.75;
+    faceMaskGroup.add(maskMesh);
+
+    // Medial Canthus Tear Duct (Pinkish Inner Corner of Eye)
+    const caruncleGeo = new THREE.SphereGeometry(0.22, 16, 16);
+    caruncleGeo.scale(1.3, 0.8, 0.5);
+    const caruncleMat = new THREE.MeshStandardMaterial({ color: 0xf43f5e, roughness: 0.4 });
+    const caruncleMesh = new THREE.Mesh(caruncleGeo, caruncleMat);
+    caruncleMesh.position.set(-1.52, -0.05, 1.76);
+    faceMaskGroup.add(caruncleMesh);
+
+    // Upper Eyelid Mesh for Realistic Blinking
+    const upperLidGeo = new THREE.SphereGeometry(2.0, 48, 32, 0, Math.PI * 2, 0, Math.PI * 0.48);
     const lidMat = new THREE.MeshStandardMaterial({
-      map: skinTexture,
-      color: 0x1e293b,
-      roughness: 0.7,
+      color: 0x0f172a,
+      roughness: 0.75,
       side: THREE.DoubleSide,
     });
     const upperLidMesh = new THREE.Mesh(upperLidGeo, lidMat);
-    upperLidMesh.rotation.x = -Math.PI * 0.38; // Initial open position
-    socketGroup.add(upperLidMesh);
+    upperLidMesh.rotation.x = -Math.PI * 0.36; // Initial open position
+    faceMaskGroup.add(upperLidMesh);
 
     // Lower Eyelid Mesh
-    const lowerLidGeo = new THREE.SphereGeometry(2.02, 48, 32, 0, Math.PI * 2, Math.PI * 0.52, Math.PI * 0.48);
+    const lowerLidGeo = new THREE.SphereGeometry(2.0, 48, 32, 0, Math.PI * 2, Math.PI * 0.52, Math.PI * 0.48);
     const lowerLidMesh = new THREE.Mesh(lowerLidGeo, lidMat);
-    lowerLidMesh.rotation.x = Math.PI * 0.38; // Initial open position
-    socketGroup.add(lowerLidMesh);
+    lowerLidMesh.rotation.x = Math.PI * 0.36; // Initial open position
+    faceMaskGroup.add(lowerLidMesh);
 
-    // Eyelash Rim Fibers
+    // Realistic Eyelashes along Upper Eyelid Rim
     const lashGroup = new THREE.Group();
-    const lashCount = 60;
-    const lashMat = new THREE.MeshBasicMaterial({ color: 0x070c14 });
+    const lashCount = 65;
+    const lashMat = new THREE.MeshBasicMaterial({ color: 0x020617 });
     for (let i = 0; i < lashCount; i++) {
-      const angle = (i / lashCount) * Math.PI - Math.PI / 2;
-      const lGeo = new THREE.CylinderGeometry(0.01, 0.02, 0.25, 6);
+      const t = i / lashCount;
+      const angle = (t - 0.5) * Math.PI * 0.9;
+      const lGeo = new THREE.CylinderGeometry(0.008, 0.018, 0.28, 6);
       const lash = new THREE.Mesh(lGeo, lashMat);
-      lash.position.set(Math.sin(angle) * 1.85, Math.cos(angle) * 0.6 + 0.9, 1.7);
-      lash.rotation.z = -angle * 0.6;
-      lash.rotation.x = 0.4;
+      const x = Math.sin(angle) * 1.65;
+      const y = Math.cos(angle) * 0.55 + 0.65;
+      lash.position.set(x, y, 1.76);
+      lash.rotation.z = -angle * 0.75;
+      lash.rotation.x = 0.45;
       lashGroup.add(lash);
     }
     upperLidMesh.add(lashGroup);
 
-    eyeAssembly.add(socketGroup);
+    mainGroup.add(faceMaskGroup);
 
     // ==========================================
-    // 5. SURGICAL LIGHT BEAMS & PARTICLES
+    // 5. SURGICAL LIGHT BEAMS (Inside View)
     // ==========================================
-    const laserGroup = new THREE.Group();
+    const surgicalLightGroup = new THREE.Group();
     const laserCylinderGeo = new THREE.CylinderGeometry(0.015, 0.015, 5, 8);
     const laserCylinderMat = new THREE.MeshBasicMaterial({
       color: 0x38bdf8,
@@ -333,26 +359,26 @@ export default function EyeVisualizerCanvas() {
     const laserBeam = new THREE.Mesh(laserCylinderGeo, laserCylinderMat);
     laserBeam.rotation.z = Math.PI / 2;
     laserBeam.position.z = 2.0;
-    laserGroup.add(laserBeam);
+    surgicalLightGroup.add(laserBeam);
 
     const laserRingGeo = new THREE.RingGeometry(0.1, 0.75, 32);
     const laserRingMat = new THREE.MeshBasicMaterial({
-      color: 0xb8ed78,
+      color: 0xa3e635,
       transparent: true,
       opacity: 0,
       side: THREE.DoubleSide,
     });
     const laserRing = new THREE.Mesh(laserRingGeo, laserRingMat);
     laserRing.position.z = 1.95;
-    laserGroup.add(laserRing);
-    scene.add(laserGroup);
+    surgicalLightGroup.add(laserRing);
+    scene.add(surgicalLightGroup);
 
-    // Vitreous Floating Particles
+    // Floating Vitreous Particles
     const pCount = 140;
     const pGeo = new THREE.BufferGeometry();
     const pPos = new Float32Array(pCount * 3);
     const pCols = new Float32Array(pCount * 3);
-    const cLime = new THREE.Color(0xb8ed78);
+    const cLime = new THREE.Color(0xa3e635);
     const cCyan = new THREE.Color(0x38bdf8);
 
     for (let i = 0; i < pCount; i++) {
@@ -369,7 +395,6 @@ export default function EyeVisualizerCanvas() {
       pCols[i * 3 + 1] = col.g;
       pCols[i * 3 + 2] = col.b;
     }
-
     pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
     pGeo.setAttribute('color', new THREE.BufferAttribute(pCols, 3));
 
@@ -377,7 +402,7 @@ export default function EyeVisualizerCanvas() {
       size: 0.04,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.65,
       blending: THREE.AdditiveBlending,
     });
     const particles = new THREE.Points(pGeo, pMat);
@@ -386,14 +411,14 @@ export default function EyeVisualizerCanvas() {
     // ==========================================
     // 6. LIGHTING
     // ==========================================
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x38bdf8, 2.5);
+    const keyLight = new THREE.DirectionalLight(0x38bdf8, 2.6);
     keyLight.position.set(5, 5, 6);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xb8ed78, 2.2);
+    const fillLight = new THREE.DirectionalLight(0xa3e635, 2.2);
     fillLight.position.set(-5, -5, 6);
     scene.add(fillLight);
 
@@ -402,7 +427,7 @@ export default function EyeVisualizerCanvas() {
     scene.add(backLight);
 
     // ==========================================
-    // 7. INTERACTION & GAZE MOUSE FOLLOW
+    // 7. MOUSE GAZE & INTERACTION
     // ==========================================
     let targetGazeX = 0;
     let targetGazeY = 0;
@@ -411,12 +436,12 @@ export default function EyeVisualizerCanvas() {
       const rect = container.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      targetGazeY = x * 0.45;
-      targetGazeX = -y * 0.35;
+      targetGazeY = x * 0.4;
+      targetGazeX = -y * 0.3;
     };
 
     const handleClick = () => {
-      setIsInsideView((prev) => !prev);
+      setIsInside((prev) => !prev);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -433,7 +458,7 @@ export default function EyeVisualizerCanvas() {
     window.addEventListener('resize', handleResize);
 
     // ==========================================
-    // 8. ANIMATION LOOP (REALISTIC BLINKING & SURGERY TRAVERSAL)
+    // 8. ANIMATION LOOP (BLINKS & DEEP SURGERY ZOOMS)
     // ==========================================
     const clock = new THREE.Clock();
     let animId;
@@ -442,61 +467,57 @@ export default function EyeVisualizerCanvas() {
     let isBlinking = false;
     let blinkProgress = 0;
 
-    const targetCamPos = new THREE.Vector3(0, 0, 6.0);
+    const targetCamPos = new THREE.Vector3(0, 0, 5.5);
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
-      const delta = clock.getDelta();
+      const inside = isInsideRef.current;
 
-      const insideView = isInsideViewRef.current;
-
-      // Natural Eyelid Blinking Mechanism ("Jhapak-Jhapak")
-      if (!insideView) {
+      // Automatic Natural Blinking ("Jhapak-Jhapak")
+      if (!inside) {
         blinkTimer += 0.016;
-        if (blinkTimer > 3.2 && !isBlinking) {
+        if (blinkTimer > 3.4 && !isBlinking) {
           isBlinking = true;
           blinkProgress = 0;
         }
 
         if (isBlinking) {
-          blinkProgress += 0.08;
-          const lidAngle = Math.sin(blinkProgress * Math.PI) * 0.42;
-          upperLidMesh.rotation.x = -Math.PI * 0.38 + lidAngle;
-          lowerLidMesh.rotation.x = Math.PI * 0.38 - lidAngle;
+          blinkProgress += 0.085;
+          const lidAngle = Math.sin(blinkProgress * Math.PI) * 0.4;
+          upperLidMesh.rotation.x = -Math.PI * 0.36 + lidAngle;
+          lowerLidMesh.rotation.x = Math.PI * 0.36 - lidAngle;
 
           if (blinkProgress >= 1.0) {
             isBlinking = false;
-            blinkTimer = Math.random() * -1.5; // Randomize next blink delay
-            upperLidMesh.rotation.x = -Math.PI * 0.38;
-            lowerLidMesh.rotation.x = Math.PI * 0.38;
+            blinkTimer = Math.random() * -1.8;
+            upperLidMesh.rotation.x = -Math.PI * 0.36;
+            lowerLidMesh.rotation.x = Math.PI * 0.36;
           }
         }
       }
 
-      // Smooth Gaze & Eyeball Movement
+      // Smooth Gaze Movement
       eyeballGroup.rotation.y += (targetGazeY - eyeballGroup.rotation.y) * 0.08;
       eyeballGroup.rotation.x += (targetGazeX - eyeballGroup.rotation.x) * 0.08;
 
-      // MODE TRANSITIONS (Realistic Eye vs Deep Surgery View)
-      if (!insideView) {
-        // External Realistic Eye View
-        targetCamPos.set(0, 0, 6.0);
+      // MODE TRANSITIONS (Realistic Almond Eye vs Deep Surgical Chamber View)
+      if (!inside) {
+        targetCamPos.set(0, 0, 5.5);
         scleraMesh.visible = true;
         cutawayMesh.visible = false;
-        socketGroup.visible = true;
+        faceMaskGroup.visible = true;
 
         laserCylinderMat.opacity = 0;
         laserRingMat.opacity = 0;
       } else {
-        // Deep Surgical Anatomy Traversal ("Surgery ke andar ghuse")
-        targetCamPos.set(0.3, 0.1, 3.2);
+        // Deep Surgical Traversal into Eye ("Surgery ke andar ghuse")
+        targetCamPos.set(0.2, 0.1, 3.1);
         scleraMesh.visible = false;
         cutawayMesh.visible = true;
-        socketGroup.visible = false;
+        faceMaskGroup.visible = false;
 
-        // Laser Surgical Sweep
-        laserCylinderMat.opacity = 0.9 + Math.sin(elapsedTime * 12) * 0.1;
+        laserCylinderMat.opacity = 0.92 + Math.sin(elapsedTime * 14) * 0.08;
         laserBeam.position.y = Math.sin(elapsedTime * 3.5) * 0.5;
         laserRingMat.opacity = 0.85;
         laserRing.rotation.z = elapsedTime * 2;
@@ -505,9 +526,9 @@ export default function EyeVisualizerCanvas() {
       // Smooth Camera LERP
       camera.position.lerp(targetCamPos, 0.06);
 
-      // Pulse Lens Glow & Float Particles
-      lensMat.emissiveIntensity = 0.2 + Math.sin(elapsedTime * 3) * 0.12;
-      particles.rotation.y = elapsedTime * 0.05;
+      // Pulse Lens & Rotate Floating Particles
+      lensMat.emissiveIntensity = 0.25 + Math.sin(elapsedTime * 3.5) * 0.15;
+      particles.rotation.y = elapsedTime * 0.04;
 
       renderer.render(scene, camera);
     };
@@ -527,18 +548,12 @@ export default function EyeVisualizerCanvas() {
   }, []);
 
   return (
-    <div className="relative w-full h-full min-h-[420px] lg:min-h-[520px] flex items-center justify-center rounded-3xl bg-gradient-to-b from-[#030712] via-[#07131f] to-[#040914] border border-[#35A6B7]/30 shadow-2xl overflow-hidden cursor-pointer group">
+    <div className="relative w-full h-full min-h-[420px] lg:min-h-[520px] flex items-center justify-center rounded-3xl bg-gradient-to-b from-[#030712] via-[#07131f] to-[#040914] border border-[#35A6B7]/30 shadow-2xl overflow-hidden cursor-pointer">
       
-      {/* Dynamic Background Ambient Glow */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/20 via-[#B8ED78]/15 to-transparent blur-3xl pointer-events-none transform scale-95" />
+      {/* Background Ambient Radial Lighting */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/20 via-[#a3e635]/15 to-transparent blur-3xl pointer-events-none transform scale-95" />
 
-      {/* Sleek Minimalist Click Hint Badge */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#030712]/85 border border-[#35A6B7]/40 backdrop-blur-md text-slate-200 text-[11px] font-medium shadow-xl group-hover:border-[#B8ED78] transition-all duration-300">
-        <span className="w-2 h-2 rounded-full bg-[#B8ED78] animate-ping" />
-        <span>{isInsideView ? '🔬 Surgical Anatomy View (Click Eye to Exit)' : '👁️ Interactive 3D Eye (Click Eye to Enter Surgery View)'}</span>
-      </div>
-
-      {/* 3D WebGL Canvas */}
+      {/* 3D WebGL Canvas Container - ZERO Text / ZERO Overlay Clutter */}
       <div 
         ref={mountRef} 
         className="w-full h-[380px] sm:h-[460px] lg:h-[520px] z-10"
