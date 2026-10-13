@@ -23,7 +23,7 @@ export default function EyeVisualizerCanvas() {
         frameBorder="0"
         allowFullScreen
         allow="autoplay; fullscreen; xr-spatial-tracking"
-        src="https://sketchfab.com/models/7d1ff51c69c04455b093bf03c67a0d40/embed?autostart=1&preload=1&ui_theme=dark&ui_color=35A6B7&ui_watermark=0&ui_watermark_link=0&ui_infos=0&ui_controls=0&ui_stop=0&ui_hint=0&ui_ar=0&ui_vr=0&ui_fullscreen=1&transparent=0&dnt=1"
+        src="https://sketchfab.com/models/b68ae822b45443edb812950993ece362/embed?autostart=1&preload=1&ui_theme=dark&ui_color=35A6B7&ui_watermark=0&ui_watermark_link=0&ui_infos=0&ui_controls=0&ui_stop=0&ui_hint=0&ui_ar=0&ui_vr=0&ui_fullscreen=1&transparent=0&dnt=1"
       />
 
       {/* Themed border overlay */}
