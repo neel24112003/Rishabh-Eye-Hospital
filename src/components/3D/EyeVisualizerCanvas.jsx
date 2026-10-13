@@ -1,6 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+/* ─── Website Theme ─── */
+const TEAL  = new THREE.Color('#35A6B7');
+const AQUA  = new THREE.Color('#51AABC');
+const LIME  = new THREE.Color('#B8ED78');
+const DARK  = new THREE.Color('#070C14');
+
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
 
@@ -8,470 +14,573 @@ export default function EyeVisualizerCanvas() {
     const container = mountRef.current;
     if (!container) return;
 
-    const W = container.clientWidth || 500;
+    const W = container.clientWidth  || 500;
     const H = container.clientHeight || 500;
 
-    /* ─── Scene ─── */
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, W / H, 0.1, 100);
-    camera.position.set(0, 0, 6.2);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    /* ── Renderer ── */
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.4;
     container.appendChild(renderer.domElement);
 
-    /* ═══════════════════════════════════════════
-       TEXTURES – all generated on canvas
-    ═══════════════════════════════════════════ */
+    /* ── Scene / Camera ── */
+    const scene = new THREE.Scene();
+    scene.background = DARK;
+    const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 100);
+    camera.position.set(0, 0, 5.5);
 
-    // ── Sclera (white of the eye with fine blood vessels) ──
-    const scleraCanvas = document.createElement('canvas');
-    scleraCanvas.width = 1024; scleraCanvas.height = 512;
-    const sc = scleraCanvas.getContext('2d');
-    // warm-white base
-    const sg = sc.createRadialGradient(512,256,0,512,256,512);
-    sg.addColorStop(0, '#fffdf8');
-    sg.addColorStop(0.6, '#fdf4ef');
-    sg.addColorStop(1, '#f5e8e0');
-    sc.fillStyle = sg; sc.fillRect(0,0,1024,512);
-    // fine capillaries
-    for (let i = 0; i < 80; i++) {
-      const ox = Math.random() < 0.5 ? Math.random()*200 : 824+Math.random()*200;
-      const oy = 100+Math.random()*312;
-      sc.beginPath(); sc.moveTo(ox, oy);
-      let cx2 = ox, cy2 = oy;
-      for (let j = 0; j < 8; j++) {
-        cx2 += (Math.random()-0.5)*55; cy2 += (Math.random()-0.5)*35;
-        sc.lineTo(cx2, cy2);
+    /* ══════════════════════════════════════════
+       PROCEDURAL TEXTURES
+    ══════════════════════════════════════════ */
+
+    /* Iris texture – large, dominant, teal/aqua themed */
+    const makeIrisTex = () => {
+      const c = document.createElement('canvas');
+      c.width = 1024; c.height = 1024;
+      const ctx = c.getContext('2d');
+      const cx = 512, cy = 512;
+
+      // 1. Black base
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1024, 1024);
+
+      // 2. Deep radial gradient – website teal palette
+      const base = ctx.createRadialGradient(cx,cy,0, cx,cy,512);
+      base.addColorStop(0,    '#000c12');
+      base.addColorStop(0.08, '#011820');
+      base.addColorStop(0.20, '#052a35');
+      base.addColorStop(0.38, '#0e5f6e');
+      base.addColorStop(0.55, '#1e8fa0');
+      base.addColorStop(0.70, '#35A6B7');
+      base.addColorStop(0.82, '#51AABC');
+      base.addColorStop(0.92, '#7dd8e8');
+      base.addColorStop(0.97, '#a0e8f4');
+      base.addColorStop(1.0,  '#020e14');
+      ctx.fillStyle = base;
+      ctx.beginPath(); ctx.arc(cx, cy, 512, 0, Math.PI*2); ctx.fill();
+
+      // 3. Radial fibres – bright teal/white
+      for (let i = 0; i < 600; i++) {
+        const ang = (i / 600) * Math.PI * 2;
+        const r0  = 55  + Math.random() * 30;
+        const r1  = 180 + Math.random() * 310;
+        const alpha = 0.18 + Math.random() * 0.55;
+        const bright = Math.random() > 0.5;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(ang) * r0, cy + Math.sin(ang) * r0);
+        ctx.lineTo(cx + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
+        ctx.strokeStyle = bright
+          ? `rgba(180,240,255,${alpha})`
+          : `rgba(81,170,188,${alpha})`;
+        ctx.lineWidth = 0.6 + Math.random() * 1.4;
+        ctx.stroke();
       }
-      sc.strokeStyle = `rgba(220,60,60,${0.12+Math.random()*0.2})`;
-      sc.lineWidth = 0.8+Math.random()*0.7;
-      sc.stroke();
-    }
-    const scleraTexture = new THREE.CanvasTexture(scleraCanvas);
 
-    // ── Iris (richly detailed – blue/hazel with crypts & collarette) ──
-    const irisCanvas = document.createElement('canvas');
-    irisCanvas.width = 1024; irisCanvas.height = 1024;
-    const ic = irisCanvas.getContext('2d');
-    const iCX = 512, iCY = 512;
-    ic.fillStyle = '#000'; ic.fillRect(0,0,1024,1024);
+      // 4. Collarette (inner ring detail)
+      ctx.beginPath(); ctx.arc(cx, cy, 148, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(184,237,120,0.35)';  // lime accent
+      ctx.lineWidth = 6; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, 158, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(53,166,183,0.5)';
+      ctx.lineWidth = 3; ctx.stroke();
 
-    // deep-blue radial base
-    const ig = ic.createRadialGradient(iCX,iCY,60,iCX,iCY,490);
-    ig.addColorStop(0,   '#010b16');
-    ig.addColorStop(0.10,'#0a1f38');
-    ig.addColorStop(0.30,'#0c4a6e');
-    ig.addColorStop(0.55,'#0369a1');
-    ig.addColorStop(0.75,'#0284c7');
-    ig.addColorStop(0.90,'#38bdf8');
-    ig.addColorStop(0.97,'#7dd3fc');
-    ig.addColorStop(1.0, '#0a2540');
-    ic.fillStyle = ig;
-    ic.beginPath(); ic.arc(iCX,iCY,490,0,Math.PI*2); ic.fill();
+      // 5. Crypts
+      for (let i = 0; i < 32; i++) {
+        const a = Math.random()*Math.PI*2;
+        const r = 110 + Math.random()*180;
+        ctx.beginPath();
+        ctx.arc(cx+Math.cos(a)*r, cy+Math.sin(a)*r, 5+Math.random()*16, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(0,0,0,${0.2+Math.random()*0.45})`; ctx.fill();
+      }
 
-    // limbal ring (dark outer edge)
-    const lr = ic.createRadialGradient(iCX,iCY,430,iCX,iCY,490);
-    lr.addColorStop(0,'rgba(0,0,0,0)');
-    lr.addColorStop(1,'rgba(0,0,0,0.92)');
-    ic.fillStyle = lr; ic.beginPath(); ic.arc(iCX,iCY,490,0,Math.PI*2); ic.fill();
+      // 6. Limbal ring (dark outer edge)
+      const lim = ctx.createRadialGradient(cx,cy,390, cx,cy,512);
+      lim.addColorStop(0, 'rgba(0,0,0,0)');
+      lim.addColorStop(1, 'rgba(0,0,0,0.95)');
+      ctx.fillStyle = lim;
+      ctx.beginPath(); ctx.arc(cx,cy,512,0,Math.PI*2); ctx.fill();
 
-    // radial fibres
-    for (let i = 0; i < 480; i++) {
-      const ang = (i/480)*Math.PI*2;
-      const inner = 70+Math.random()*20;
-      const outer = 200+Math.random()*270;
-      const alpha = 0.25+Math.random()*0.55;
-      ic.beginPath();
-      ic.moveTo(iCX+Math.cos(ang)*inner, iCY+Math.sin(ang)*inner);
-      ic.lineTo(iCX+Math.cos(ang)*outer, iCY+Math.sin(ang)*outer);
-      const even = i%2===0;
-      ic.strokeStyle = even ? `rgba(125,211,252,${alpha})` : `rgba(186,230,253,${alpha})`;
-      ic.lineWidth = 0.8+Math.random()*1.2;
-      ic.stroke();
-    }
+      // 7. Pupil gradient
+      const pup = ctx.createRadialGradient(cx,cy,0, cx,cy,115);
+      pup.addColorStop(0,   '#000000');
+      pup.addColorStop(0.7, 'rgba(2,18,28,0.95)');
+      pup.addColorStop(1,   'rgba(0,0,0,0)');
+      ctx.fillStyle = pup;
+      ctx.beginPath(); ctx.arc(cx,cy,115,0,Math.PI*2); ctx.fill();
 
-    // collarette ring
-    ic.beginPath(); ic.arc(iCX,iCY,155,0,Math.PI*2);
-    ic.strokeStyle = 'rgba(186,230,253,0.35)'; ic.lineWidth = 8; ic.stroke();
-    ic.beginPath(); ic.arc(iCX,iCY,162,0,Math.PI*2);
-    ic.strokeStyle = 'rgba(14,116,144,0.4)'; ic.lineWidth = 4; ic.stroke();
+      // 8. Solid pupil center
+      ctx.fillStyle = '#000000';
+      ctx.beginPath(); ctx.arc(cx,cy,80,0,Math.PI*2); ctx.fill();
 
-    // crypts (irregular gaps)
-    for (let i = 0; i < 28; i++) {
-      const ang = Math.random()*Math.PI*2;
-      const r = 140+Math.random()*150;
-      const x = iCX+Math.cos(ang)*r, y = iCY+Math.sin(ang)*r;
-      ic.beginPath(); ic.arc(x,y, 6+Math.random()*14, 0, Math.PI*2);
-      ic.fillStyle = `rgba(0,0,0,${0.25+Math.random()*0.4})`; ic.fill();
-    }
+      return new THREE.CanvasTexture(c);
+    };
 
-    // pupil sphincter gradient
-    const pg = ic.createRadialGradient(iCX,iCY,60,iCX,iCY,130);
-    pg.addColorStop(0,'#000'); pg.addColorStop(0.7,'rgba(3,60,120,0.8)'); pg.addColorStop(1,'rgba(0,0,0,0)');
-    ic.fillStyle = pg; ic.beginPath(); ic.arc(iCX,iCY,130,0,Math.PI*2); ic.fill();
+    /* Sclera – warm white with subtle veins */
+    const makeSclera = () => {
+      const c = document.createElement('canvas');
+      c.width = 1024; c.height = 512;
+      const ctx = c.getContext('2d');
+      // warm white base
+      const g = ctx.createRadialGradient(512,256,0,512,256,520);
+      g.addColorStop(0, '#ffffff');
+      g.addColorStop(0.5,'#fdf6f0');
+      g.addColorStop(1, '#f0e4d8');
+      ctx.fillStyle = g; ctx.fillRect(0,0,1024,512);
+      // delicate blood vessels near edges only
+      for (let i=0;i<50;i++){
+        const edge = Math.random()>0.5;
+        const ox = edge ? Math.random()*160 : 864+Math.random()*160;
+        const oy = 80+Math.random()*352;
+        ctx.beginPath(); ctx.moveTo(ox,oy);
+        let px=ox,py=oy;
+        for(let j=0;j<6;j++){ px+=(Math.random()-0.5)*50; py+=(Math.random()-0.5)*30; ctx.lineTo(px,py); }
+        ctx.strokeStyle=`rgba(210,50,50,${0.08+Math.random()*0.14})`;
+        ctx.lineWidth=0.7+Math.random()*0.8; ctx.stroke();
+      }
+      return new THREE.CanvasTexture(c);
+    };
 
-    // pure black pupil
-    ic.fillStyle = '#000'; ic.beginPath(); ic.arc(iCX,iCY,92,0,Math.PI*2); ic.fill();
+    /* Iris glow overlay for bloom effect */
+    const makeGlowRing = () => {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0,0,512,512);
+      const g = ctx.createRadialGradient(256,256,60,256,256,256);
+      g.addColorStop(0,   'rgba(53,166,183,0)');
+      g.addColorStop(0.7, 'rgba(53,166,183,0.0)');
+      g.addColorStop(0.85,'rgba(81,170,188,0.5)');
+      g.addColorStop(0.95,'rgba(184,237,120,0.4)');
+      g.addColorStop(1.0, 'rgba(53,166,183,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(256,256,256,0,Math.PI*2); ctx.fill();
+      return new THREE.CanvasTexture(c);
+    };
 
-    const irisTexture = new THREE.CanvasTexture(irisCanvas);
+    const irisTex  = makeIrisTex();
+    const scleraTex = makeSclera();
+    const glowTex  = makeGlowRing();
 
-    // ── Eyelid skin texture ──
-    const skinCanvas = document.createElement('canvas');
-    skinCanvas.width = 512; skinCanvas.height = 512;
-    const sk = skinCanvas.getContext('2d');
-    const skGrad = sk.createLinearGradient(0,0,512,512);
-    skGrad.addColorStop(0,'#c8956a'); skGrad.addColorStop(0.5,'#b07040'); skGrad.addColorStop(1,'#8a5530');
-    sk.fillStyle = skGrad; sk.fillRect(0,0,512,512);
-    // subtle pore noise
-    for (let i=0;i<800;i++){
-      const px=Math.random()*512,py=Math.random()*512;
-      sk.fillStyle=`rgba(0,0,0,${0.02+Math.random()*0.04})`;
-      sk.beginPath();sk.arc(px,py,1+Math.random()*2,0,Math.PI*2);sk.fill();
-    }
-    const skinTexture = new THREE.CanvasTexture(skinCanvas);
+    /* ══════════════════════════════════════════
+       EYE GROUP
+    ══════════════════════════════════════════ */
+    const eye = new THREE.Group();
+    scene.add(eye);
 
-    /* ═══════════════════════════════════════════
-       GEOMETRY & MESHES
-    ═══════════════════════════════════════════ */
-
-    const eyeGroup = new THREE.Group();
-    scene.add(eyeGroup);
-
-    // 1. EYEBALL – slightly oblate sphere for realistic shape
-    const eyeballGeo = new THREE.SphereGeometry(1.8, 128, 128);
-    // Squeeze slightly on Z (eyes aren't perfect spheres)
-    eyeballGeo.applyMatrix4(new THREE.Matrix4().makeScale(1, 1, 0.95));
-    const eyeballMat = new THREE.MeshPhysicalMaterial({
-      map: scleraTexture,
-      roughness: 0.2,
+    /* 1. EYEBALL SPHERE – slightly oblate */
+    const ballGeo = new THREE.SphereGeometry(1.55, 128, 128);
+    const ballMat = new THREE.MeshPhysicalMaterial({
+      map: scleraTex,
+      roughness: 0.15,
       metalness: 0.0,
-      clearcoat: 0.6,
-      clearcoatRoughness: 0.1,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.05,
     });
-    const eyeballMesh = new THREE.Mesh(eyeballGeo, eyeballMat);
-    eyeGroup.add(eyeballMesh);
+    const ball = new THREE.Mesh(ballGeo, ballMat);
+    ball.scale.z = 0.92;
+    eye.add(ball);
 
-    // 2. IRIS DISC – flat ring sitting on front of eyeball
-    const irisGeo = new THREE.RingGeometry(0.28, 1.22, 128);
+    /* 2. IRIS – large disc (takes up most visible eye) */
+    const irisGeo = new THREE.CircleGeometry(1.18, 256);
     const irisMat = new THREE.MeshStandardMaterial({
-      map: irisTexture,
-      side: THREE.DoubleSide,
-      roughness: 0.18,
+      map: irisTex,
+      roughness: 0.08,
       metalness: 0.0,
     });
     const irisMesh = new THREE.Mesh(irisGeo, irisMat);
-    irisMesh.position.z = 1.52;
-    // Slight forward tilt so iris plane curves naturally
-    eyeGroup.add(irisMesh);
+    irisMesh.position.z = 1.31;
+    eye.add(irisMesh);
 
-    // 3. PUPIL (pure black disc on iris)
-    const pupilGeo = new THREE.CircleGeometry(0.285, 64);
-    const pupilMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
-    const pupilMesh = new THREE.Mesh(pupilGeo, pupilMat);
-    pupilMesh.position.z = 1.525;
-    eyeGroup.add(pupilMesh);
+    /* 3. PUPIL */
+    const pupGeo = new THREE.CircleGeometry(0.315, 128);
+    const pupMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const pupMesh = new THREE.Mesh(pupGeo, pupMat);
+    pupMesh.position.z = 1.315;
+    eye.add(pupMesh);
 
-    // 4. CORNEA – clear convex dome with physical refraction look
-    const corneaGeo = new THREE.SphereGeometry(1.86, 128, 128, 0, Math.PI*2, 0, Math.PI*0.285);
-    const corneaMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
+    /* 4. CORNEA – subtle convex glass dome */
+    const cornGeo = new THREE.SphereGeometry(1.6, 128, 128, 0, Math.PI*2, 0, 0.78);
+    const cornMat = new THREE.MeshPhysicalMaterial({
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.15,
       roughness: 0.0,
       metalness: 0.0,
-      transmission: 0.95,
-      thickness: 0.3,
+      transmission: 0.92,
+      thickness: 0.25,
       ior: 1.376,
       clearcoat: 1.0,
       clearcoatRoughness: 0.0,
-      envMapIntensity: 1.2,
     });
-    const corneaMesh = new THREE.Mesh(corneaGeo, corneaMat);
-    corneaMesh.rotation.x = Math.PI / 2;
-    eyeGroup.add(corneaMesh);
+    const cornMesh = new THREE.Mesh(cornGeo, cornMat);
+    cornMesh.rotation.x = Math.PI / 2;
+    eye.add(cornMesh);
 
-    // 5. CORNEAL SPECULAR HIGHLIGHT – tiny bright ellipse to sell realism
-    const highlightGeo = new THREE.CircleGeometry(0.22, 32);
-    const highlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.78, depthWrite: false });
-    const highlightMesh = new THREE.Mesh(highlightGeo, highlightMat);
-    highlightMesh.position.set(-0.38, 0.42, 1.83);
-    highlightMesh.lookAt(camera.position);
-    eyeGroup.add(highlightMesh);
+    /* 5. IRIS GLOW RING (additive blend for limbal glow) */
+    const glowGeo = new THREE.PlaneGeometry(2.6, 2.6);
+    const glowMat = new THREE.MeshBasicMaterial({
+      map: glowTex,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      opacity: 0.85,
+    });
+    const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+    glowMesh.position.z = 1.32;
+    eye.add(glowMesh);
 
-    // small secondary highlight
-    const hl2Geo = new THREE.CircleGeometry(0.07, 32);
-    const hl2Mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.45, depthWrite: false });
-    const hl2Mesh = new THREE.Mesh(hl2Geo, hl2Mat);
-    hl2Mesh.position.set(0.45, -0.3, 1.83);
-    hl2Mesh.lookAt(camera.position);
-    eyeGroup.add(hl2Mesh);
+    /* 6. CORNEAL HIGHLIGHTS – small, crisp, not giant blobs */
+    const mkHL = (size, opacity, x, y) => {
+      const c = document.createElement('canvas');
+      c.width = 128; c.height = 128;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(64,64,0,64,64,64);
+      g.addColorStop(0, `rgba(255,255,255,${opacity})`);
+      g.addColorStop(0.35,`rgba(255,255,255,${opacity*0.6})`);
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle=g; ctx.fillRect(0,0,128,128);
+      const geo = new THREE.PlaneGeometry(size, size);
+      const mat = new THREE.MeshBasicMaterial({
+        map: new THREE.CanvasTexture(c),
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const m = new THREE.Mesh(geo, mat);
+      m.position.set(x, y, 1.61);
+      return m;
+    };
+    const hl1 = mkHL(0.38, 0.95, -0.30, 0.38);  // main highlight
+    const hl2 = mkHL(0.14, 0.55,  0.38,-0.25);   // secondary
+    eye.add(hl1); eye.add(hl2);
 
-    // 6. UPPER EYELID – sculpted to almond shape using lathe/curved mesh
-    //    We build custom geometry to get a proper eyelid crease & shape
-    const buildLid = (isUpper) => {
+    /* 7. EYELIDS – almond-shaped paths using custom geometry */
+    const buildLidCurve = (open, isUpper) => {
       const pts = [];
-      const segs = 64;
+      const segs = 80;
       for (let i = 0; i <= segs; i++) {
-        const t = i / segs; // 0 to 1 left to right
-        const x = -2.1 + t * 4.2; // spans -2.1 to +2.1
-        // Almond silhouette: medial and lateral canthus taper to points
-        const halfOpen = Math.sqrt(Math.max(0, 1 - ((x / 2.1) ** 2))) * 1.08;
-        const y = isUpper ? halfOpen : -halfOpen;
-        // curve to wrap sphere (z comes from sphere radius)
-        const z = Math.sqrt(Math.max(0, 1.84 ** 2 - x * x)) * 0.62;
+        const t  = i / segs;       // 0..1 left to right
+        const nx = t * 2 - 1;      // -1..1 normalised
+        // Almond silhouette – squints at corners
+        const almondH = (1 - nx*nx*1.18) * (1 - Math.abs(nx)*0.35);
+        const baseH   = Math.sqrt(Math.max(0, almondH)) * open;
+        const y       = isUpper ? baseH : -baseH;
+        const x       = nx * 1.78;
+        const z       = Math.sqrt(Math.max(0, 1.55*1.55 - x*x*0.9)) * 0.82;
         pts.push(new THREE.Vector3(x, y, z));
       }
-      return pts;
+      return new THREE.CatmullRomCurve3(pts);
     };
 
-    // Thicker lid geometry using tube-like extrusion
-    const buildLidMesh = (isUpper, color) => {
-      const pts = buildLid(isUpper);
-      const curve = new THREE.CatmullRomCurve3(pts);
-
-      // Extrude a flat ribbon
-      const ribbonGeo = new THREE.TubeGeometry(curve, 128, 0.12, 8, false);
-      const ribbonMat = new THREE.MeshStandardMaterial({
-        color: color,
-        roughness: 0.75,
-        metalness: 0.02,
-      });
-      return new THREE.Mesh(ribbonGeo, ribbonMat);
+    /* Eyelid margin (the thin rim visible on closed/open lids) */
+    const makeLidEdge = (isUpper, color) => {
+      const curve = buildLidCurve(isUpper ? 1.12 : 0.72, isUpper);
+      const geo   = new THREE.TubeGeometry(curve, 160, 0.045, 10, false);
+      const mat   = new THREE.MeshStandardMaterial({ color, roughness: 0.7 });
+      const m     = new THREE.Mesh(geo, mat);
+      m.position.z = 0.68;
+      return m;
     };
 
-    const upperLid = buildLidMesh(true, 0x2d1b0e);
-    upperLid.position.z = 0.85;
-    upperLid.rotation.x = 0.18;
-    eyeGroup.add(upperLid);
-
-    const lowerLid = buildLidMesh(false, 0x3a2010);
-    lowerLid.position.z = 0.85;
-    lowerLid.rotation.x = -0.14;
-    eyeGroup.add(lowerLid);
-
-    // 7. EYELID SKIN PLANE – dark skin area above/below eye
-    const makeLidSkin = (isUpper) => {
+    /* Eyelid skin fill shapes */
+    const makeUpperSkin = () => {
       const shape = new THREE.Shape();
-      if (isUpper) {
-        shape.moveTo(-2.1, 0);
-        shape.bezierCurveTo(-1.5, 1.2, 1.5, 1.2, 2.1, 0);
-        shape.lineTo(2.6, 2.8);
-        shape.lineTo(-2.6, 2.8);
-      } else {
-        shape.moveTo(-2.1, 0);
-        shape.bezierCurveTo(-1.5, -1.0, 1.5, -1.0, 2.1, 0);
-        shape.lineTo(2.6, -2.2);
-        shape.lineTo(-2.6, -2.2);
-      }
+      shape.moveTo(-1.85, 0);
+      shape.quadraticCurveTo(-0.9, 1.25, 0, 1.18);
+      shape.quadraticCurveTo( 0.9, 1.25, 1.85, 0);
+      shape.lineTo(2.4, 3.0);
+      shape.lineTo(-2.4, 3.0);
       shape.closePath();
-      const geo = new THREE.ShapeGeometry(shape, 32);
-      const mat = new THREE.MeshStandardMaterial({ color: 0x1a0e06, roughness: 0.9, metalness: 0, side: THREE.DoubleSide });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.z = 1.6;
-      return mesh;
+      const geo = new THREE.ShapeGeometry(shape, 48);
+      const mat = new THREE.MeshStandardMaterial({ color: 0x0c1828, roughness: 0.95, side: THREE.DoubleSide });
+      const m = new THREE.Mesh(geo, mat);
+      m.position.z = 1.54;
+      return m;
     };
 
-    eyeGroup.add(makeLidSkin(true));
-    eyeGroup.add(makeLidSkin(false));
+    const makeLowerSkin = () => {
+      const shape = new THREE.Shape();
+      shape.moveTo(-1.85, 0);
+      shape.quadraticCurveTo(-0.9, -0.95, 0, -0.88);
+      shape.quadraticCurveTo( 0.9, -0.95, 1.85, 0);
+      shape.lineTo(2.4, -2.4);
+      shape.lineTo(-2.4, -2.4);
+      shape.closePath();
+      const geo = new THREE.ShapeGeometry(shape, 48);
+      const mat = new THREE.MeshStandardMaterial({ color: 0x0c1828, roughness: 0.95, side: THREE.DoubleSide });
+      const m = new THREE.Mesh(geo, mat);
+      m.position.z = 1.54;
+      return m;
+    };
 
-    // 8. EYELASHES – curve outward from upper lid
-    const lashMat = new THREE.MeshBasicMaterial({ color: 0x0a0604 });
-    const lashCount = 55;
-    for (let i = 0; i < lashCount; i++) {
-      const t = (i / (lashCount - 1));
-      const x = -1.85 + t * 3.7;
-      const arcY = Math.sqrt(Math.max(0, 1 - ((x / 2.05) ** 2)));
-      // Place on upper lid rim
-      const baseZ = Math.sqrt(Math.max(0, 1.84 ** 2 - x * x)) * 0.62 + 0.85;
-      const lashGeo = new THREE.CylinderGeometry(0.012, 0.024, 0.3 + Math.random() * 0.18, 5);
-      const lash = new THREE.Mesh(lashGeo, lashMat);
-      lash.position.set(x, arcY * 1.05 + 0.06, baseZ + 0.06);
-      // Curl outward and slightly upward
-      lash.rotation.z = -x * 0.22;
-      lash.rotation.x = -0.45 - Math.random() * 0.3;
-      eyeGroup.add(lash);
+    /* Eyelid crease line (teal-tinted for website theme) */
+    const makeLidCrease = () => {
+      const pts = [];
+      for (let i=0;i<=60;i++){
+        const t=i/60, x=(t*2-1)*1.5;
+        const y = Math.sqrt(Math.max(0,1-(x/1.65)**2))*0.38+1.16;
+        pts.push(new THREE.Vector3(x,y,1.54));
+      }
+      const curve = new THREE.CatmullRomCurve3(pts);
+      const geo = new THREE.TubeGeometry(curve, 80, 0.018, 6, false);
+      const mat = new THREE.MeshBasicMaterial({ color: 0x1a3a45, transparent: true, opacity: 0.6 });
+      return new THREE.Mesh(geo, mat);
+    };
+
+    const upperEdge = makeLidEdge(true,  0x1a2832);
+    const lowerEdge = makeLidEdge(false, 0x1a2832);
+    const upperSkin = makeUpperSkin();
+    const lowerSkin = makeLowerSkin();
+    const crease    = makeLidCrease();
+    eye.add(upperEdge, lowerEdge, upperSkin, lowerSkin, crease);
+
+    /* 8. EYELASHES – teal-dark, curled */
+    const lashCol = 0x0a1520;
+    const lashMat = new THREE.MeshBasicMaterial({ color: lashCol });
+
+    // Upper lashes
+    for (let i = 0; i < 60; i++) {
+      const t  = i / 59;
+      const nx = t * 2 - 1;
+      const x  = nx * 1.72;
+      const almondH = (1 - nx*nx*1.18) * (1 - Math.abs(nx)*0.35);
+      const baseY = Math.sqrt(Math.max(0, almondH)) * 1.12;
+      const baseZ = Math.sqrt(Math.max(0, 1.55*1.55 - x*x*0.9)) * 0.82 + 0.7;
+      const len  = 0.22 + Math.random() * 0.16;
+      const geo  = new THREE.CylinderGeometry(0.008, 0.020, len, 5);
+      const lash = new THREE.Mesh(geo, lashMat);
+      lash.position.set(x, baseY + 0.04, baseZ + 0.05);
+      lash.rotation.x = -(0.55 + Math.random() * 0.35);
+      lash.rotation.z = -nx * 0.25;
+      eye.add(lash);
+    }
+    // Lower lashes – shorter, sparser
+    for (let i = 0; i < 30; i++) {
+      const t  = i / 29;
+      const nx = t * 2 - 1;
+      const x  = nx * 1.5;
+      const almondH = (1 - nx*nx*1.18) * (1 - Math.abs(nx)*0.35);
+      const baseY = -Math.sqrt(Math.max(0, almondH)) * 0.72;
+      const baseZ = Math.sqrt(Math.max(0, 1.55*1.55 - x*x*0.9)) * 0.82 + 0.7;
+      const len  = 0.14 + Math.random() * 0.08;
+      const geo  = new THREE.CylinderGeometry(0.006, 0.014, len, 5);
+      const lash = new THREE.Mesh(geo, lashMat);
+      lash.position.set(x, baseY - 0.03, baseZ - 0.02);
+      lash.rotation.x = 0.45 + Math.random() * 0.25;
+      lash.rotation.z = -nx * 0.2;
+      eye.add(lash);
     }
 
-    // Lower lashes (fewer, subtler)
-    for (let i = 0; i < 28; i++) {
-      const t = (i / 27);
-      const x = -1.6 + t * 3.2;
-      const arcY = Math.sqrt(Math.max(0, 1 - ((x / 2.05) ** 2)));
-      const baseZ = Math.sqrt(Math.max(0, 1.84 ** 2 - x * x)) * 0.62 + 0.85;
-      const lGeo = new THREE.CylinderGeometry(0.008, 0.016, 0.18 + Math.random() * 0.1, 5);
-      const l = new THREE.Mesh(lGeo, lashMat);
-      l.position.set(x, -arcY * 0.88 - 0.04, baseZ - 0.04);
-      l.rotation.z = -x * 0.18;
-      l.rotation.x = 0.4 + Math.random() * 0.25;
-      eyeGroup.add(l);
+    /* 9. IRIS OUTER GLOW – floating light ring (website teal) */
+    const ringGeo = new THREE.RingGeometry(1.15, 1.45, 256);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: TEAL,
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    });
+    const glowRing = new THREE.Mesh(ringGeo, ringMat);
+    glowRing.position.z = 1.33;
+    eye.add(glowRing);
+
+    /* 10. MEDIAL CANTHUS tear duct */
+    const carGeo = new THREE.SphereGeometry(0.14, 20, 12);
+    carGeo.applyMatrix4(new THREE.Matrix4().makeScale(1.5, 0.65, 0.5));
+    const carMat = new THREE.MeshStandardMaterial({ color: 0xb04060, roughness: 0.5 });
+    const carMesh= new THREE.Mesh(carGeo, carMat);
+    carMesh.position.set(-1.78, 0.03, 1.32);
+    eye.add(carMesh);
+
+    /* ══════════════════════════════════════════
+       AMBIENT PARTICLES – floating light dots
+       (match teal/lime theme)
+    ══════════════════════════════════════════ */
+    const partCount = 120;
+    const partGeo = new THREE.BufferGeometry();
+    const positions = new Float32Array(partCount * 3);
+    const colors = new Float32Array(partCount * 3);
+    for (let i = 0; i < partCount; i++) {
+      const r = 2.2 + Math.random() * 1.5;
+      const theta = Math.random() * Math.PI * 2;
+      const phi   = (Math.random() - 0.5) * Math.PI;
+      positions[i*3]   = r * Math.cos(phi) * Math.cos(theta);
+      positions[i*3+1] = r * Math.cos(phi) * Math.sin(theta);
+      positions[i*3+2] = r * Math.sin(phi);
+      // alternate teal and lime
+      const isTeal = Math.random() > 0.35;
+      colors[i*3]   = isTeal ? 0.208 : 0.722;
+      colors[i*3+1] = isTeal ? 0.651 : 0.929;
+      colors[i*3+2] = isTeal ? 0.718 : 0.471;
     }
+    partGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    partGeo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+    const partMat = new THREE.PointsMaterial({
+      size: 0.045,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const particles = new THREE.Points(partGeo, partMat);
+    scene.add(particles);
 
-    // 9. MEDIAL CANTHUS (tear duct pink fold)
-    const carGeo = new THREE.SphereGeometry(0.18, 32, 16);
-    carGeo.applyMatrix4(new THREE.Matrix4().makeScale(1.4, 0.7, 0.5));
-    const carMat = new THREE.MeshStandardMaterial({ color: 0xc84b6e, roughness: 0.5 });
-    const carMesh = new THREE.Mesh(carGeo, carMat);
-    carMesh.position.set(-2.02, 0.02, 1.48);
-    eyeGroup.add(carMesh);
+    /* ══════════════════════════════════════════
+       LIGHTING
+    ══════════════════════════════════════════ */
+    // Key – warm white from upper-left
+    const key = new THREE.DirectionalLight(0xfff2e8, 4.0);
+    key.position.set(-3, 5, 8); scene.add(key);
 
-    /* ═══════════════════════════════════════════
-       LIGHTING – cinematic 3-point setup
-    ═══════════════════════════════════════════ */
+    // Fill – cool teal from right (matches theme)
+    const fill = new THREE.DirectionalLight(0x51AABC, 2.2);
+    fill.position.set(6, 0, 4); scene.add(fill);
 
-    // Key light (bright, slightly warm, from top-left front)
-    const keyLight = new THREE.DirectionalLight(0xfff8f0, 3.5);
-    keyLight.position.set(-4, 6, 8);
-    keyLight.castShadow = true;
-    scene.add(keyLight);
+    // Rim – lime accent from behind
+    const rim = new THREE.DirectionalLight(0xB8ED78, 0.9);
+    rim.position.set(0, -3, -5); scene.add(rim);
 
-    // Fill light (cool blue, from right)
-    const fillLight = new THREE.DirectionalLight(0xd4eeff, 1.8);
-    fillLight.position.set(6, 0, 5);
-    scene.add(fillLight);
+    // Ambient
+    scene.add(new THREE.AmbientLight(0x223344, 1.0));
 
-    // Rim / back light (warm, from behind for depth)
-    const rimLight = new THREE.DirectionalLight(0xffd4a0, 1.2);
-    rimLight.position.set(0, -4, -6);
-    scene.add(rimLight);
+    // Inner iris point light (teal glow inside eye)
+    const innerPt = new THREE.PointLight(0x35A6B7, 1.4, 3.5);
+    innerPt.position.set(0, 0, 0.5);
+    eye.add(innerPt);
 
-    // Subtle ambient
-    const ambient = new THREE.AmbientLight(0x8090a0, 0.9);
-    scene.add(ambient);
-
-    // Small point light inside eye to simulate internal glow
-    const innerGlow = new THREE.PointLight(0x4499cc, 0.8, 4);
-    innerGlow.position.set(0, 0, 0.5);
-    eyeGroup.add(innerGlow);
-
-    /* ═══════════════════════════════════════════
-       ENVIRONMENT (simple gradient background)
-    ═══════════════════════════════════════════ */
-    scene.background = new THREE.Color(0x050d1a);
-
-    /* ═══════════════════════════════════════════
-       INTERACTION – drag to rotate, natural gaze
-    ═══════════════════════════════════════════ */
-    let isDragging = false;
-    let prevX = 0, prevY = 0;
-    let rotX = 0, rotY = 0;
-    let velX = 0, velY = 0;
-    // natural idle gaze target
+    /* ══════════════════════════════════════════
+       INTERACTION
+    ══════════════════════════════════════════ */
+    let dragging = false, px = 0, py = 0;
+    let rotX = 0, rotY = 0, velX = 0, velY = 0;
     let gazeX = 0, gazeY = 0;
 
-    const onDown = (e) => {
-      isDragging = true;
-      prevX = e.clientX ?? e.touches?.[0].clientX;
-      prevY = e.clientY ?? e.touches?.[0].clientY;
-      velX = 0; velY = 0;
+    const onDown = e => {
+      dragging = true;
+      px = e.clientX ?? e.touches?.[0].clientX;
+      py = e.clientY ?? e.touches?.[0].clientY;
+      velX = velY = 0;
     };
-    const onMove = (e) => {
+    const onMove = e => {
       const cx = e.clientX ?? e.touches?.[0].clientX;
       const cy = e.clientY ?? e.touches?.[0].clientY;
-      if (isDragging) {
-        velX = (cx - prevX) * 0.012;
-        velY = (cy - prevY) * 0.008;
+      if (dragging) {
+        velX = (cx - px) * 0.011;
+        velY = (cy - py) * 0.007;
         rotY += velX;
         rotX += velY;
-        rotX = Math.max(-0.6, Math.min(0.6, rotX));
+        rotX = Math.max(-0.55, Math.min(0.55, rotX));
       }
-      // update gaze target from mouse position within container
       const rect = container.getBoundingClientRect();
-      gazeX = ((cx - rect.left) / rect.width - 0.5) * 0.28;
-      gazeY = -((cy - rect.top) / rect.height - 0.5) * 0.22;
-      prevX = cx; prevY = cy;
+      gazeX = ((cx - rect.left) / rect.width  - 0.5) * 0.26;
+      gazeY =-((cy - rect.top)  / rect.height - 0.5) * 0.20;
+      px = cx; py = cy;
     };
-    const onUp = () => { isDragging = false; };
+    const onUp = () => { dragging = false; };
 
     renderer.domElement.addEventListener('mousedown', onDown);
     window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    renderer.domElement.addEventListener('touchstart', e => onDown(e.touches[0]));
-    window.addEventListener('touchmove', e => onMove(e.touches[0]));
-    window.addEventListener('touchend', onUp);
+    window.addEventListener('mouseup',   onUp);
+    renderer.domElement.addEventListener('touchstart', e => onDown(e.touches[0]), { passive: true });
+    window.addEventListener('touchmove',  e => onMove(e.touches[0]), { passive: true });
+    window.addEventListener('touchend',   onUp);
 
-    const handleResize = () => {
+    const onResize = () => {
       if (!container) return;
       const w = container.clientWidth, h = container.clientHeight;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', onResize);
 
-    /* ═══════════════════════════════════════════
+    /* ══════════════════════════════════════════
        ANIMATION LOOP
-    ═══════════════════════════════════════════ */
+    ══════════════════════════════════════════ */
     const clock = new THREE.Clock();
     let animId;
 
     // Blink state
-    let blinkTimer = 2.5 + Math.random() * 2;
-    let blinkPhase = 0; // 0=open, >0=closing/opening
+    let blinkTimer = 2.5 + Math.random() * 2.5;
+    let blinkPhase = 0;
+    const upperRef = upperEdge;
+    const upperSkinRef = upperSkin;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
-      const dt = clock.getDelta();
+      const t  = clock.getElapsedTime();
+      clock.getDelta();
 
-      // Inertia-based drag rotation
-      if (!isDragging) {
-        velX *= 0.90;
-        velY *= 0.90;
-        // Gently return toward neutral with slight natural wander
-        const wanderX = Math.sin(t * 0.3) * 0.04;
-        const wanderY = Math.cos(t * 0.21) * 0.03;
-        rotY += (gazeX + wanderX - rotY) * 0.04;
-        rotX += (gazeY + wanderY - rotX) * 0.04;
+      /* Inertia / idle gaze */
+      if (!dragging) {
+        velX *= 0.88; velY *= 0.88;
+        const wx = Math.sin(t * 0.28) * 0.05;
+        const wy = Math.cos(t * 0.19) * 0.035;
+        rotY += (gazeX + wx - rotY) * 0.038;
+        rotX += (gazeY + wy - rotX) * 0.038;
       }
+      eye.rotation.y = rotY;
+      eye.rotation.x = rotX;
 
-      eyeGroup.rotation.y = rotY;
-      eyeGroup.rotation.x = rotX;
+      /* Highlights always face camera */
+      hl1.lookAt(camera.position);
+      hl2.lookAt(camera.position);
+      glowMesh.lookAt(camera.position);
+      glowRing.lookAt(camera.position);
 
-      // Corneal highlight always faces camera (billboard)
-      highlightMesh.lookAt(camera.position);
-      hl2Mesh.lookAt(camera.position);
+      /* Inner glow pulse (teal heartbeat) */
+      innerPt.intensity = 1.4 + Math.sin(t * 2.1) * 0.55;
+      innerPt.color.setHSL(0.52 + Math.sin(t * 0.5) * 0.04, 0.8, 0.55);
 
-      // Inner glow pulse (simulates blood/life)
-      innerGlow.intensity = 0.8 + Math.sin(t * 1.8) * 0.25;
+      /* Iris limbal glow ring breathe */
+      ringMat.opacity = 0.28 + Math.sin(t * 1.6) * 0.22;
 
-      // Pupil micro-breathe (subtle scale change)
-      const pupilScale = 1 + Math.sin(t * 0.9) * 0.04;
-      pupilMesh.scale.setScalar(pupilScale);
+      /* Pupil subtle micro-pulse */
+      const ps = 1 + Math.sin(t * 1.1) * 0.035;
+      pupMesh.scale.setScalar(ps);
 
-      // ── BLINK MECHANISM ──
+      /* Particles slow drift */
+      particles.rotation.y = t * 0.04;
+      particles.rotation.x = t * 0.018;
+
+      /* Glow mesh opacity breathe */
+      glowMat.opacity = 0.7 + Math.sin(t * 1.4) * 0.2;
+
+      /* ── BLINK ── */
       blinkTimer -= 0.016;
       if (blinkTimer <= 0 && blinkPhase === 0) {
         blinkPhase = 0.01;
-        blinkTimer = 3 + Math.random() * 4;
+        blinkTimer = 3.2 + Math.random() * 4.5;
       }
       if (blinkPhase > 0) {
-        blinkPhase += 0.15;
-        // close (0→1) then open (1→2)
+        blinkPhase += 0.14;
         const p = blinkPhase <= 1 ? blinkPhase : 2 - blinkPhase;
-        const lidClose = Math.sin(p * Math.PI * 0.5);
-        upperLid.rotation.x = 0.18 + lidClose * 1.15;
-        lowerLid.rotation.x = -0.14 - lidClose * 0.4;
-        if (blinkPhase >= 2) { blinkPhase = 0; upperLid.rotation.x = 0.18; lowerLid.rotation.x = -0.14; }
+        const close = Math.sin(p * Math.PI * 0.5);
+        upperRef.position.y = close * -0.62;
+        upperSkinRef.position.y = close * -0.62;
+        crease.position.y = close * -0.28;
+        lowerEdge.position.y = close * 0.28;
+        lowerSkin.position.y = close * 0.28;
+        if (blinkPhase >= 2) {
+          blinkPhase = 0;
+          upperRef.position.y = 0; upperSkinRef.position.y = 0;
+          crease.position.y   = 0; lowerEdge.position.y    = 0;
+          lowerSkin.position.y = 0;
+        }
       }
 
       renderer.render(scene, camera);
     };
-
     animate();
 
-    /* ─── cleanup ─── */
     return () => {
       cancelAnimationFrame(animId);
       renderer.domElement.removeEventListener('mousedown', onDown);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', onResize);
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
       renderer.dispose();
     };
@@ -479,18 +588,41 @@ export default function EyeVisualizerCanvas() {
 
   return (
     <div
-      className="relative w-full h-full min-h-[420px] lg:min-h-[520px] overflow-hidden rounded-3xl"
-      style={{ background: 'radial-gradient(ellipse at 30% 40%, #0d2240 0%, #050d1a 70%)' }}
+      className="relative w-full h-full overflow-hidden rounded-2xl"
+      style={{
+        background: 'radial-gradient(ellipse at 40% 35%, #0d2240 0%, #070C14 65%)',
+        minHeight: '420px',
+      }}
     >
-      {/* Subtle corner vignette */}
-      <div className="absolute inset-0 pointer-events-none rounded-3xl"
-        style={{ boxShadow: 'inset 0 0 80px 30px rgba(0,0,0,0.55)' }} />
+      {/* Subtle teal vignette glow at centre */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-2xl"
+        style={{
+          background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(53,166,183,0.07) 0%, transparent 70%)',
+          boxShadow: 'inset 0 0 70px 20px rgba(5,12,20,0.6)',
+        }}
+      />
 
       {/* Three.js canvas */}
       <div
         ref={mountRef}
-        className="w-full h-[380px] sm:h-[460px] lg:h-[520px] cursor-grab active:cursor-grabbing"
+        className="w-full h-[400px] sm:h-[460px] lg:h-[500px] cursor-grab active:cursor-grabbing select-none"
       />
+
+      {/* Bottom label */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none">
+        <span
+          className="text-xs font-medium tracking-widest uppercase px-3 py-1 rounded-full"
+          style={{
+            color: '#35A6B7',
+            background: 'rgba(53,166,183,0.10)',
+            border: '1px solid rgba(53,166,183,0.25)',
+            letterSpacing: '0.18em',
+          }}
+        >
+          Human Eye · 3D Model
+        </span>
+      </div>
     </div>
   );
 }
