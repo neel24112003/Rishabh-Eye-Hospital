@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
@@ -18,7 +17,7 @@ export default function EyeVisualizerCanvas() {
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.4;
+    renderer.toneMappingExposure = 1.5;
     renderer.shadowMap.enabled   = true;
     renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
@@ -30,156 +29,185 @@ export default function EyeVisualizerCanvas() {
     /* ── Camera ── */
     const camera = new THREE.PerspectiveCamera(38, W / H, 0.01, 100);
     camera.position.set(0, 0, 3.5);
+    camera.lookAt(0, 0, 0);
 
-    /* ── OrbitControls (drag to rotate) ── */
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping    = true;
-    controls.dampingFactor    = 0.06;
-    controls.enablePan        = false;
-    controls.minDistance      = 1.8;
-    controls.maxDistance      = 6;
-    controls.autoRotate       = true;
-    controls.autoRotateSpeed  = 1.2;
-    controls.target.set(0, 0, 0);
-
-    /* ── Lighting (match reference photo) ── */
-    // Warm key from upper-left-front
-    const key = new THREE.DirectionalLight(0xfff8ee, 3.5);
+    /* ── Lighting ── */
+    // Warm key light upper-left-front (matches reference photo specular)
+    const key = new THREE.DirectionalLight(0xfff5e8, 4.0);
     key.position.set(-2, 3, 5);
     key.castShadow = true;
     scene.add(key);
 
-    // Cool fill from right
-    const fill = new THREE.DirectionalLight(0xd0e8ff, 1.5);
-    fill.position.set(4, 0, 3);
+    // Cool blue fill from right
+    const fill = new THREE.DirectionalLight(0xc8e0ff, 1.8);
+    fill.position.set(5, 0, 2);
     scene.add(fill);
 
-    // Rim light
-    const rim = new THREE.DirectionalLight(0xffe0d0, 0.6);
-    rim.position.set(0, -3, -4);
+    // Rim / backlight
+    const rim = new THREE.DirectionalLight(0xffcca0, 0.5);
+    rim.position.set(0, -4, -5);
     scene.add(rim);
 
-    // Ambient
-    scene.add(new THREE.AmbientLight(0x334455, 1.2));
+    // Soft ambient
+    scene.add(new THREE.AmbientLight(0x2a3a55, 1.5));
 
-    /* ── Loading overlay ── */
-    const loadDiv = document.createElement('div');
-    Object.assign(loadDiv.style, {
-      position: 'absolute', inset: '0', display: 'flex',
-      alignItems: 'center', justifyContent: 'center',
-      color: '#35A6B7', fontFamily: 'sans-serif', fontSize: '14px',
-      background: '#070C14', zIndex: '10',
-    });
-    loadDiv.textContent = 'Loading eye model…';
-    container.style.position = 'relative';
-    container.appendChild(loadDiv);
+    /* ── Eye group (mouse tracking rotates this) ── */
+    const eyeGroup = new THREE.Group();
+    scene.add(eyeGroup);
+
+    /* ── Mouse tracking ── */
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const onMouseMove = (e) => {
+      const rect = container.getBoundingClientRect();
+      mouseX =  ((e.clientX - rect.left) / rect.width  - 0.5) * 2;
+      mouseY = -((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+    };
+    window.addEventListener('mousemove', onMouseMove);
 
     /* ── Load GLB ── */
     const loader = new GLTFLoader();
-    let eyeMesh = null;
 
     loader.load(
       '/models/eye.glb',
       (gltf) => {
-        /* Remove loading overlay */
-        if (container.contains(loadDiv)) container.removeChild(loadDiv);
-
         const model = gltf.scene;
 
-        /* Centre and scale model to fill view nicely */
+        /* 1. Center model at origin BEFORE any rotation */
         const box    = new THREE.Box3().setFromObject(model);
-        const centre = box.getCenter(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        model.position.sub(center);          // move pivot to geometric center
+
+        /* 2. Scale to fit nicely in view */
         const size   = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale  = 2.2 / maxDim;
-
-        model.position.sub(centre.multiplyScalar(scale));
+        const scale  = 2.4 / maxDim;
         model.scale.setScalar(scale);
 
-        /* Apply website theme tint to iris material */
-        model.traverse((child) => {
-          if (child.isMesh) {
-            child.castShadow    = true;
-            child.receiveShadow = true;
+        /* 3. Flip 180° so iris faces the camera (+Z direction) */
+        model.rotation.y = Math.PI;
 
-            /* Tint the iris with website teal (#35A6B7) */
-            if (child.name.toLowerCase().includes('iris') ||
-                child.material?.name?.toLowerCase().includes('iris')) {
+        /* 4. Enhance materials */
+        model.traverse((child) => {
+          if (!child.isMesh) return;
+          child.castShadow    = true;
+          child.receiveShadow = true;
+
+          const name = (child.name + ' ' + (child.material?.name ?? '')).toLowerCase();
+
+          if (name.includes('iris')) {
+            // Tint iris to website teal
+            child.material = child.material.clone();
+            child.material.color.set('#2e9db0');
+            child.material.roughness          = 0.05;
+            child.material.envMapIntensity    = 1.5;
+          } else if (name.includes('cornea') || name.includes('lens')) {
+            child.material = child.material.clone();
+            child.material.transparent = true;
+            child.material.opacity     = 0.35;
+            child.material.roughness   = 0.0;
+          } else {
+            // Sclera / rest — slightly enhance
+            if (child.material) {
               child.material = child.material.clone();
-              child.material.color.set('#35A6B7');
-              child.material.roughness = 0.08;
+              child.material.roughness = 0.35;
             }
           }
         });
 
-        eyeMesh = model;
-        scene.add(model);
+        eyeGroup.add(model);
       },
-      (xhr) => {
-        const pct = Math.round((xhr.loaded / xhr.total) * 100);
-        loadDiv.textContent = `Loading eye model… ${pct}%`;
-      },
-      (err) => {
-        console.error('GLB load error:', err);
-        loadDiv.textContent = 'Failed to load model.';
-      }
+      undefined,
+      (err) => console.error('[EyeVisualizerCanvas] GLB load error:', err)
     );
 
     /* ── Resize ── */
     const onResize = () => {
       if (!container) return;
-      const w = container.clientWidth, h = container.clientHeight;
+      const w = container.clientWidth;
+      const h = container.clientHeight;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
     window.addEventListener('resize', onResize);
 
-    /* ── Animation loop ── */
+    /* ── Animation loop with smooth mouse tracking ── */
     let animId;
+    const MAX_ANGLE = 0.38; // radians — how far the eye can rotate
+
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      controls.update();
+
+      // Smooth lerp toward mouse position
+      const targetX = -mouseY * MAX_ANGLE;
+      const targetY =  mouseX * MAX_ANGLE;
+      eyeGroup.rotation.x += (targetX - eyeGroup.rotation.x) * 0.06;
+      eyeGroup.rotation.y += (targetY - eyeGroup.rotation.y) * 0.06;
+
       renderer.render(scene, camera);
     };
     animate();
 
+    /* ── Cleanup ── */
     return () => {
       cancelAnimationFrame(animId);
-      controls.dispose();
+      window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onResize);
-      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
-      if (loadDiv.parentNode === container) container.removeChild(loadDiv);
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
       renderer.dispose();
     };
   }, []);
 
   return (
     <div
-      className="relative w-full h-full overflow-hidden rounded-2xl"
+      className="relative w-full overflow-hidden rounded-2xl"
       style={{ background: '#070C14', minHeight: '420px' }}
     >
-      {/* Teal corner accents */}
-      <div className="absolute top-0 left-0 z-20 pointer-events-none">
-        <div style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
-        <div style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
-      </div>
-      <div className="absolute top-0 right-0 z-20 pointer-events-none flex flex-col items-end">
-        <div style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
-        <div style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
-      </div>
-      <div className="absolute bottom-0 left-0 z-20 pointer-events-none flex flex-col justify-end">
-        <div style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
-        <div style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
-      </div>
-      <div className="absolute bottom-0 right-0 z-20 pointer-events-none flex flex-col items-end justify-end">
-        <div style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
-        <div style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
-      </div>
+      {/* Teal corner accents — top-left */}
+      <div
+        className="absolute top-0 left-0 z-20 pointer-events-none"
+        style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
+      />
+      <div
+        className="absolute top-0 left-0 z-20 pointer-events-none"
+        style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
+      />
+      {/* Lime corner accents — top-right */}
+      <div
+        className="absolute top-0 right-0 z-20 pointer-events-none"
+        style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
+      />
+      <div
+        className="absolute top-0 right-0 z-20 pointer-events-none"
+        style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
+      />
+      {/* Lime corner accents — bottom-left */}
+      <div
+        className="absolute bottom-0 left-0 z-20 pointer-events-none"
+        style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
+      />
+      <div
+        className="absolute bottom-0 left-0 z-20 pointer-events-none"
+        style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
+      />
+      {/* Teal corner accents — bottom-right */}
+      <div
+        className="absolute bottom-0 right-0 z-20 pointer-events-none"
+        style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
+      />
+      <div
+        className="absolute bottom-0 right-0 z-20 pointer-events-none"
+        style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
+      />
 
       <div
         ref={mountRef}
-        className="w-full h-[400px] sm:h-[460px] lg:h-[500px] select-none cursor-grab active:cursor-grabbing"
+        className="w-full"
+        style={{ height: '460px' }}
       />
     </div>
   );
