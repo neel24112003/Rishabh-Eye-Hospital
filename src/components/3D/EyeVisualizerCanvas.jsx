@@ -1,7 +1,158 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
+/* ─────────────────────────────────────────────
+   Canvas texture helpers
+───────────────────────────────────────────── */
+
+/** Sclera: warm white + red vessels */
+function buildScleraTexture() {
+  const S = 1024;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = S;
+  const c = cv.getContext('2d');
+
+  // warm white base
+  const bg = c.createRadialGradient(S/2, S/2, 0, S/2, S/2, S/2);
+  bg.addColorStop(0,   '#fdf6ef');
+  bg.addColorStop(0.6, '#f8ece0');
+  bg.addColorStop(1,   '#e8d5c4');
+  c.fillStyle = bg;
+  c.fillRect(0, 0, S, S);
+
+  // red blood vessels
+  const rng = (n) => Math.sin(n * 127.1 + 311.7) * 0.5 + 0.5;
+  for (let i = 0; i < 60; i++) {
+    const startAngle = rng(i)     * Math.PI * 2;
+    const startR     = rng(i + 1) * 0.12 + 0.38;
+    const len        = rng(i + 2) * 0.28 + 0.12;
+    const thick      = rng(i + 3) * 3.5  + 1.2;
+    const alpha      = rng(i + 4) * 0.55 + 0.35;
+
+    let x = S/2 + Math.cos(startAngle) * startR * S * 0.48;
+    let y = S/2 + Math.sin(startAngle) * startR * S * 0.48;
+
+    c.beginPath();
+    c.moveTo(x, y);
+
+    let angle = startAngle + (rng(i + 5) - 0.5) * 0.8;
+    for (let s = 0; s < 8; s++) {
+      angle += (rng(i * 7 + s) - 0.5) * 0.55;
+      const r = (startR + len * (s / 8)) * 0.5;
+      x = S/2 + Math.cos(angle) * r * S;
+      y = S/2 + Math.sin(angle) * r * S;
+      c.lineTo(x, y);
+
+      if (s % 3 === 2 && rng(i * 3 + s) > 0.5) {
+        // branch
+        const bAngle = angle + (rng(i * 9 + s) - 0.5) * 0.9;
+        const bLen   = 0.06 + rng(i * 11 + s) * 0.08;
+        c.moveTo(x, y);
+        c.lineTo(
+          x + Math.cos(bAngle) * bLen * S,
+          y + Math.sin(bAngle) * bLen * S,
+        );
+        c.moveTo(x, y);
+      }
+    }
+
+    c.strokeStyle = `rgba(195,55,55,${alpha})`;
+    c.lineWidth   = thick;
+    c.lineCap     = 'round';
+    c.lineJoin    = 'round';
+    c.stroke();
+  }
+
+  return new THREE.CanvasTexture(cv);
+}
+
+/** Iris: teal gradient + radial fibers + pupil */
+function buildIrisTexture() {
+  const S = 512;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = S;
+  const c = cv.getContext('2d');
+  const cx = S / 2, cy = S / 2;
+
+  // Teal iris base
+  const ig = c.createRadialGradient(cx, cy, 0, cx, cy, S/2);
+  ig.addColorStop(0,    '#0e3a44');
+  ig.addColorStop(0.18, '#1a6e80');
+  ig.addColorStop(0.42, '#35A6B7');
+  ig.addColorStop(0.72, '#2b8a9e');
+  ig.addColorStop(0.90, '#1a5560');
+  ig.addColorStop(1,    '#0a2a30');
+  c.fillStyle = ig;
+  c.beginPath();
+  c.arc(cx, cy, S/2, 0, Math.PI*2);
+  c.fill();
+
+  // Radial fiber lines
+  const N_FIBERS = 720;
+  for (let i = 0; i < N_FIBERS; i++) {
+    const a    = (i / N_FIBERS) * Math.PI * 2;
+    const wob  = Math.sin(a * 17 + i * 0.3) * 0.018;
+    const rIn  = (0.19 + wob) * S/2;
+    const rOut = (0.92 + Math.sin(a * 11) * 0.03) * S/2;
+    const bright = 0.12 + (Math.sin(a * 23) * 0.5 + 0.5) * 0.22;
+    c.beginPath();
+    c.moveTo(cx + Math.cos(a) * rIn,  cy + Math.sin(a) * rIn);
+    c.lineTo(cx + Math.cos(a) * rOut, cy + Math.sin(a) * rOut);
+    c.strokeStyle = `rgba(130,230,245,${bright})`;
+    c.lineWidth   = 0.65;
+    c.stroke();
+  }
+
+  // Collarette ring
+  c.beginPath();
+  c.arc(cx, cy, S * 0.22, 0, Math.PI*2);
+  c.strokeStyle = 'rgba(255,255,255,0.18)';
+  c.lineWidth   = 3;
+  c.stroke();
+
+  // Limbal (outer) dark ring
+  const limbal = c.createRadialGradient(cx, cy, S*0.38, cx, cy, S*0.5);
+  limbal.addColorStop(0,   'rgba(0,0,0,0)');
+  limbal.addColorStop(0.7, 'rgba(0,0,0,0.25)');
+  limbal.addColorStop(1,   'rgba(0,0,0,0.72)');
+  c.fillStyle = limbal;
+  c.beginPath();
+  c.arc(cx, cy, S/2, 0, Math.PI*2);
+  c.fill();
+
+  // Pupil — deep black
+  const pr = S * 0.185;
+  const pupil = c.createRadialGradient(cx, cy, 0, cx, cy, pr);
+  pupil.addColorStop(0,   '#000000');
+  pupil.addColorStop(0.8, '#060a0b');
+  pupil.addColorStop(1,   '#0e1f24');
+  c.fillStyle = pupil;
+  c.beginPath();
+  c.arc(cx, cy, pr, 0, Math.PI*2);
+  c.fill();
+
+  // Crescent specular highlight on pupil/iris upper-left
+  c.save();
+  c.globalAlpha = 0.62;
+  const hl = c.createRadialGradient(
+    cx - S*0.055, cy - S*0.095, 0,
+    cx - S*0.055, cy - S*0.095, S*0.12,
+  );
+  hl.addColorStop(0,   'rgba(255,255,255,0.95)');
+  hl.addColorStop(0.5, 'rgba(200,245,255,0.3)');
+  hl.addColorStop(1,   'rgba(0,0,0,0)');
+  c.fillStyle = hl;
+  c.beginPath();
+  c.arc(cx - S*0.055, cy - S*0.095, S*0.12, 0, Math.PI*2);
+  c.fill();
+  c.restore();
+
+  return new THREE.CanvasTexture(cv);
+}
+
+/* ─────────────────────────────────────────────
+   Main component
+───────────────────────────────────────────── */
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
 
@@ -10,50 +161,124 @@ export default function EyeVisualizerCanvas() {
     if (!container) return;
 
     const W = container.clientWidth  || 500;
-    const H = container.clientHeight || 500;
+    const H = container.clientHeight || 460;
 
-    /* ── Renderer ── */
+    /* Renderer */
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.5;
+    renderer.toneMappingExposure = 1.3;
     renderer.shadowMap.enabled   = true;
     renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
-    /* ── Scene ── */
+    /* Scene */
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#070C14');
 
-    /* ── Camera ── */
+    /* Camera */
     const camera = new THREE.PerspectiveCamera(38, W / H, 0.01, 100);
-    camera.position.set(0, 0, 3.5);
+    camera.position.set(0, 0, 3.2);
     camera.lookAt(0, 0, 0);
 
-    /* ── Lighting ── */
-    // Warm key light upper-left-front (matches reference photo specular)
-    const key = new THREE.DirectionalLight(0xfff5e8, 4.0);
+    /* Lighting */
+    const key = new THREE.DirectionalLight(0xfff5e0, 3.8);
     key.position.set(-2, 3, 5);
     key.castShadow = true;
     scene.add(key);
 
-    // Cool blue fill from right
-    const fill = new THREE.DirectionalLight(0xc8e0ff, 1.8);
-    fill.position.set(5, 0, 2);
+    const fill = new THREE.DirectionalLight(0xc0e0ff, 1.4);
+    fill.position.set(4, 1, 3);
     scene.add(fill);
 
-    // Rim / backlight
-    const rim = new THREE.DirectionalLight(0xffcca0, 0.5);
-    rim.position.set(0, -4, -5);
+    const rim = new THREE.DirectionalLight(0xffe8c0, 0.5);
+    rim.position.set(0, -4, -4);
     scene.add(rim);
 
-    // Soft ambient
-    scene.add(new THREE.AmbientLight(0x2a3a55, 1.5));
+    scene.add(new THREE.AmbientLight(0x203040, 1.8));
 
-    /* ── Eye group (mouse tracking rotates this) ── */
+    /* Eye group — rotated by mouse */
     const eyeGroup = new THREE.Group();
     scene.add(eyeGroup);
+
+    /* ── Sclera (eyeball) ── */
+    const scleraTex = buildScleraTexture();
+    const scleraMat = new THREE.MeshStandardMaterial({
+      map:       scleraTex,
+      roughness: 0.28,
+      metalness: 0.0,
+    });
+    const scleraMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 96, 96),
+      scleraMat,
+    );
+    scleraMesh.castShadow    = true;
+    scleraMesh.receiveShadow = true;
+    eyeGroup.add(scleraMesh);
+
+    /* ── Iris disc (sits on the front of the sphere) ── */
+    const irisTex  = buildIrisTexture();
+    const irisMat  = new THREE.MeshStandardMaterial({
+      map:       irisTex,
+      roughness: 0.08,
+      metalness: 0.02,
+    });
+    // Slightly convex disc
+    const irisGeo  = new THREE.CircleGeometry(0.42, 128);
+    const irisMesh = new THREE.Mesh(irisGeo, irisMat);
+    irisMesh.position.z  = 0.88;   // sit just inside front of sphere
+    irisMesh.castShadow  = true;
+    eyeGroup.add(irisMesh);
+
+    /* ── Cornea dome (transparent glass over iris) ── */
+    const corneaMat = new THREE.MeshPhysicalMaterial({
+      transparent:    true,
+      opacity:        0.22,
+      roughness:      0.0,
+      metalness:      0.0,
+      transmission:   0.85,
+      ior:            1.376,
+      envMapIntensity:1.5,
+      side:           THREE.FrontSide,
+    });
+    const corneaGeo  = new THREE.SphereGeometry(1.015, 96, 96,
+      0, Math.PI * 2,
+      0, Math.PI * 0.38,      // only front cap
+    );
+    const corneaMesh = new THREE.Mesh(corneaGeo, corneaMat);
+    corneaMesh.rotation.x = -Math.PI / 2;
+    corneaMesh.position.y = -0.02;
+    // Simpler: just a slightly larger front sphere cap
+    const corneaMesh2 = new THREE.Mesh(
+      new THREE.SphereGeometry(1.012, 96, 96),
+      corneaMat,
+    );
+    eyeGroup.add(corneaMesh2);
+
+    /* ── Specular billboard highlight (upper-left) ── */
+    const hlCanvas = document.createElement('canvas');
+    hlCanvas.width = hlCanvas.height = 256;
+    const hlCtx = hlCanvas.getContext('2d');
+    const hlG   = hlCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
+    hlG.addColorStop(0,   'rgba(255,255,255,0.92)');
+    hlG.addColorStop(0.3, 'rgba(220,245,255,0.45)');
+    hlG.addColorStop(0.7, 'rgba(180,230,255,0.10)');
+    hlG.addColorStop(1,   'rgba(0,0,0,0)');
+    hlCtx.fillStyle = hlG;
+    hlCtx.fillRect(0, 0, 256, 256);
+
+    const hlSprite = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map:         new THREE.CanvasTexture(hlCanvas),
+        transparent: true,
+        opacity:     0.70,
+        depthWrite:  false,
+      }),
+    );
+    hlSprite.position.set(-0.28, 0.32, 0.95);
+    hlSprite.scale.set(0.56, 0.56, 1);
+    eyeGroup.add(hlSprite);
 
     /* ── Mouse tracking ── */
     let mouseX = 0;
@@ -66,65 +291,8 @@ export default function EyeVisualizerCanvas() {
     };
     window.addEventListener('mousemove', onMouseMove);
 
-    /* ── Load GLB ── */
-    const loader = new GLTFLoader();
-
-    loader.load(
-      '/models/eye.glb',
-      (gltf) => {
-        const model = gltf.scene;
-
-        /* 1. Center model at origin BEFORE any rotation */
-        const box    = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        model.position.sub(center);          // move pivot to geometric center
-
-        /* 2. Scale to fit nicely in view */
-        const size   = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale  = 2.4 / maxDim;
-        model.scale.setScalar(scale);
-
-        /* 3. Flip 180° so iris faces the camera (+Z direction) */
-        model.rotation.y = Math.PI;
-
-        /* 4. Enhance materials */
-        model.traverse((child) => {
-          if (!child.isMesh) return;
-          child.castShadow    = true;
-          child.receiveShadow = true;
-
-          const name = (child.name + ' ' + (child.material?.name ?? '')).toLowerCase();
-
-          if (name.includes('iris')) {
-            // Tint iris to website teal
-            child.material = child.material.clone();
-            child.material.color.set('#2e9db0');
-            child.material.roughness          = 0.05;
-            child.material.envMapIntensity    = 1.5;
-          } else if (name.includes('cornea') || name.includes('lens')) {
-            child.material = child.material.clone();
-            child.material.transparent = true;
-            child.material.opacity     = 0.35;
-            child.material.roughness   = 0.0;
-          } else {
-            // Sclera / rest — slightly enhance
-            if (child.material) {
-              child.material = child.material.clone();
-              child.material.roughness = 0.35;
-            }
-          }
-        });
-
-        eyeGroup.add(model);
-      },
-      undefined,
-      (err) => console.error('[EyeVisualizerCanvas] GLB load error:', err)
-    );
-
     /* ── Resize ── */
     const onResize = () => {
-      if (!container) return;
       const w = container.clientWidth;
       const h = container.clientHeight;
       camera.aspect = w / h;
@@ -133,19 +301,14 @@ export default function EyeVisualizerCanvas() {
     };
     window.addEventListener('resize', onResize);
 
-    /* ── Animation loop with smooth mouse tracking ── */
+    /* ── Animate ── */
     let animId;
-    const MAX_ANGLE = 0.38; // radians — how far the eye can rotate
+    const MAX_ANGLE = 0.36;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-
-      // Smooth lerp toward mouse position
-      const targetX = -mouseY * MAX_ANGLE;
-      const targetY =  mouseX * MAX_ANGLE;
-      eyeGroup.rotation.x += (targetX - eyeGroup.rotation.x) * 0.06;
-      eyeGroup.rotation.y += (targetY - eyeGroup.rotation.y) * 0.06;
-
+      eyeGroup.rotation.x += (-mouseY * MAX_ANGLE - eyeGroup.rotation.x) * 0.06;
+      eyeGroup.rotation.y += ( mouseX * MAX_ANGLE - eyeGroup.rotation.y) * 0.06;
       renderer.render(scene, camera);
     };
     animate();
@@ -158,6 +321,8 @@ export default function EyeVisualizerCanvas() {
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
+      scleraTex.dispose();
+      irisTex.dispose();
       renderer.dispose();
     };
   }, []);
@@ -165,44 +330,17 @@ export default function EyeVisualizerCanvas() {
   return (
     <div
       className="relative w-full overflow-hidden rounded-2xl"
-      style={{ background: '#070C14', minHeight: '420px' }}
+      style={{ background: '#070C14' }}
     >
-      {/* Teal corner accents — top-left */}
-      <div
-        className="absolute top-0 left-0 z-20 pointer-events-none"
-        style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
-      />
-      <div
-        className="absolute top-0 left-0 z-20 pointer-events-none"
-        style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
-      />
-      {/* Lime corner accents — top-right */}
-      <div
-        className="absolute top-0 right-0 z-20 pointer-events-none"
-        style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
-      />
-      <div
-        className="absolute top-0 right-0 z-20 pointer-events-none"
-        style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
-      />
-      {/* Lime corner accents — bottom-left */}
-      <div
-        className="absolute bottom-0 left-0 z-20 pointer-events-none"
-        style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
-      />
-      <div
-        className="absolute bottom-0 left-0 z-20 pointer-events-none"
-        style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }}
-      />
-      {/* Teal corner accents — bottom-right */}
-      <div
-        className="absolute bottom-0 right-0 z-20 pointer-events-none"
-        style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
-      />
-      <div
-        className="absolute bottom-0 right-0 z-20 pointer-events-none"
-        style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.9 }}
-      />
+      {/* Corner accents */}
+      <div className="absolute top-0 left-0 z-20 pointer-events-none" style={{ width: 28, height: 2, background: '#35A6B7', opacity: 0.9, borderRadius: 2 }} />
+      <div className="absolute top-0 left-0 z-20 pointer-events-none" style={{ width: 2, height: 28, background: '#35A6B7', opacity: 0.9, borderRadius: 2 }} />
+      <div className="absolute top-0 right-0 z-20 pointer-events-none" style={{ width: 28, height: 2, background: '#B8ED78', opacity: 0.75, borderRadius: 2 }} />
+      <div className="absolute top-0 right-0 z-20 pointer-events-none" style={{ width: 2, height: 28, background: '#B8ED78', opacity: 0.75, borderRadius: 2 }} />
+      <div className="absolute bottom-0 left-0 z-20 pointer-events-none" style={{ width: 2, height: 28, background: '#B8ED78', opacity: 0.75, borderRadius: 2 }} />
+      <div className="absolute bottom-0 left-0 z-20 pointer-events-none" style={{ width: 28, height: 2, background: '#B8ED78', opacity: 0.75, borderRadius: 2 }} />
+      <div className="absolute bottom-0 right-0 z-20 pointer-events-none" style={{ width: 2, height: 28, background: '#35A6B7', opacity: 0.9, borderRadius: 2 }} />
+      <div className="absolute bottom-0 right-0 z-20 pointer-events-none" style={{ width: 28, height: 2, background: '#35A6B7', opacity: 0.9, borderRadius: 2 }} />
 
       <div
         ref={mountRef}
