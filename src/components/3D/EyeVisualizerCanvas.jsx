@@ -5,63 +5,97 @@ import * as THREE from 'three';
    Canvas texture helpers
 ───────────────────────────────────────────── */
 
-/** Sclera: warm white + red vessels */
+/** Sclera: warm white + organic curved red vessels at outer rim */
 function buildScleraTexture() {
   const S = 1024;
   const cv = document.createElement('canvas');
   cv.width = cv.height = S;
   const c = cv.getContext('2d');
+  const cx = S / 2, cy = S / 2, R = S / 2;
 
-  // warm white base
-  const bg = c.createRadialGradient(S/2, S/2, 0, S/2, S/2, S/2);
-  bg.addColorStop(0,   '#fdf6ef');
-  bg.addColorStop(0.6, '#f8ece0');
-  bg.addColorStop(1,   '#e8d5c4');
+  // Bright white base — bright center, soft cream at edges
+  const bg = c.createRadialGradient(cx * 0.88, cy * 0.82, 0, cx, cy, R);
+  bg.addColorStop(0,    '#fffcf8');
+  bg.addColorStop(0.40, '#fdf8f2');
+  bg.addColorStop(0.78, '#f5e8da');
+  bg.addColorStop(1,    '#ebd4c0');
   c.fillStyle = bg;
   c.fillRect(0, 0, S, S);
 
-  // red blood vessels
-  const rng = (n) => Math.sin(n * 127.1 + 311.7) * 0.5 + 0.5;
-  for (let i = 0; i < 60; i++) {
-    const startAngle = rng(i)     * Math.PI * 2;
-    const startR     = rng(i + 1) * 0.12 + 0.38;
-    const len        = rng(i + 2) * 0.28 + 0.12;
-    const thick      = rng(i + 3) * 3.5  + 1.2;
-    const alpha      = rng(i + 4) * 0.55 + 0.35;
+  // Deterministic pseudo-random
+  const rng = (n) => Math.abs(Math.sin(n * 127.1 + n * 0.5 * 311.7));
 
-    let x = S/2 + Math.cos(startAngle) * startR * S * 0.48;
-    let y = S/2 + Math.sin(startAngle) * startR * S * 0.48;
+  // Draw one organic bezier vessel from outer rim curving inward
+  const drawVessel = (i) => {
+    const startAngle = rng(i * 1.1) * Math.PI * 2;
+
+    // Root on the very outer rim
+    const x0 = cx + Math.cos(startAngle) * R * 0.90;
+    const y0 = cy + Math.sin(startAngle) * R * 0.90;
+
+    // Tip — goes inward 10-35%
+    const depth  = rng(i * 1.7) * 0.28 + 0.10;
+    const endAngle = startAngle + (rng(i * 2.3) - 0.5) * 0.50;
+    const x3 = cx + Math.cos(endAngle) * R * (0.90 - depth);
+    const y3 = cy + Math.sin(endAngle) * R * (0.90 - depth);
+
+    // Bezier control points for natural S-curve
+    const cp1A = startAngle + (rng(i * 3.1) - 0.5) * 0.30;
+    const cp2A = endAngle   + (rng(i * 4.3) - 0.5) * 0.30;
+    const x1 = cx + Math.cos(cp1A) * R * (0.90 - depth * 0.25);
+    const y1 = cy + Math.sin(cp1A) * R * (0.90 - depth * 0.25);
+    const x2 = cx + Math.cos(cp2A) * R * (0.90 - depth * 0.72);
+    const y2 = cy + Math.sin(cp2A) * R * (0.90 - depth * 0.72);
+
+    const thick = rng(i * 5.9) * 2.2 + 0.8;
+    const alpha = rng(i * 7.3) * 0.40 + 0.28;
+
+    // Gradient: opaque red at root → transparent at tip
+    const grad = c.createLinearGradient(x0, y0, x3, y3);
+    grad.addColorStop(0,   `rgba(195,58,58,${alpha})`);
+    grad.addColorStop(0.55,`rgba(205,70,65,${alpha * 0.55})`);
+    grad.addColorStop(1,   `rgba(215,90,80,0)`);
 
     c.beginPath();
-    c.moveTo(x, y);
-
-    let angle = startAngle + (rng(i + 5) - 0.5) * 0.8;
-    for (let s = 0; s < 8; s++) {
-      angle += (rng(i * 7 + s) - 0.5) * 0.55;
-      const r = (startR + len * (s / 8)) * 0.5;
-      x = S/2 + Math.cos(angle) * r * S;
-      y = S/2 + Math.sin(angle) * r * S;
-      c.lineTo(x, y);
-
-      if (s % 3 === 2 && rng(i * 3 + s) > 0.5) {
-        // branch
-        const bAngle = angle + (rng(i * 9 + s) - 0.5) * 0.9;
-        const bLen   = 0.06 + rng(i * 11 + s) * 0.08;
-        c.moveTo(x, y);
-        c.lineTo(
-          x + Math.cos(bAngle) * bLen * S,
-          y + Math.sin(bAngle) * bLen * S,
-        );
-        c.moveTo(x, y);
-      }
-    }
-
-    c.strokeStyle = `rgba(195,55,55,${alpha})`;
+    c.moveTo(x0, y0);
+    c.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+    c.strokeStyle = grad;
     c.lineWidth   = thick;
     c.lineCap     = 'round';
     c.lineJoin    = 'round';
     c.stroke();
-  }
+
+    // Thin sub-branch from midpoint
+    if (rng(i * 11.3) > 0.52) {
+      const t   = 0.48;
+      const bx  = (1-t)**3*x0 + 3*(1-t)**2*t*x1 + 3*(1-t)*t**2*x2 + t**3*x3;
+      const by  = (1-t)**3*y0 + 3*(1-t)**2*t*y1 + 3*(1-t)*t**2*y2 + t**3*y3;
+      const bA  = endAngle + (rng(i * 13.7) - 0.5) * 0.85;
+      const bR  = R * (0.90 - depth * (0.72 + rng(i * 17.1) * 0.22));
+      c.beginPath();
+      c.moveTo(bx, by);
+      c.quadraticCurveTo(
+        cx + Math.cos(bA) * bR * 1.05,
+        cy + Math.sin(bA) * bR * 1.05,
+        cx + Math.cos(bA) * bR * 0.80,
+        cy + Math.sin(bA) * bR * 0.80,
+      );
+      c.strokeStyle = `rgba(205,70,65,${alpha * 0.38})`;
+      c.lineWidth   = thick * 0.42;
+      c.stroke();
+    }
+  };
+
+  // 58 vessels spread around the rim
+  for (let i = 0; i < 58; i++) drawVessel(i);
+
+  // Soft blush vignette at outer rim to blend vessel roots
+  const blush = c.createRadialGradient(cx, cy, R * 0.65, cx, cy, R);
+  blush.addColorStop(0,   'rgba(235,155,130,0)');
+  blush.addColorStop(0.7, 'rgba(220,138,115,0.05)');
+  blush.addColorStop(1,   'rgba(200,110,95,0.12)');
+  c.fillStyle = blush;
+  c.fillRect(0, 0, S, S);
 
   return new THREE.CanvasTexture(cv);
 }
