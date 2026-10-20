@@ -1,378 +1,186 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Eye, Zap, Activity, Scan, Layers, CheckCircle2 } from 'lucide-react';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
-  const [activeMode, setActiveMode] = useState('scan'); // 'scan' | 'lasik'
-  const activeModeRef = useRef('scan');
-
-  // Keep ref synchronized instantly without re-mounting Three.js canvas!
-  useEffect(() => {
-    activeModeRef.current = activeMode;
-  }, [activeMode]);
 
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 500;
-    const height = container.clientHeight || 500;
+    const W = container.clientWidth  || 500;
+    const H = container.clientHeight || 500;
 
-    // Scene & Camera (camera z=6.7 for perfect centered eye proportion)
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.z = 6.7;
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    /* ── Renderer ── */
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.4;
+    renderer.shadowMap.enabled   = true;
+    renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
-    const eyeGroup = new THREE.Group();
-    scene.add(eyeGroup);
+    /* ── Scene ── */
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#070C14');
 
-    // High-Resolution Iris Texture (Generated Once)
-    const canvasIris = document.createElement('canvas');
-    canvasIris.width = 512;
-    canvasIris.height = 512;
-    const ctx = canvasIris.getContext('2d');
+    /* ── Camera ── */
+    const camera = new THREE.PerspectiveCamera(38, W / H, 0.01, 100);
+    camera.position.set(0, 0, 3.5);
 
-    const centerX = 256;
-    const centerY = 256;
+    /* ── OrbitControls (drag to rotate) ── */
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping    = true;
+    controls.dampingFactor    = 0.06;
+    controls.enablePan        = false;
+    controls.minDistance      = 1.8;
+    controls.maxDistance      = 6;
+    controls.autoRotate       = true;
+    controls.autoRotateSpeed  = 1.2;
+    controls.target.set(0, 0, 0);
 
-    ctx.fillStyle = '#050B14';
-    ctx.fillRect(0, 0, 512, 512);
+    /* ── Lighting (match reference photo) ── */
+    // Warm key from upper-left-front
+    const key = new THREE.DirectionalLight(0xfff8ee, 3.5);
+    key.position.set(-2, 3, 5);
+    key.castShadow = true;
+    scene.add(key);
 
-    const outerGrad = ctx.createRadialGradient(centerX, centerY, 75, centerX, centerY, 250);
-    outerGrad.addColorStop(0, '#061325');
-    outerGrad.addColorStop(0.3, '#1B7B93');
-    outerGrad.addColorStop(0.65, '#35A6B7');
-    outerGrad.addColorStop(0.85, '#B8ED78');
-    outerGrad.addColorStop(1.0, '#091A2E');
-    ctx.fillStyle = outerGrad;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, 250, 0, Math.PI * 2);
-    ctx.fill();
+    // Cool fill from right
+    const fill = new THREE.DirectionalLight(0xd0e8ff, 1.5);
+    fill.position.set(4, 0, 3);
+    scene.add(fill);
 
-    ctx.lineWidth = 1.5;
-    for (let i = 0; i < 180; i++) {
-      const angle = (i * Math.PI * 2) / 180;
-      const length = 90 + Math.random() * 150;
-      const alpha = 0.25 + Math.random() * 0.4;
-      ctx.strokeStyle = i % 2 === 0 ? `rgba(184, 237, 120, ${alpha})` : `rgba(53, 166, 183, ${alpha})`;
-      ctx.beginPath();
-      ctx.moveTo(centerX + Math.cos(angle) * 50, centerY + Math.sin(angle) * 50);
-      ctx.lineTo(centerX + Math.cos(angle) * length, centerY + Math.sin(angle) * length);
-      ctx.stroke();
-    }
+    // Rim light
+    const rim = new THREE.DirectionalLight(0xffe0d0, 0.6);
+    rim.position.set(0, -3, -4);
+    scene.add(rim);
 
-    const collarGrad = ctx.createRadialGradient(centerX, centerY, 45, centerX, centerY, 75);
-    collarGrad.addColorStop(0, '#04070D');
-    collarGrad.addColorStop(0.5, '#51AABC');
-    collarGrad.addColorStop(1, '#B8ED78');
-    ctx.fillStyle = collarGrad;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, 75, 0, Math.PI * 2);
-    ctx.fill();
+    // Ambient
+    scene.add(new THREE.AmbientLight(0x334455, 1.2));
 
-    ctx.fillStyle = '#030508';
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
-    ctx.fill();
-
-    const irisTexture = new THREE.CanvasTexture(canvasIris);
-
-    // 1. Concentric Eyeball Sclera (Sphere Radius 2.0 at Origin)
-    const scleraGeo = new THREE.SphereGeometry(2.0, 64, 64);
-    const scleraMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf4f9fd,
-      roughness: 0.15,
-      metalness: 0.05,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.05,
+    /* ── Loading overlay ── */
+    const loadDiv = document.createElement('div');
+    Object.assign(loadDiv.style, {
+      position: 'absolute', inset: '0', display: 'flex',
+      alignItems: 'center', justifyContent: 'center',
+      color: '#35A6B7', fontFamily: 'sans-serif', fontSize: '14px',
+      background: '#070C14', zIndex: '10',
     });
-    const sclera = new THREE.Mesh(scleraGeo, scleraMat);
-    eyeGroup.add(sclera);
+    loadDiv.textContent = 'Loading eye model…';
+    container.style.position = 'relative';
+    container.appendChild(loadDiv);
 
-    // 2. Concentric Iris Disc (Front Position Z=1.62)
-    const irisGeo = new THREE.RingGeometry(0.3, 1.28, 64, 8);
-    const irisMat = new THREE.MeshStandardMaterial({
-      map: irisTexture,
-      side: THREE.DoubleSide,
-      roughness: 0.15,
-      metalness: 0.2,
-      emissive: new THREE.Color(0x1b7b93),
-      emissiveIntensity: 0.35,
-    });
-    const irisMesh = new THREE.Mesh(irisGeo, irisMat);
-    irisMesh.position.set(0, 0, 1.62);
-    eyeGroup.add(irisMesh);
+    /* ── Load GLB ── */
+    const loader = new GLTFLoader();
+    let eyeMesh = null;
 
-    // 3. Pupil Disc (Z=1.63)
-    const pupilGeo = new THREE.CircleGeometry(0.33, 32);
-    const pupilMat = new THREE.MeshBasicMaterial({ color: 0x020408 });
-    const pupilMesh = new THREE.Mesh(pupilGeo, pupilMat);
-    pupilMesh.position.set(0, 0, 1.63);
-    eyeGroup.add(pupilMesh);
+    loader.load(
+      '/models/eye.glb',
+      (gltf) => {
+        /* Remove loading overlay */
+        if (container.contains(loadDiv)) container.removeChild(loadDiv);
 
-    // 4. Concentric Cornea Lens Dome (Radius 2.04 centered at Origin 0,0,0)
-    const corneaGeo = new THREE.SphereGeometry(2.04, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.26);
-    const corneaMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.28,
-      roughness: 0.02,
-      transmission: 0.95,
-      clearcoat: 1.0,
-      ior: 1.38,
-    });
-    const corneaMesh = new THREE.Mesh(corneaGeo, corneaMat);
-    corneaMesh.rotation.x = Math.PI / 2;
-    corneaMesh.position.set(0, 0, 0);
-    eyeGroup.add(corneaMesh);
+        const model = gltf.scene;
 
-    // 5. Cornea Anatomy Scan Ring (Sweeps in Scan Mode)
-    const scanRingGeo = new THREE.RingGeometry(0.2, 1.45, 64);
-    const scanRingMat = new THREE.MeshBasicMaterial({
-      color: 0x35a6b7,
-      transparent: true,
-      opacity: 0,
-      side: THREE.DoubleSide,
-      blending: THREE.AdditiveBlending,
-    });
-    const scanRingMesh = new THREE.Mesh(scanRingGeo, scanRingMat);
-    scanRingMesh.position.z = 1.65;
-    eyeGroup.add(scanRingMesh);
+        /* Centre and scale model to fill view nicely */
+        const box    = new THREE.Box3().setFromObject(model);
+        const centre = box.getCenter(new THREE.Vector3());
+        const size   = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale  = 2.2 / maxDim;
 
-    // Orbiting Particles (Lightweight)
-    const particleCount = 140;
-    const particleGeo = new THREE.BufferGeometry();
-    const particlePos = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
+        model.position.sub(centre.multiplyScalar(scale));
+        model.scale.setScalar(scale);
 
-    const cLime = new THREE.Color(0xb8ed78);
-    const cTeal = new THREE.Color(0x35a6b7);
+        /* Apply website theme tint to iris material */
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow    = true;
+            child.receiveShadow = true;
 
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 2.4 + Math.random() * 0.6;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = (Math.random() - 0.5) * Math.PI * 0.7;
+            /* Tint the iris with website teal (#35A6B7) */
+            if (child.name.toLowerCase().includes('iris') ||
+                child.material?.name?.toLowerCase().includes('iris')) {
+              child.material = child.material.clone();
+              child.material.color.set('#35A6B7');
+              child.material.roughness = 0.08;
+            }
+          }
+        });
 
-      particlePos[i * 3] = radius * Math.sin(theta) * Math.cos(phi);
-      particlePos[i * 3 + 1] = radius * Math.cos(theta) * Math.cos(phi);
-      particlePos[i * 3 + 2] = radius * Math.sin(phi);
+        eyeMesh = model;
+        scene.add(model);
+      },
+      (xhr) => {
+        const pct = Math.round((xhr.loaded / xhr.total) * 100);
+        loadDiv.textContent = `Loading eye model… ${pct}%`;
+      },
+      (err) => {
+        console.error('GLB load error:', err);
+        loadDiv.textContent = 'Failed to load model.';
+      }
+    );
 
-      const mixedColor = Math.random() > 0.5 ? cLime : cTeal;
-      particleColors[i * 3] = mixedColor.r;
-      particleColors[i * 3 + 1] = mixedColor.g;
-      particleColors[i * 3 + 2] = mixedColor.b;
-    }
-
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.038,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.65,
-      blending: THREE.AdditiveBlending,
-    });
-    const particleSystem = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleSystem);
-
-    // LASIK Laser Beam Group
-    const laserGroup = new THREE.Group();
-    scene.add(laserGroup);
-
-    const laserLineGeo = new THREE.CylinderGeometry(0.015, 0.015, 6, 8);
-    const laserLineMat = new THREE.MeshBasicMaterial({
-      color: 0x35a6b7,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-    });
-    const laserMesh = new THREE.Mesh(laserLineGeo, laserLineMat);
-    laserMesh.rotation.z = Math.PI / 2;
-    laserMesh.position.z = 2.15;
-    laserGroup.add(laserMesh);
-
-    const targetRingGeo = new THREE.RingGeometry(0.1, 0.7, 24);
-    const targetRingMat = new THREE.MeshBasicMaterial({
-      color: 0xb8ed78,
-      transparent: true,
-      opacity: 0,
-      side: THREE.DoubleSide,
-    });
-    const targetRing = new THREE.Mesh(targetRingGeo, targetRingMat);
-    targetRing.position.z = 2.05;
-    laserGroup.add(targetRing);
-
-    // Studio Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
-    scene.add(ambientLight);
-
-    const dirLight1 = new THREE.DirectionalLight(0xb8ed78, 2.0);
-    dirLight1.position.set(6, 6, 6);
-    scene.add(dirLight1);
-
-    const dirLight2 = new THREE.DirectionalLight(0x35a6b7, 2.5);
-    dirLight2.position.set(-6, -6, 6);
-    scene.add(dirLight2);
-
-    // Mouse Tracking
-    let targetRotationX = 0;
-    let targetRotationY = 0;
-
-    const handleMouseMove = (e) => {
-      const rect = container.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      targetRotationY = x * 0.35;
-      targetRotationX = -y * 0.25;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    const handleResize = () => {
+    /* ── Resize ── */
+    const onResize = () => {
       if (!container) return;
-      const w = container.clientWidth;
-      const h = container.clientHeight;
+      const w = container.clientWidth, h = container.clientHeight;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
+    window.addEventListener('resize', onResize);
 
-    window.addEventListener('resize', handleResize);
-
-    let clock = new THREE.Clock();
+    /* ── Animation loop ── */
     let animId;
-
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
-
-      eyeGroup.rotation.y += (targetRotationY - eyeGroup.rotation.y) * 0.06;
-      eyeGroup.rotation.x += (targetRotationX - eyeGroup.rotation.x) * 0.06;
-
-      particleSystem.rotation.y = elapsedTime * 0.06;
-
-      // INSTANT ON-THE-SPOT MODE SWITCHING (0ms LAG!)
-      const mode = activeModeRef.current;
-
-      if (mode === 'lasik') {
-        // Laser Beam active
-        laserLineMat.opacity = 0.95 + Math.sin(elapsedTime * 14) * 0.05;
-        laserMesh.position.y = Math.sin(elapsedTime * 3.0) * 0.75;
-        targetRingMat.opacity = 0.95;
-        targetRing.scale.setScalar(1 + Math.sin(elapsedTime * 5) * 0.15);
-        targetRing.rotation.z = elapsedTime * 1.5;
-
-        scanRingMat.opacity = 0;
-      } else if (mode === 'scan') {
-        // Cornea Scan Beam active
-        scanRingMat.opacity = 0.75 + Math.sin(elapsedTime * 4) * 0.2;
-        scanRingMesh.position.z = 1.64 + Math.sin(elapsedTime * 2.5) * 0.08;
-        scanRingMesh.rotation.z = elapsedTime * 0.8;
-
-        laserLineMat.opacity = 0;
-        targetRingMat.opacity = 0;
-      } else {
-        laserLineMat.opacity = 0;
-        targetRingMat.opacity = 0;
-        scanRingMat.opacity = 0;
-      }
-
+      controls.update();
       renderer.render(scene, camera);
     };
-
     animate();
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      controls.dispose();
+      window.removeEventListener('resize', onResize);
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+      if (loadDiv.parentNode === container) container.removeChild(loadDiv);
       renderer.dispose();
     };
-  }, []); // [] ONCE ON MOUNT = 0ms INSTANT RESPONSE!
+  }, []);
 
   return (
-    <div className="relative w-full h-full min-h-[380px] lg:min-h-[480px] flex flex-col items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#35A6B7]/15 via-[#B8ED78]/10 to-transparent rounded-full blur-3xl pointer-events-none transform scale-90" />
-
-      {/* Top Floating HUD Status Badge */}
-      <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-20 flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#070C14]/90 border border-[#35A6B7]/40 backdrop-blur-md">
-        {activeMode === 'scan' ? (
-          <>
-            <Activity className="w-3 h-3 text-[#35A6B7] animate-pulse shrink-0" />
-            <span className="text-[9.5px] sm:text-[10.5px] font-bold text-white uppercase tracking-wider">3D Cornea Scan</span>
-          </>
-        ) : (
-          <>
-            <Zap className="w-3 h-3 text-[#B8ED78] fill-[#B8ED78] animate-pulse shrink-0" />
-            <span className="text-[9.5px] sm:text-[10.5px] font-bold text-[#B8ED78] uppercase tracking-wider">LASIK View Active</span>
-          </>
-        )}
+    <div
+      className="relative w-full h-full overflow-hidden rounded-2xl"
+      style={{ background: '#070C14', minHeight: '420px' }}
+    >
+      {/* Teal corner accents */}
+      <div className="absolute top-0 left-0 z-20 pointer-events-none">
+        <div style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
+        <div style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
+      </div>
+      <div className="absolute top-0 right-0 z-20 pointer-events-none flex flex-col items-end">
+        <div style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
+        <div style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
+      </div>
+      <div className="absolute bottom-0 left-0 z-20 pointer-events-none flex flex-col justify-end">
+        <div style={{ width: 2, height: 28, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
+        <div style={{ width: 28, height: 2, background: '#B8ED78', borderRadius: 2, opacity: 0.75 }} />
+      </div>
+      <div className="absolute bottom-0 right-0 z-20 pointer-events-none flex flex-col items-end justify-end">
+        <div style={{ width: 2, height: 28, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
+        <div style={{ width: 28, height: 2, background: '#35A6B7', borderRadius: 2, opacity: 0.85 }} />
       </div>
 
-      {/* Top Right Floating HUD Metrics Box (Appears during Scan Mode on both Mobile & Desktop) */}
-      {activeMode === 'scan' && (
-        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-20 flex flex-col gap-0.5 p-1.5 sm:p-2 rounded-xl bg-[#070C14]/90 border border-[#35A6B7]/40 backdrop-blur-md text-[8.5px] sm:text-[9.5px] text-slate-300 shadow-xl shadow-[#070C14]">
-          <div className="flex items-center gap-1 text-[#B8ED78] font-bold">
-            <CheckCircle2 className="w-2.5 h-2.5 shrink-0" />
-            <span>Cornea: 540 µm</span>
-          </div>
-          <div className="flex items-center gap-1 text-slate-200">
-            <span className="w-1 h-1 rounded-full bg-[#35A6B7] shrink-0" />
-            <span>IOP: 14 mmHg</span>
-          </div>
-          <div className="flex items-center gap-1 text-slate-200">
-            <span className="w-1 h-1 rounded-full bg-[#51AABC] shrink-0" />
-            <span>Lens: 99.8% Clear</span>
-          </div>
-        </div>
-      )}
-
-      {/* 3D WebGL Canvas Container */}
-      <div 
-        ref={mountRef} 
-        className="w-full h-[360px] sm:h-[440px] lg:h-[480px] cursor-grab active:cursor-grabbing z-10"
+      <div
+        ref={mountRef}
+        className="w-full h-[400px] sm:h-[460px] lg:h-[500px] select-none cursor-grab active:cursor-grabbing"
       />
-
-      {/* Bottom Controls Bar (Guaranteed 0% overlap on mobile & desktop) */}
-      <div className="absolute bottom-3 inset-x-3 sm:bottom-4 sm:inset-x-4 z-20 flex items-center justify-between gap-2">
-        {/* Button 1: 3D Cornea Scan */}
-        <button
-          onClick={() => setActiveMode('scan')}
-          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
-            activeMode === 'scan'
-              ? 'bg-gradient-to-r from-[#35A6B7] to-[#51AABC] text-slate-950 shadow-[#35A6B7]/40 border border-[#35A6B7]'
-              : 'bg-[#0E1726]/85 text-[#35A6B7] border border-[#35A6B7]/40 hover:bg-[#35A6B7]/20'
-          }`}
-        >
-          <Scan className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${activeMode === 'scan' ? 'text-slate-950' : 'text-[#35A6B7]'}`} />
-          <span className="truncate">3D Cornea Scan</span>
-        </button>
-
-        {/* Button 2: Instant LASIK Laser */}
-        <button
-          onClick={() => setActiveMode('lasik')}
-          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-xs shadow-xl transition-all duration-200 backdrop-blur-md active:scale-95 ${
-            activeMode === 'lasik'
-              ? 'bg-gradient-to-r from-[#B8ED78] to-[#35A6B7] text-slate-950 shadow-[#B8ED78]/40 border border-[#B8ED78]'
-              : 'bg-[#0E1726]/85 text-[#B8ED78] border border-[#B8ED78]/40 hover:bg-[#B8ED78]/20'
-          }`}
-        >
-          <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${activeMode === 'lasik' ? 'fill-slate-950 text-slate-950' : 'fill-[#B8ED78] text-[#B8ED78]'}`} />
-          <span className="truncate">LASIK Laser View</span>
-        </button>
-      </div>
     </div>
   );
 }
