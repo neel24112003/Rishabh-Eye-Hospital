@@ -14,7 +14,10 @@ export default function EyeVisualizerCanvas() {
 
     /* Renderer */
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(W, H);
+    renderer.setSize(W, H, false);
+    renderer.domElement.style.display = 'block';
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping         = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.4;
@@ -48,23 +51,27 @@ export default function EyeVisualizerCanvas() {
     const eyeGroup = new THREE.Group();
     scene.add(eyeGroup);
 
-    /* Mouse tracking */
+    /* Pointer tracking for mouse gaze and touch interaction. */
     let mouseX = 0, mouseY = 0;
-    const onPointerMove = (e) => {
-      if (
-        e.pointerType !== 'mouse' ||
-        !window.matchMedia('(hover: hover) and (pointer: fine)').matches
-      ) return;
+    const updateGaze = (clientX, clientY) => {
       const rect = container.getBoundingClientRect();
-      mouseX = THREE.MathUtils.clamp(((e.clientX - rect.left) / rect.width - 0.5) * 2, -1, 1);
-      mouseY = THREE.MathUtils.clamp(-((e.clientY - rect.top) / rect.height - 0.5) * 2, -1, 1);
+      mouseX = THREE.MathUtils.clamp(((clientX - rect.left) / rect.width - 0.5) * 2, -1, 1);
+      mouseY = THREE.MathUtils.clamp(-((clientY - rect.top) / rect.height - 0.5) * 2, -1, 1);
     };
-    const onPointerLeave = () => {
+    const onPointerMove = (e) => updateGaze(e.clientX, e.clientY);
+    const onPointerLeave = (e) => {
+      if (e.pointerType !== 'mouse') return;
       mouseX = 0;
       mouseY = 0;
     };
+    const onTouchMove = (e) => {
+      const touch = e.touches[0] || e.changedTouches[0];
+      if (touch) updateGaze(touch.clientX, touch.clientY);
+    };
     container.addEventListener('pointermove', onPointerMove);
     container.addEventListener('pointerleave', onPointerLeave);
+    window.addEventListener('touchstart', onTouchMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
 
     /* ── Blue radial iris texture with a dark pupil and warm inner ring ── */
     const buildIrisTexture = () => {
@@ -181,10 +188,13 @@ export default function EyeVisualizerCanvas() {
     /* Resize */
     const onResize = () => {
       const w = container.clientWidth, h = container.clientHeight;
+      if (!w || !h) return;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(w, h, false);
     };
+    const resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(container);
     window.addEventListener('resize', onResize);
 
     /* Animate */
@@ -202,6 +212,9 @@ export default function EyeVisualizerCanvas() {
       cancelAnimationFrame(animId);
       container.removeEventListener('pointermove', onPointerMove);
       container.removeEventListener('pointerleave', onPointerLeave);
+      window.removeEventListener('touchstart', onTouchMove);
+      window.removeEventListener('touchmove', onTouchMove);
+      resizeObserver.disconnect();
       window.removeEventListener('resize', onResize);
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
       renderer.dispose();
