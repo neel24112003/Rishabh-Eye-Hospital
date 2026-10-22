@@ -116,7 +116,7 @@ export default function Navbar({ onOpenAppointment }) {
           </div>
 
           {/* Right Action Buttons */}
-          <div className="hidden sm:flex items-center shrink-0">
+          <div className="hidden lg:flex items-center shrink-0">
             <button
               type="button"
               onClick={(e) => {
