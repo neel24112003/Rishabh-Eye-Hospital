@@ -50,12 +50,21 @@ export default function EyeVisualizerCanvas() {
 
     /* Mouse tracking */
     let mouseX = 0, mouseY = 0;
-    const onMouseMove = (e) => {
+    const onPointerMove = (e) => {
+      if (
+        e.pointerType !== 'mouse' ||
+        !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+      ) return;
       const rect = container.getBoundingClientRect();
-      mouseX =  ((e.clientX - rect.left) / rect.width  - 0.5) * 2;
-      mouseY = -((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+      mouseX = THREE.MathUtils.clamp(((e.clientX - rect.left) / rect.width - 0.5) * 2, -1, 1);
+      mouseY = THREE.MathUtils.clamp(-((e.clientY - rect.top) / rect.height - 0.5) * 2, -1, 1);
     };
-    window.addEventListener('mousemove', onMouseMove);
+    const onPointerLeave = () => {
+      mouseX = 0;
+      mouseY = 0;
+    };
+    container.addEventListener('pointermove', onPointerMove);
+    container.addEventListener('pointerleave', onPointerLeave);
 
     /* ── Blue radial iris texture with a dark pupil and warm inner ring ── */
     const buildIrisTexture = () => {
@@ -191,7 +200,8 @@ export default function EyeVisualizerCanvas() {
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener('mousemove', onMouseMove);
+      container.removeEventListener('pointermove', onPointerMove);
+      container.removeEventListener('pointerleave', onPointerLeave);
       window.removeEventListener('resize', onResize);
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
       renderer.dispose();
@@ -213,7 +223,7 @@ export default function EyeVisualizerCanvas() {
       <div className="absolute bottom-0 right-0 z-20 pointer-events-none" style={{ width: 2, height: 28, background: '#35A6B7', opacity: 0.9, borderRadius: 2 }} />
       <div className="absolute bottom-0 right-0 z-20 pointer-events-none" style={{ width: 28, height: 2, background: '#35A6B7', opacity: 0.9, borderRadius: 2 }} />
 
-      <div ref={mountRef} className="w-full" style={{ height: '460px' }} />
+      <div ref={mountRef} className="w-full aspect-square sm:aspect-auto sm:h-[clamp(300px,60vw,460px)] lg:h-[460px]" />
     </div>
   );
 }
