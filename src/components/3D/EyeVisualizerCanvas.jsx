@@ -2,85 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-/* ── Procedural iris texture (teal + radial fibers + black pupil) ── */
-function buildIrisTexture() {
-  const S = 512;
-  const cv = document.createElement('canvas');
-  cv.width = cv.height = S;
-  const c = cv.getContext('2d');
-  const cx = S / 2, cy = S / 2;
-
-  // Teal iris base gradient
-  const ig = c.createRadialGradient(cx, cy, 0, cx, cy, S / 2);
-  ig.addColorStop(0,    '#0a2f38');
-  ig.addColorStop(0.16, '#175f6e');
-  ig.addColorStop(0.40, '#35A6B7');
-  ig.addColorStop(0.70, '#268a9a');
-  ig.addColorStop(0.88, '#174f5a');
-  ig.addColorStop(1,    '#08252c');
-  c.fillStyle = ig;
-  c.beginPath();
-  c.arc(cx, cy, S / 2, 0, Math.PI * 2);
-  c.fill();
-
-  // 700 radial fiber lines
-  for (let i = 0; i < 700; i++) {
-    const a     = (i / 700) * Math.PI * 2;
-    const rIn   = (0.18 + Math.sin(a * 17) * 0.015) * S / 2;
-    const rOut  = (0.90 + Math.sin(a * 11) * 0.025) * S / 2;
-    const bright = 0.10 + (Math.sin(a * 23 + i * 0.2) * 0.5 + 0.5) * 0.22;
-    c.beginPath();
-    c.moveTo(cx + Math.cos(a) * rIn,  cy + Math.sin(a) * rIn);
-    c.lineTo(cx + Math.cos(a) * rOut, cy + Math.sin(a) * rOut);
-    c.strokeStyle = `rgba(130,230,248,${bright})`;
-    c.lineWidth   = 0.6;
-    c.stroke();
-  }
-
-  // Collarette ring
-  c.beginPath();
-  c.arc(cx, cy, S * 0.21, 0, Math.PI * 2);
-  c.strokeStyle = 'rgba(255,255,255,0.17)';
-  c.lineWidth   = 2.5;
-  c.stroke();
-
-  // Limbal dark ring
-  const limbal = c.createRadialGradient(cx, cy, S * 0.38, cx, cy, S * 0.5);
-  limbal.addColorStop(0,   'rgba(0,0,0,0)');
-  limbal.addColorStop(0.7, 'rgba(0,0,0,0.22)');
-  limbal.addColorStop(1,   'rgba(0,0,0,0.70)');
-  c.fillStyle = limbal;
-  c.beginPath();
-  c.arc(cx, cy, S / 2, 0, Math.PI * 2);
-  c.fill();
-
-  // Deep black pupil
-  const pr = S * 0.182;
-  const pg = c.createRadialGradient(cx, cy, 0, cx, cy, pr);
-  pg.addColorStop(0,   '#000000');
-  pg.addColorStop(0.82,'#060c0e');
-  pg.addColorStop(1,   '#0e1e22');
-  c.fillStyle = pg;
-  c.beginPath();
-  c.arc(cx, cy, pr, 0, Math.PI * 2);
-  c.fill();
-
-  // Crescent highlight upper-left
-  const hl = c.createRadialGradient(
-    cx - S * 0.06, cy - S * 0.10, 0,
-    cx - S * 0.06, cy - S * 0.10, S * 0.12,
-  );
-  hl.addColorStop(0,   'rgba(255,255,255,0.92)');
-  hl.addColorStop(0.45,'rgba(200,248,255,0.32)');
-  hl.addColorStop(1,   'rgba(0,0,0,0)');
-  c.fillStyle = hl;
-  c.beginPath();
-  c.arc(cx - S * 0.06, cy - S * 0.10, S * 0.12, 0, Math.PI * 2);
-  c.fill();
-
-  return new THREE.CanvasTexture(cv);
-}
-
 export default function EyeVisualizerCanvas() {
   const mountRef = useRef(null);
 
@@ -123,10 +44,11 @@ export default function EyeVisualizerCanvas() {
     scene.add(rim);
     scene.add(new THREE.AmbientLight(0x334455, 1.3));
 
-    /* Mouse tracking group */
+    /* Eye group — rotated by mouse */
     const eyeGroup = new THREE.Group();
     scene.add(eyeGroup);
 
+    /* Mouse tracking */
     let mouseX = 0, mouseY = 0;
     const onMouseMove = (e) => {
       const rect = container.getBoundingClientRect();
@@ -135,8 +57,73 @@ export default function EyeVisualizerCanvas() {
     };
     window.addEventListener('mousemove', onMouseMove);
 
-    /* ── Load GLB (real 3D model from user's eye.blend) ── */
-    let irisAdded = false;
+    /* ── Blue radial iris texture with a dark pupil and warm inner ring ── */
+    const buildIrisTexture = () => {
+      const S = 512;
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = S;
+      const c = cv.getContext('2d');
+      const cx = S / 2, cy = S / 2;
+      const irisRadius = S / 2;
+
+      const iris = c.createRadialGradient(cx, cy, S * 0.12, cx, cy, irisRadius);
+      iris.addColorStop(0, '#172c35');
+      iris.addColorStop(0.25, '#284c5a');
+      iris.addColorStop(0.48, '#76b8ca');
+      iris.addColorStop(0.68, '#397c91');
+      iris.addColorStop(0.88, '#193d4c');
+      iris.addColorStop(1, '#081923');
+      c.fillStyle = iris;
+      c.beginPath();
+      c.arc(cx, cy, irisRadius, 0, Math.PI * 2);
+      c.fill();
+
+      // Fine radial blue fibers, with subtle darker strands for natural variation.
+      for (let i = 0; i < 900; i++) {
+        const angle = (i / 900) * Math.PI * 2;
+        const inner = S * (0.265 + Math.sin(angle * 19) * 0.008);
+        const outer = S * (0.46 + Math.sin(angle * 13) * 0.025);
+        const rayLength = outer - inner;
+        const light = i % 3 !== 0;
+        c.beginPath();
+        c.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
+        c.lineTo(
+          cx + Math.cos(angle) * (inner + rayLength),
+          cy + Math.sin(angle) * (inner + rayLength),
+        );
+        c.strokeStyle = light
+          ? `rgba(190,231,240,${0.12 + (i % 7) * 0.018})`
+          : `rgba(9,25,31,${0.16 + (i % 5) * 0.025})`;
+        c.lineWidth = 0.7 + (i % 4) * 0.35;
+        c.stroke();
+      }
+
+      // Warm amber collarette around the pupil.
+      const collarette = c.createRadialGradient(cx, cy, S * 0.255, cx, cy, S * 0.34);
+      collarette.addColorStop(0, 'rgba(224,176,104,0.5)');
+      collarette.addColorStop(0.35, 'rgba(182,137,75,0.58)');
+      collarette.addColorStop(1, 'rgba(135,103,63,0)');
+      c.fillStyle = collarette;
+      c.beginPath();
+      c.arc(cx, cy, S * 0.34, 0, Math.PI * 2);
+      c.fill();
+
+      // Black pupil
+      const pupil = c.createRadialGradient(cx, cy, 0, cx, cy, S * 0.255);
+      pupil.addColorStop(0, '#020405');
+      pupil.addColorStop(0.88, '#05090a');
+      pupil.addColorStop(1, '#171a15');
+      c.fillStyle = pupil;
+      c.beginPath();
+      c.arc(cx, cy, S * 0.255, 0, Math.PI * 2);
+      c.fill();
+
+      const texture = new THREE.CanvasTexture(cv);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    };
+
+    /* ── Load GLB model ── */
     const loader = new GLTFLoader();
     loader.load(
       '/models/eye.glb',
@@ -148,78 +135,35 @@ export default function EyeVisualizerCanvas() {
         const centre = box.getCenter(new THREE.Vector3());
         const size   = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale  = 2.2 / maxDim;
+        const sc     = 2.2 / maxDim;
         model.position.sub(centre);
-        model.scale.setScalar(scale);
-
-        /* Keep original orientation (white sclera faces camera) */
-        /* No Y rotation — GLB front = sclera front = nice organic texture */
+        model.scale.setScalar(sc);
 
         model.traverse((child) => {
-          if (!child.isMesh) return;
-          child.castShadow    = true;
-          child.receiveShadow = true;
+          if (child.isMesh) {
+            child.castShadow    = true;
+            child.receiveShadow = true;
+          }
         });
 
         eyeGroup.add(model);
 
-        /* ── Add procedural iris disc on front of sclera ── */
-        if (!irisAdded) {
-          irisAdded = true;
+        /* ── Iris disc on front of sclera ── */
+        const frontZ = (size.z / 2) * sc + 0.01;
 
-          /* Determine front-Z of the loaded model (in group space) */
-          const frontZ = (size.z / 2) * scale * 0.72; // slightly inside front
-
-          const irisTex = buildIrisTexture();
-          const irisMesh = new THREE.Mesh(
-            new THREE.CircleGeometry(0.40 * scale, 128),
-            new THREE.MeshStandardMaterial({
-              map:       irisTex,
-              roughness: 0.06,
-              metalness: 0.02,
-            }),
-          );
-          irisMesh.position.z = frontZ;
-          irisMesh.castShadow = true;
-          eyeGroup.add(irisMesh);
-
-          /* Transparent cornea dome over iris */
-          const corneaMesh = new THREE.Mesh(
-            new THREE.SphereGeometry(scale * 1.015 * 0.5, 96, 96),
-            new THREE.MeshPhysicalMaterial({
-              transparent:  true,
-              opacity:      0.18,
-              roughness:    0.0,
-              metalness:    0.0,
-              transmission: 0.88,
-              ior:          1.376,
-            }),
-          );
-          eyeGroup.add(corneaMesh);
-
-          /* Specular highlight sprite */
-          const hlC = document.createElement('canvas');
-          hlC.width = hlC.height = 256;
-          const hlCtx = hlC.getContext('2d');
-          const hlG   = hlCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
-          hlG.addColorStop(0,   'rgba(255,255,255,0.90)');
-          hlG.addColorStop(0.35,'rgba(220,245,255,0.40)');
-          hlG.addColorStop(0.75,'rgba(180,230,255,0.08)');
-          hlG.addColorStop(1,   'rgba(0,0,0,0)');
-          hlCtx.fillStyle = hlG;
-          hlCtx.fillRect(0, 0, 256, 256);
-          const hlSprite = new THREE.Sprite(
-            new THREE.SpriteMaterial({
-              map:         new THREE.CanvasTexture(hlC),
-              transparent: true,
-              opacity:     0.65,
-              depthWrite:  false,
-            }),
-          );
-          hlSprite.position.set(-0.26, 0.30, frontZ + 0.08);
-          hlSprite.scale.set(0.52, 0.52, 1);
-          eyeGroup.add(hlSprite);
-        }
+        // Blue iris circle mesh
+        const irisRadius = 0.28 * sc;
+        const irisMesh = new THREE.Mesh(
+          new THREE.CircleGeometry(irisRadius, 128),
+          new THREE.MeshBasicMaterial({
+            map:       buildIrisTexture(),
+            depthWrite: true,
+            toneMapped: false,
+          }),
+        );
+        irisMesh.position.z = frontZ;
+        irisMesh.renderOrder = 1;
+        eyeGroup.add(irisMesh);
       },
       undefined,
       (err) => console.error('[Eye] GLB load error:', err),
@@ -234,7 +178,7 @@ export default function EyeVisualizerCanvas() {
     };
     window.addEventListener('resize', onResize);
 
-    /* Animate — smooth mouse tracking */
+    /* Animate */
     let animId;
     const MAX = 0.36;
     const animate = () => {
