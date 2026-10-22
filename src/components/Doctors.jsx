@@ -72,7 +72,7 @@ export default function Doctors() {
         </div>
 
         {/* Doctor Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8">
           {doctors.map((doctor, index) => (
             <motion.div
               key={index}
@@ -83,7 +83,7 @@ export default function Doctors() {
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-stretch overflow-hidden"
             >
               {/* Doctor Real Photo Portrait Card */}
-              <div className="relative w-full sm:w-60 h-80 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
+              <div className="relative w-full sm:w-60 lg:w-72 h-80 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
                 <img
                   src={doctor.image}
                   alt={doctor.name}
@@ -111,14 +111,14 @@ export default function Doctors() {
                     {doctor.qualifications}
                   </p>
 
-                  <p className="text-xs font-semibold text-[#35A6B7] uppercase tracking-wider mb-3">
+                  <p className="text-xs lg:text-sm font-semibold text-[#35A6B7] uppercase tracking-wider mb-3">
                     {doctor.title}
                   </p>
 
                   {doctor.fellowships && doctor.fellowships.length > 0 && (
                     <div className="space-y-1.5 mb-4 bg-[#35A6B7]/10 p-2.5 rounded-xl border border-[#35A6B7]/30">
                       {doctor.fellowships.map((fellowship, fIdx) => (
-                        <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                        <div key={fIdx} className="flex items-center gap-2 text-xs lg:text-sm text-slate-200 font-medium">
                           <Award className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
                           <span>{fellowship}</span>
                         </div>
@@ -129,7 +129,7 @@ export default function Doctors() {
                   {doctor.clinicalFocus && doctor.clinicalFocus.length > 0 && (
                     <div className="space-y-1.5 mb-4 bg-[#35A6B7]/10 p-2.5 rounded-xl border border-[#35A6B7]/30">
                       {doctor.clinicalFocus.map((focus, fIdx) => (
-                        <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                        <div key={fIdx} className="flex items-center gap-2 text-xs lg:text-sm text-slate-200 font-medium">
                           <Award className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
                           <span>{focus}</span>
                         </div>
@@ -137,7 +137,7 @@ export default function Doctors() {
                     </div>
                   )}
 
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                  <p className="text-slate-300 text-xs sm:text-sm lg:text-base leading-relaxed mb-4">
                     {doctor.description}
                   </p>
 
@@ -145,7 +145,7 @@ export default function Doctors() {
                     {doctor.specialties.map((spec, sIdx) => (
                       <div
                         key={sIdx}
-                        className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 text-[11px] font-medium text-slate-200"
+                        className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 text-[11px] lg:text-xs font-medium text-slate-200"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#B8ED78] shrink-0" />
                         <span>{spec}</span>
@@ -169,6 +169,5 @@ export default function Doctors() {
     </section>
   );
 }
-
 
 
