@@ -41,6 +41,8 @@ export default function Doctors() {
       experience: "20+ Years Experience",
       image: "/images/dr-shefali-yagnik.jpg",
       objectPosition: "object-[50%_35%]",
+      portraitHeight: "lg:h-[461px]",
+      infoAlignment: "lg:justify-start",
       badgeColor: "from-[#51AABC] to-[#35A6B7]",
       description: "Leading Orthoptist & Contact Lens Specialist with 20+ years of clinical mastery. Specialized in advanced binocular vision evaluation, pediatric refraction diagnostics, non-surgical squint therapy, computer vision syndrome (CVS) treatment, and custom specialty contact lens fitting with compassionate patient care.",
       specialties: [
@@ -83,7 +85,7 @@ export default function Doctors() {
               className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative group flex flex-col sm:flex-row gap-6 items-stretch overflow-hidden"
             >
               {/* Doctor Real Photo Portrait Card */}
-              <div className="relative w-full sm:w-60 lg:w-72 h-80 sm:h-auto rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all">
+              <div className={`relative w-full sm:w-60 lg:w-72 h-80 sm:h-auto ${doctor.portraitHeight || ''} rounded-2xl overflow-hidden shrink-0 border border-[#35A6B7]/40 shadow-xl bg-[#070C14] group-hover:border-[#B8ED78]/60 transition-all`}>
                 <img
                   src={doctor.image}
                   alt={doctor.name}
@@ -96,7 +98,7 @@ export default function Doctors() {
               </div>
 
               {/* Doctor Info */}
-              <div className="flex-1 flex flex-col justify-between h-full">
+              <div className={`flex-1 flex flex-col ${doctor.infoAlignment || 'justify-between'} h-full`}>
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#35A6B7]/15 border border-[#35A6B7]/30 text-xs font-semibold text-[#35A6B7] mb-3">
                     <Star className="w-3.5 h-3.5 fill-[#B8ED78] text-[#B8ED78]" />
@@ -169,5 +171,4 @@ export default function Doctors() {
     </section>
   );
 }
-
 
