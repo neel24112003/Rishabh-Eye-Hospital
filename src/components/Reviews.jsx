@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles, ChevronDown } from 'lucide-react';
+import { Star, MessageSquare, Quote, CheckCircle2, UserCheck, Plus, X, Sparkles, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { serviceCategories } from '../data/servicesList';
 import initialReviewsDb from '../data/patient_reviews_db.json';
 
 const PERMANENT_STORAGE_KEY = 'RISHABH_PERMANENT_PATIENT_REVIEWS_DB';
+const REVIEWS_PER_PAGE = 6;
+const SLIDE_INTERVAL_MS = 6000;
 const LEGACY_KEYS = [
   'RISHABH_PERMANENT_USER_REVIEWS_VAULT',
   'rishabh_user_submitted_reviews_v5',
@@ -50,29 +52,79 @@ const mergeAllReviews = (fetchedList = []) => {
     return `${normName}___${normText}`;
   };
 
-  // 1. Highest priority: User submitted reviews on this browser
-  localUser.forEach((item) => {
-    const key = getUniqueKey(item);
-    if (key && !map.has(key)) map.set(key, item);
-  });
+  const addReviews = (reviews) => {
+    reviews.forEach((item) => {
+      const key = getUniqueKey(item);
+      if (key && !map.has(key)) map.set(key, item);
+    });
+  };
 
-  // 2. Next: Fetched reviews from API / JSON database
-  fetchedList.forEach((item) => {
-    const key = getUniqueKey(item);
-    if (key && !map.has(key)) map.set(key, item);
-  });
+  const getCreatedAt = (item) => {
+    const timestamp = Number(item?.createdAt || item?.id);
+    return Number.isFinite(timestamp) && timestamp > 1000000000000 ? timestamp : null;
+  };
 
-  // 3. Fallback: Base database file (patient_reviews_db.json)
-  initialReviewsDb.forEach((item) => {
-    const key = getUniqueKey(item);
-    if (key && !map.has(key)) map.set(key, item);
-  });
+  // Keep the original reviews in place, then append submitted reviews oldest-first.
+  addReviews(initialReviewsDb);
+  const submittedReviews = [
+    ...localUser.map((review, index) => ({ review, index, source: 0 })),
+    ...fetchedList.map((review, index) => ({ review, index, source: 1 }))
+  ];
+  submittedReviews
+    .map((item) => ({ ...item, createdAt: getCreatedAt(item.review) }))
+    .sort((a, b) => {
+      if (a.createdAt === null) return b.createdAt === null ? a.source - b.source || a.index - b.index : -1;
+      if (b.createdAt === null) return 1;
+      return a.createdAt - b.createdAt || a.source - b.source || a.index - b.index;
+    })
+    .forEach(({ review }) => {
+      const key = getUniqueKey(review);
+      if (key && !map.has(key)) map.set(key, review);
+    });
 
   return Array.from(map.values());
 };
 
 export default function Reviews() {
   const [reviewsList, setReviewsList] = useState(() => mergeAllReviews([]));
+  const [activePage, setActivePage] = useState(0);
+  const [slideDirection, setSlideDirection] = useState(1);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const pageCount = Math.ceil(reviewsList.length / REVIEWS_PER_PAGE);
+  const currentReviews = reviewsList.slice(
+    activePage * REVIEWS_PER_PAGE,
+    (activePage + 1) * REVIEWS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setActivePage((currentPage) => Math.min(currentPage, pageCount - 1));
+  }, [pageCount]);
+
+  useEffect(() => {
+    if (pageCount < 2 || carouselPaused) return undefined;
+
+    const intervalId = window.setInterval(() => {
+      setSlideDirection(1);
+      setActivePage((currentPage) => (currentPage + 1) % pageCount);
+    }, SLIDE_INTERVAL_MS);
+
+    return () => window.clearInterval(intervalId);
+  }, [pageCount, carouselPaused, activePage]);
+
+  const goToPage = (page) => {
+    setSlideDirection(page > activePage ? 1 : -1);
+    setActivePage(page);
+  };
+
+  const showPreviousPage = () => {
+    setSlideDirection(-1);
+    setActivePage((currentPage) => (currentPage - 1 + pageCount) % pageCount);
+  };
+
+  const showNextPage = () => {
+    setSlideDirection(1);
+    setActivePage((currentPage) => (currentPage + 1) % pageCount);
+  };
 
   // Fetch reviews from APIs + JSON database on mount
   useEffect(() => {
@@ -117,6 +169,7 @@ export default function Reviews() {
     text: ''
   });
   const [submittedMessage, setSubmittedMessage] = useState(false);
+
 
 // Helper to intelligently get the correct Doctor name based on review content & doctor choice
 const getDoctorName = (review) => {
@@ -253,53 +306,120 @@ const getFormattedDate = (item) => {
           </p>
         </div>
 
-        {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {reviewsList.map((review, index) => (
+        {/* Review carousel: keep six reviews on each page and append new ones after existing pages. */}
+        <div
+          onMouseEnter={() => setCarouselPaused(true)}
+          onMouseLeave={() => setCarouselPaused(false)}
+          onFocusCapture={() => setCarouselPaused(true)}
+          onBlurCapture={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setCarouselPaused(false);
+          }}
+          aria-roledescription="carousel"
+          aria-label="Patient reviews"
+        >
+          <AnimatePresence mode="wait" initial={false} custom={slideDirection}>
             <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative flex flex-col justify-between"
+              key={activePage}
+              custom={slideDirection}
+              variants={{
+                enter: (direction) => ({ opacity: 0, x: direction * 48 }),
+                center: { opacity: 1, x: 0 },
+                exit: (direction) => ({ opacity: 0, x: direction * -48 })
+              }}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: 'easeInOut' }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8"
             >
-              <div className="relative z-10">
-                {/* Rating (Left) & Treatment Badge + Quote Icon (Right - 100% Single Horizontal Line) */}
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="flex text-[#B8ED78] shrink-0">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#B8ED78]" />
-                    ))}
+              {currentReviews.map((review, index) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="glass-panel rounded-3xl p-6 sm:p-8 border border-[#35A6B7]/30 hover:border-[#B8ED78]/50 shadow-xl glass-card-hover relative flex flex-col justify-between"
+                >
+                  <div className="relative z-10">
+                    {/* Rating (Left) & Treatment Badge + Quote Icon (Right - 100% Single Horizontal Line) */}
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <div className="flex text-[#B8ED78] shrink-0">
+                        {[...Array(review.rating)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#B8ED78]" />
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                          {review.treatment}
+                        </span>
+                        <Quote className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8ED78]/60 shrink-0" />
+                      </div>
+                    </div>
+
+                    <p className="text-slate-200 text-sm leading-relaxed italic mb-6">
+                      "{review.text}"
+                    </p>
                   </div>
 
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold bg-[#35A6B7]/20 text-[#35A6B7] border border-[#35A6B7]/40 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                      {review.treatment}
-                    </span>
-                    <Quote className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8ED78]/60 shrink-0" />
+                  {/* Author Footer */}
+                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5 font-bold text-white text-sm">
+                        <span>{review.name}</span>
+                        <CheckCircle2 className="w-4 h-4 text-[#B8ED78]" />
+                      </div>
+                      <div className="text-xs text-slate-400 font-mono">{review.location} • {getDoctorName(review)}</div>
+                    </div>
+
+                    <span className="text-[11px] text-slate-500 font-mono">{getFormattedDate(review)}</span>
                   </div>
-                </div>
-
-                <p className="text-slate-200 text-sm leading-relaxed italic mb-6">
-                  "{review.text}"
-                </p>
-              </div>
-
-              {/* Author Footer */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-1.5 font-bold text-white text-sm">
-                    <span>{review.name}</span>
-                    <CheckCircle2 className="w-4 h-4 text-[#B8ED78]" />
-                  </div>
-                  <div className="text-xs text-slate-400 font-mono">{review.location} • {getDoctorName(review)}</div>
-                </div>
-
-                <span className="text-[11px] text-slate-500 font-mono">{getFormattedDate(review)}</span>
-              </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
+          </AnimatePresence>
+
+          {pageCount > 1 && (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={showPreviousPage}
+                  aria-label="Previous review page"
+                  className="p-2 rounded-full border border-[#35A6B7]/40 text-[#35A6B7] hover:bg-[#35A6B7]/15 transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <span className="text-sm text-slate-300 tabular-nums" aria-live="polite">
+                  Page {activePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  onClick={showNextPage}
+                  aria-label="Next review page"
+                  className="p-2 rounded-full border border-[#35A6B7]/40 text-[#35A6B7] hover:bg-[#35A6B7]/15 transition-colors"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2" role="group" aria-label="Choose review page">
+                {Array.from({ length: pageCount }, (_, page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => goToPage(page)}
+                    aria-label={`Go to review page ${page + 1}`}
+                    aria-current={activePage === page ? 'page' : undefined}
+                    className={`h-2.5 rounded-full transition-all ${
+                      activePage === page ? 'w-7 bg-[#B8ED78]' : 'w-2.5 bg-slate-600 hover:bg-slate-400'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Share Patient Experience Button (Positioned Below Comments Grid) */}

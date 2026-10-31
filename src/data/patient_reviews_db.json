@@ -1,5 +1,27 @@
 [
   {
+    "id": 5,
+    "name": "Ayush Sharma",
+    "location": "Surat, Gujarat",
+    "treatment": "Retinal Examination, Vitrectomy & Intravitreal Injections",
+    "doctor": "Dr. Shefali H. Yagnik",
+    "rating": 5,
+    "date": "4 weeks ago",
+    "text": "Had a good experience with my retinal examination done by Dr. Shefali Yagnik. She was professional, careful, and explained everything clearly. Highly recommended!",
+    "verified": true
+  },
+  {
+    "id": 6,
+    "name": "Neel Patel",
+    "location": "Surat, Gujarat",
+    "treatment": "Contact Lens Clinic",
+    "doctor": "Dr. Hetalkumar R. Yagnik",
+    "rating": 5,
+    "date": "4 weeks ago",
+    "text": "Had a great experience with Dr. Hetal Kumar for my contact lenses. Very professional, helpful, and explained everything clearly. Highly recommended!",
+    "verified": true
+  },
+  {
     "id": 1,
     "name": "Rajesh V. Patel",
     "location": "New City Light, Surat",
